@@ -1,0 +1,27 @@
+{
+  "name": "digitaldonkey",
+  "version": "1.0.0",
+  "description": "donkeymedia.eu theme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@r.donkeymedia.eu:donkeymedia-d8-theme-repo.git"
+  },
+  "keywords": [
+    "drupal",
+    "drupal8"
+  ],
+  "author": "Thorsten Krug",
+  "license": "ISC",
+  "dependencies": {
+    "browser-sync": "^2.9.7",
+    "gulp": "^3.9.0",
+    "gulp-filter": "^3.0.1",
+    "gulp-sass": "^2.0.4",
+    "gulp-shell": "^0.4.3",
+    "gulp-sourcemaps": "^1.6.0"
+  }
+}
