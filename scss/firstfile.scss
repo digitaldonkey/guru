@@ -5,8 +5,12 @@
 	p {
 		color: blue;
 	}
+	a {
+    	transition: 1s; /* it will be prefixed */
+	}
 }
 
 .node {
 	@extend %node;
+	border-radius: 5px;
 }
