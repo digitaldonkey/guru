@@ -1,0 +1,16 @@
+name: Digitaldonkey
+type: theme
+base theme: classy
+description: 'Hello World !'
+package: Custom
+core: 8.x
+#libraries:
+#  - fluffiness/global-styling
+#stylesheets-remove:
+#  - '@classy/css/layout.css'
+#  - core/assets/vendor/normalize-css/normalize.css
+regions:
+  header: Header
+  content: Content
+  sidebar_first: 'Sidebar first'
+  footer: Footer
