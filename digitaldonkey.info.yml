@@ -1,14 +1,21 @@
 name: Digitaldonkey
+description: 'Custom classy based theme.'
 type: theme
-base theme: classy
-description: 'Hello World !'
-package: Custom
 core: 8.x
-#libraries:
-#  - fluffiness/global-styling
+# Defines the base theme
+base theme: classy
+
+package: Custom
+libraries:
+  - digitaldonkey/global-styling
+
 #stylesheets-remove:
 #  - '@classy/css/layout.css'
 #  - core/assets/vendor/normalize-css/normalize.css
+
+# Regions
+# Default Regions see:
+# https://api.drupal.org/api/drupal/core/modules/system/templates/page.html.twig/8
 regions:
   header: Header
   content: Content

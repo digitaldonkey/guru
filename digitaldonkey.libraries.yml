@@ -1,0 +1,13 @@
+global-styling:
+  version: 1.x
+  css:
+    theme:
+      css/main.css: {}
+  js:
+      js/behaviors.js: { scope: footer }
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery-once
+# For external libraries see:
+# https://www.drupal.org/theme-guide/8/assets#external

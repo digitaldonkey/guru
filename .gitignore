@@ -30,7 +30,13 @@ Temporary Items
 # Exclude node modules from git
 # See: https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 
+# Exclude node and bower files.
 node_modules
+bower_components
 
-# Exclude CSS Files
+# Exclude generated CSS Files.
 css/*.css
+
+# Exclude generated styleguide Files.
+styleguide/*
+!styleguide/.gitkeep

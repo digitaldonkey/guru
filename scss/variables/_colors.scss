@@ -1,0 +1,98 @@
+/*
+COLORS
+
+`src: variables/_colors.scss`
+Styleguide 1.1
+*/
+
+$black:     #222222;
+$white:     #ffffff;
+$yellow: #DEBF1F;
+$green:     #25a847;
+
+$gray-light: #cfcfcf;
+$gray-medium: #999999;
+$gray-dark: #4a4a4a;
+
+$darkblue-lighter: #343b43;
+$darkblue: #202930;
+$darkblue-darker: #151c22;
+
+
+/*
+Color palete
+
+.kss-colorblock is just a Helper to show Color-Variables
+
+Markup:
+<div class="kss-colorblock" style="background-color: {{modifier_class}}">{{modifier_class}}</div>
+
+#222222 - $black:   #222222
+#DEBF1F - $yellow:  #DEBF1F
+#53AA2A - $green:   #53AA2A
+#cfcfcf - $gray-light: #cfcfcf;
+#999999 - $gray-medium: #999999;
+#4a4a4a - $gray-dark: #4a4a4a;
+
+
+Styleguide 1.1.1
+*/
+
+// todo needs to go somewhere Not Abstract.
+.kss-colorblock{
+  width: 5rem;
+  height: 5rem;
+  background: $white;
+  padding: 0.1rem;
+
+  &.kss-colorblock--inline {
+    display: inline-block;
+  }
+}
+
+/*
+Background CSS classes (.bg-[nont color related name])
+
+
+Markup:
+<div class="kss-colorblock {{modifier_class}}">{{modifier_class}}</div>
+
+.bg-one - %bg-one .bg-one $yellow
+.bg-two - %bg-two %bg-two $green
+.bg-three - %bg-three .bg-three $gray-medium
+
+Styleguide 1.1
+*/
+$bg-one: $green;
+$bg-two: $yellow;
+$bg-three: $darkblue;
+$bg-four: $green;
+$bg-five: $yellow;
+$bg-six: $darkblue;
+
+%bg-one,
+.bg-one {
+  background: $bg-one;
+  color:$yellow;
+  a {
+    color:$yellow;
+  }
+}
+%bg-two,
+.bg-two {
+  background: $bg-two;
+  color:$black;
+  a {
+    color:$black;
+  }
+}
+%bg-three,
+.bg-three {
+  background: $bg-three;
+  color:$white;
+  a {
+    color:$white;
+  }
+}
+
+
