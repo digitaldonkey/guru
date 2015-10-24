@@ -4,6 +4,32 @@
 Project page:
 https://www.drupal.org/sandbox/digitaldonkey/2599668
 
+
+This is an example Theme named "digitaldonkey". 
+
+It demonstrate the use of
+
+<ul>
+  <li>gulp as a build tool</li>
+  <li>libsass for fast scss compilation</li>
+  <li>browserSync for an amazing developing and testing experience</li>
+  <li>singularity css grid system</li>
+  <li>KSS-Node to create stylesheets and maintain your style library</li>
+  <li>sourcemaps</li>
+  <li>autoprefixer</li>
+</ul>
+
+
+Checkout presentation at Drupalcamp Essen 2015
+http://drupalcamp-essen.de/15/session/creating-a-gulp-based-d8-theme-with-browsersync
+
+See the slides
+http://slides.com/digitaldonkey/create-a-drupal8-theme
+
+Please use drupal issue tracker to provide feedback and share improvements. 
+https://www.drupal.org/project/issues/search/2599668
+
+
 ## Getting started
 
 1) You should have node.js and npm available in your command line.
@@ -80,3 +106,4 @@ https://github.com/at-import/Singularity/wiki/Spanning-The-Grid
 ### More info about the used gulp dependencies
 www.npmjs.com/package/[package-name]
 e.g: https://www.npmjs.com/package/gulp-watch
+
