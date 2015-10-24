@@ -1,6 +1,3 @@
-// Singularity
-// See: https://github.com/at-import/Singularity/wiki/Spanning-The-Grid
-
 ////////////////////////
 // Required
 ////////////////////////
@@ -10,7 +7,6 @@ var gulp = require('gulp'),
 		sass = require('gulp-sass'),
 		sourcemaps = require('gulp-sourcemaps'),
 		autoprefixer = require('gulp-autoprefixer'),
-		filter = require('gulp-filter'),
 		plumber = require('gulp-plumber'),
 		rename = require('gulp-rename'),
 
@@ -28,17 +24,22 @@ var gulp = require('gulp'),
 		shell  = require('gulp-shell');
 
 
-
-// Static Server + watching scss/html files
+////////////////////////
+// Serve Task
+////////////////////////
 gulp.task('serve', ['sass', 'styleguide'], function() {
-
+	// Static Server init.
 	browserSync.init({
 		proxy: 'http://drupaleight.local.dev'
 	});
+	// Initialize watch task.
 	gulp.watch('scss/**/*.scss', ['sass', 'styleguide']);
 });
 
-// Compile sass into CSS & auto-inject into browsers
+
+////////////////////////
+// SASS Task
+////////////////////////
 gulp.task('sass', function () {
 	return gulp.src('scss/*.scss')
 		.pipe(plumber())
@@ -51,14 +52,13 @@ gulp.task('sass', function () {
 				}
 		  }))
 			.on('end', function(){
-				gutil.log('Finished SASS compile.');
+				gutil.log('Just an example for the end event :D');
 		})
 		.pipe(sourcemaps.init())
 		.pipe(autoprefixer({
 			browsers: [
 				'last 2 versions',
 				'safari 5',
-				'ie 8',
 				'ie 9',
 				'opera 12.1',
 				'ios 6',
@@ -66,17 +66,15 @@ gulp.task('sass', function () {
 			],
 			cascade: true
 		}))
-			//.pipe(sourcemaps.write())
-			.pipe(gulp.dest('css'))
-			//.pipe(filter('css/*.css'))
-			.pipe(browserSync.stream());
+		.pipe(sourcemaps.write())
+		.pipe(gulp.dest('css'))
+		.pipe(browserSync.stream());
 });
 
 
 ////////////////////////
 // Script Task
 ////////////////////////
-
 gulp.task('scripts', function() {
 
 // Get all JS files in folder, exclude minified ones.
@@ -115,35 +113,24 @@ gulp.task('styleguide', shell.task([
 ));
 
 
-
-////////////////////////
-// Watch Tasks
-////////////////////////
-gulp.task('watch', function() {
-	gulp.watch('js/**/*.js', ['scripts']);
-	gulp.watch('scss/**/*.scss', ['sass']);
-	//gulp.watch('app/**/*.html', ['html']);
-});
-
-
 ////////////////////////
 // Browser-Sync Tasks
 ////////////////////////
 // Notes: ".local" domains are very slow.
 // See: http://stackoverflow.com/questions/24807786/browsersync-extremely-slow
-// Sow we Exclude the DNS requests DNS?
-// http://stackoverflow.com/questions/31143913/browsersync-proxy-to-homestead-really-slow
+// So we Exclude the DNS requests DNS.
+// See: http://stackoverflow.com/questions/31143913/browsersync-proxy-to-homestead-really-slow
 gulp.task('browser-sync', function() {
 	browserSync.init({
-			proxy: {
-				target: '127.0.0.1',
-				reqHeaders: function (config) {
-					return {
-						host: 'drupaleight.local'
-					};
-				}
-			}
-		});
+    proxy: {
+      target: '127.0.0.1',
+      reqHeaders: function (config) {
+       return {
+          host: 'drupaleight.local'
+        };
+      }
+    }
+	});
 });
 
 
@@ -151,3 +138,17 @@ gulp.task('browser-sync', function() {
 // Default Task
 ////////////////////////
 gulp.task('default', ['serve']);
+
+
+////////////////////////
+// TODO
+////////////////////////
+
+// scss-lint
+// https://github.com/brigade/scss-lint
+
+// Improve Non-Globbing aggregation
+// https://www.npmjs.com/package/gulp-cssimport
+
+// improve Error handling?!
+// https://gist.github.com/floatdrop/8269868

@@ -4,16 +4,18 @@ type: theme
 core: 8.x
 # Defines the base theme
 base theme: classy
+screenshot: logo.svg
 
-package: Custom
+# -- Libraries ---------------------------------------------------
 libraries:
   - digitaldonkey/global-styling
 
+# You can also remove stylesheets.
 #stylesheets-remove:
 #  - '@classy/css/layout.css'
 #  - core/assets/vendor/normalize-css/normalize.css
 
-# Regions
+# -- Regions ---------------------------------------------------
 # Default Regions see:
 # https://api.drupal.org/api/drupal/core/modules/system/templates/page.html.twig/8
 regions:

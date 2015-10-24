@@ -1,13 +1,15 @@
 /*
-COLORS
+
+Color palette
 
 `src: variables/_colors.scss`
+
 Styleguide 1.1
 */
 
 $black:     #222222;
 $white:     #ffffff;
-$yellow: #DEBF1F;
+$yellow:    #f9be37;
 $green:     #25a847;
 
 $gray-light: #cfcfcf;
@@ -38,7 +40,7 @@ Markup:
 Styleguide 1.1.1
 */
 
-// todo needs to go somewhere Not Abstract.
+// Todo needs to go somewhere not abstract.
 .kss-colorblock{
   width: 5rem;
   height: 5rem;
@@ -51,7 +53,7 @@ Styleguide 1.1.1
 }
 
 /*
-Background CSS classes (.bg-[nont color related name])
+Background CSS classes
 
 
 Markup:
@@ -61,7 +63,7 @@ Markup:
 .bg-two - %bg-two %bg-two $green
 .bg-three - %bg-three .bg-three $gray-medium
 
-Styleguide 1.1
+Styleguide 1.1.2
 */
 $bg-one: $green;
 $bg-two: $yellow;

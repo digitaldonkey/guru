@@ -1,0 +1,82 @@
+
+# Gulp based Drupal 8 theme base with kss styleguide
+ 
+Project page:
+https://www.drupal.org/sandbox/digitaldonkey/2599668
+
+## Getting started
+
+1) You should have node.js and npm available in your command line.
+
+```
+npm -v
+2.14.4
+```
+
+2) Install node dependencies
+
+```
+cd [theme folder]
+npm install --save-dev gulp gulp-sass browser-sync gulp-sourcemaps gulp-shell compass-mixins  breakpoint-sass gulp-util gulp-plumber gulp-uglify gulp-rename kss
+```
+
+3) If your grid system choice will be singularity you need bower
+
+```
+bower -v
+1.4.1
+```
+
+4) Install singularity
+
+```
+cd [theme folder]
+bower install --save singularity
+```
+
+5) Install singularity
+```
+cd [theme folder]
+gulp
+```
+
+### browser sync
+You need the drupal module link_css to make browserSync working.
+https://www.drupal.org/project/link_css
+Here is the reason:
+https://github.com/BrowserSync/browser-sync/issues/10
+
+### KSS-Node
+Look into the scss files for examples. See: 
+https://github.com/kss-node/kss-node/wiki/Quick-Start-Guide
+https://www.npmjs.com/package/kss
+https://github.com/kss-node/kss/blob/spec/SPEC.md
+
+You can access the styleguide in:
+/sites/all/themes/_custom/digitaldonkey/styleguide/
+
+### Libsass
+http://sass-lang.com/libsass
+
+**Installing libsass with homebrew**
+```
+brew install libsass
+```
+
+There are some differences betwenn compass-sass and lib-sass left.
+For details read here:
+http://www.sitepoint.com/switching-ruby-sass-libsass/
+
+Spriting with libsass is not working yet.
+But maybe this https://github.com/wellington/wellington
+
+
+### Singularity
+You may know singularity from Omega4 theme.
+Known Issue: With lib-sass the background grids are not working (yet).
+http://singularity.gs/
+https://github.com/at-import/Singularity/wiki/Spanning-The-Grid
+
+### More info about the used gulp dependencies
+www.npmjs.com/package/[package-name]
+e.g: https://www.npmjs.com/package/gulp-watch

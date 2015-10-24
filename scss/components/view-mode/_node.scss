@@ -1,9 +1,7 @@
 /*
 Node view-mode teaser
 
-.site-logo Inline SVG logo.
-
-`src: components/_view-mode/node.scss`
+`src: components/view-mode/_node.scss`
 
 Markup:
 <article data-history-node-id="8" role="article" class="contextual-region node node--type-article node--promoted node--view-mode-teaser" about="/node/8" typeof="schema:Article" data-quickedit-entity-instance-id="0">
@@ -62,8 +60,8 @@ Styleguide 4.2
 .node--view-mode-teaser {
   @extend %node;
   /* Testing Breakpoint */
-  @include breakpoint(37em) {
-    border: 1px dashed red;
+  @include breakpoint(999px) {
+    border: 5px dashed $yellow;
   }
 }
 
