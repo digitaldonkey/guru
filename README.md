@@ -32,40 +32,47 @@ https://www.drupal.org/project/issues/search/2599668
 
 ## Getting started
 
-1) You should have node.js and npm available in your command line.
+1) You should have bower and npm available in your command line.
+If your grid system choice will be singularity you need bower.
 
 ```
 npm -v
 2.14.4
 ```
 
-2) Install node dependencies
-
-```
-cd [theme folder]
-npm install --global gulp
-npm install --save-dev gulp gulp-autoprefixer gulp-sass browser-sync gulp-sourcemaps gulp-shell compass-mixins  breakpoint-sass gulp-util gulp-plumber gulp-uglify gulp-rename kss
-```
-
-3) If your grid system choice will be singularity you need bower
-
 ```
 bower -v
 1.4.1
 ```
 
-4) Install singularity
+2) Install node dependencies
+
+```
+cd [theme folder] (Out of the box the theme name is digitaldonkey)
+npm install --global gulp bower
+npm install 
+```
+
+3) Install singularity
 
 ```
 cd [theme folder]
 bower install --save singularity
 ```
 
-5) Install singularity
+4) Adapt your domain name in the gulpfile to make 
+Edit sites/all/themes/_custom/digitaldonkey/gulpfile.js (or where ever you installed the theme)
+and change the domain "drupaleight.local" to your domain.
+
+5) Run gulp in theme folder
 ```
 cd [theme folder]
 gulp
 ```
+
+6) Enable theme in Drupal
+and check the styleguide in /sites/all/themes/_custom/digitaldonkey/styleguide/
+
 
 ### browser sync
 You need the drupal module link_css to make browserSync working.
