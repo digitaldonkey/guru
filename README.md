@@ -43,7 +43,8 @@ npm -v
 
 ```
 cd [theme folder]
-npm install --save-dev gulp gulp-sass browser-sync gulp-sourcemaps gulp-shell compass-mixins  breakpoint-sass gulp-util gulp-plumber gulp-uglify gulp-rename kss
+npm install --global gulp
+npm install --save-dev gulp gulp-autoprefixer gulp-sass browser-sync gulp-sourcemaps gulp-shell compass-mixins  breakpoint-sass gulp-util gulp-plumber gulp-uglify gulp-rename kss
 ```
 
 3) If your grid system choice will be singularity you need bower
