@@ -6,7 +6,31 @@
   // Required
   ////////////////////////
 
-  var gulp = require('gulp'),
+  // Local_config.
+  var local_config = {
+      server: {
+        domain: 'drupaleight.local',
+        ip: '127.0.0.1'
+      },
+      sass: {
+        // Remove comments and minify CSS.
+        outputStyle: 'compressed'
+        // Alternatively: keep comments in CSS.
+        //outputStyle: 'nested',
+      },
+      autoprefixer: {
+        browsers: [
+          'last 2 versions',
+          'safari 5',
+          'ie 9',
+          'opera 12.1',
+          'ios 6',
+          'android 4'
+        ]
+      }
+    },
+    // Other require's.
+      gulp = require('gulp'),
       // sassc/libsass implementation.
       sass = require('gulp-sass'),
       sourcemaps = require('gulp-sourcemaps'),
@@ -34,7 +58,14 @@
   gulp.task('serve', ['sass', 'styleguide'], function() {
     // Static Server init.
     browserSync.init({
-      proxy: 'http://drupaleight.local.dev'
+      proxy: {
+        target: local_config.server.ip,
+        reqHeaders: function (config) {
+          return {
+            host: local_config.server.domain
+          };
+        }
+      }
     });
     // Initialize watch task.
     gulp.watch('scss/**/*.scss', ['sass', 'styleguide']);
@@ -50,9 +81,7 @@
       .pipe(sourcemaps.init())
       .pipe(sass({
         // Remove comments and minify CSS.
-        outputStyle: 'compressed',
-        // Keep comments in CSS.
-        //outputStyle: 'nested',
+        outputStyle: local_config.sass.outputStyle,
         sourcemap: true,
         precision: 10,
         onError: function (err) {
@@ -63,14 +92,7 @@
           gutil.log('Just an example for the end event :D');
       })
       .pipe(autoprefixer({
-        browsers: [
-          'last 2 versions',
-          'safari 5',
-          'ie 9',
-          'opera 12.1',
-          'ios 6',
-          'android 4'
-        ],
+        browsers: local_config.autoprefixer.browsers,
         cascade: true
       }))
       .pipe(sourcemaps.write())
@@ -102,7 +124,7 @@
 
 
   ////////////////////////
-  // Build Styleguide.
+  // Build KSS Styleguide.
   ////////////////////////
   gulp.task('styleguide', shell.task([
       // kss-node [source folder of files to parse] [destination folder] --template [location of template files]
@@ -121,27 +143,6 @@
 
 
   ////////////////////////
-  // Browser-Sync Tasks
-  ////////////////////////
-  // Notes: ".local" domains are very slow.
-  // See: http://stackoverflow.com/questions/24807786/browsersync-extremely-slow
-  // So we Exclude the DNS requests DNS.
-  // See: http://stackoverflow.com/questions/31143913/browsersync-proxy-to-homestead-really-slow
-  gulp.task('browser-sync', function() {
-    browserSync.init({
-      proxy: {
-        target: '127.0.0.1',
-        reqHeaders: function (config) {
-         return {
-            host: 'drupaleight.local'
-          };
-        }
-      }
-    });
-  });
-
-
-  ////////////////////////
   // Default Task
   ////////////////////////
   gulp.task('default', ['serve']);
@@ -150,7 +151,7 @@
   ////////////////////////
   // TODO
   ////////////////////////
-  
+
   // scss-lint
   // https://github.com/brigade/scss-lint
 
