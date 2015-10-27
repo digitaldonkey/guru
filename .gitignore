@@ -36,6 +36,7 @@ bower_components
 
 # Exclude generated CSS Files.
 css/*.css
+css/*.css.map
 
 # Exclude generated styleguide Files.
 styleguide/*

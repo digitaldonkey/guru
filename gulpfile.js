@@ -54,19 +54,21 @@ gulp.task('sass', function () {
 			.on('end', function(){
 				gutil.log('Just an example for the end event :D');
 		})
-		.pipe(sourcemaps.init())
-		.pipe(autoprefixer({
-			browsers: [
-				'last 2 versions',
-				'safari 5',
-				'ie 9',
-				'opera 12.1',
-				'ios 6',
-				'android 4'
-			],
-			cascade: true
-		}))
-		.pipe(sourcemaps.write())
+		.pipe(sourcemaps.init({
+      debug: true
+    }))
+		//.pipe(autoprefixer({
+		//	browsers: [
+		//		'last 2 versions',
+		//		'safari 5',
+		//		'ie 9',
+		//		'opera 12.1',
+		//		'ios 6',
+		//		'android 4'
+		//	],
+		//	cascade: true
+		//}))
+		.pipe(sourcemaps.write('.'))
 		.pipe(gulp.dest('css'))
 		.pipe(browserSync.stream());
 });
@@ -145,6 +147,11 @@ gulp.task('default', ['serve']);
 ////////////////////////
 
 // Fix sourcemaps which are currently not working.
+// They won't work together with autoprefixer in this way.
+// See: https://github.com/floridoo/gulp-sourcemaps/issues/60
+// AND https://github.com/postcss/autoprefixer/issues/368
+
+// Remove comments in rendered CSS, Minify CSS.
 
 // scss-lint
 // https://github.com/brigade/scss-lint
