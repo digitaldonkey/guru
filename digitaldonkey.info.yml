@@ -11,9 +11,9 @@ libraries:
   - digitaldonkey/global-styling
 
 # You can also remove stylesheets.
-#stylesheets-remove:
-#  - '@classy/css/layout.css'
-#  - core/assets/vendor/normalize-css/normalize.css
+stylesheets-remove:
+  - '@classy/css/layout.css'
+  - core/assets/vendor/normalize-css/normalize.css
 
 # -- Regions ---------------------------------------------------
 # Default Regions see:
