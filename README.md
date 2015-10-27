@@ -49,7 +49,7 @@ bower -v
 
 ```
 cd [theme folder] (Out of the box the theme name is digitaldonkey)
-npm install --global gulp bower
+npm install --global gulp bower browser-sync
 npm install 
 ```
 
