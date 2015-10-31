@@ -38,6 +38,9 @@ bower_components
 css/*.css
 css/*.css.map
 
+# Minifyed js files
+js/js/*.min.js
+
 # Exclude generated styleguide Files.
 styleguide/*
 !styleguide/.gitkeep
