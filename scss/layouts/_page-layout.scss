@@ -3,58 +3,48 @@ body {
 }
 
 .layout-container {
-  max-width: 80em;
-  margin: 0 auto;
-  height: 100%;
+
+  @include add-grid(12);
+  @include add-gutter(1 / 3);
 
   // Background Grids aren't working with libsass yet.
-  //@include sgs-change('debug', true); -> Error: https://github.com/at-import/Singularity/issues/211
-  @include add-grid(12);
-  @include add-gutter(1/3);
+  // @include sgs-change('debug', true); -> Error: https://github.com/at-import/Singularity/issues/211
+  //@include sgs-change('debug', true);
+  //@include background-grid();
 
-
-  @include background-grid($color: blue);
-  //.views-row {
-  //  @include grid-span(3, 1, 12);
-  //}
-  .views-row {
-    margin-bottom: 2rem;
-  }
+  height: 100%;
+  margin: 0 auto;
+  max-width: 80em;
 
   .views-row:nth-child(4n+3) {
     @include grid-span(3, 1, 12);
   }
+
   .views-row:nth-child(4n+4) {
     @include grid-span(3, 4, 12);
   }
+
   .views-row:nth-child(4n+5) {
     @include grid-span(3, 7, 12);
   }
+
   .views-row:nth-child(4n+6) {
     @include grid-span(3, 10, 12);
   }
+
   .views-row:nth-child(8n+7) {
     clear: both;
   }
-  //.views-row:nth-child((3n+1)) {
-  //  @include grid-span(3, 4, 12);
-  //}
-  //.views-row:nth-child(3) {
-  //  @include grid-span(3, 7, 12);
-  //}
-  //.views-row:nth-child(4) {
-  //  @include grid-span(3, 10, 12);
-  //}
-  //.views-row:nth-child(5) {
-  //  clear: both;
-  //}
-  .views-row:nth-child(1){
+
+  .views-row:nth-child(1) {
     @include grid-span(6, 1, 12);
   }
-  .views-row:nth-child(2){
+
+  .views-row:nth-child(2) {
     @include grid-span(6, 7, 12);
   }
-  .views-row:nth-child(3){
+
+  .views-row:nth-child(3) {
     clear: both;
   }
 }

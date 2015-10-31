@@ -1,0 +1,87 @@
+//
+// Node view-mode teaser
+//
+// `src: components/view-mode/_node.scss`
+//
+// Markup:
+// <article data-history-node-id="8" role="article" class="contextual-region node node--type-article node--promoted node--view-mode-teaser" about="/node/8" typeof="schema:Article" data-quickedit-entity-instance-id="0">
+// <h2>
+// 	<a href="/node/8" rel="bookmark"></a>
+// </h2>
+// <div class="node__content">
+// 	<div data-quickedit-field-id="node/8/field_image/en/teaser" class="field field--name-field-image field--type-image field--label-hidden field__item quickedit-field">
+// 		<a href="/node/8"> <img property="schema:image" src="http:// drupaleight.local/sites/default/files/styles/medium/public/field/image/generateImage_wjcdbc.jpeg?itok=w9lvuZzu" width="162" height="220" alt="Abigo augue eu luptatum obruo ullamcorper." title="Dolus modo natu oppeto qui te." typeof="foaf:Image" class="image-style-medium"> </a>
+// 	</div>
+// 	<div property="schema:text" data-quickedit-field-id="node/8/body/en/teaser" class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item quickedit-field">
+// 		<p>
+// 			Abico aliquam diam inhibeo nisl pecus ullamcorper validus. Exerci nobis paulatim pertineo tation. Ideo neque premo suscipit ulciscor. Aliquip bene gemino hos nimis quidem refero roto ut. Abdo abico ad comis eu odio paulatim tego. Commodo imputo probo quis sudo torqueo vel.
+// 		</p>
+// 		<p>
+// 			Abbas aliquip amet blandit incassum iriure rusticus vulpes. Brevitas gravis luctus os ut. Brevitas erat ibidem pneum sit. Cui mauris odio ratis roto vero verto. Aptent cui facilisi importunus praesent quia utinam virtus zelus. Enim ex feugiat magna meus persto turpis utrum virtus. Aliquam cui et exerci exputo letalis nibh paulatim valetudo. Augue bene elit ex hos proprius quia usitas ymo.
+// 		</p>
+// 		<p>
+// 			Haero ille immitto lenis meus neque quidne sit. Aptent pecus zelus. Augue nobis nutus os saluto scisco. Ad defui eligo loquor luptatum neque premo te. Bene comis ex feugiat rusticus secundum sed turpis.
+// 		</p>
+// 		<p>
+// 			Ad aptent camur duis elit inhibeo. Brevitas esca ex iaceo quidem tation typicus valde. Abigo euismod imputo natu nobis pneum quis ut verto wisi. Cui diam esca ille iriure jugis singularis turpis venio. Immitto persto ratis secundum. Brevitas eu patria pecus saluto sed ymo.
+// 		</p>
+// 		<p>
+// 			Et genitus in meus modo os si suscipere. Aliquip defui persto sino verto wisi. Dignissim feugiat luptatum metuo quis suscipit typicus validus venio verto. Elit lucidus oppeto utrum vulputate.
+// 		</p>
+// 	</div>
+// 	<div class="node__links">
+// 		<ul class="links inline">
+// 			<li class="node-readmore"><a href="/node/8" rel="tag" title="Gravis Immitto Sudo" hreflang="en">Read more<span class="visually-hidden"> about Gravis Immitto Sudo</span></a></li>
+// 		</ul>
+// 	</div>
+// </div>
+// </article>
+//
+// Styleguide 4.2
+//
+//
+
+%node,
+.node {
+  background: $gray-light;
+  clear: left;
+  margin-bottom: $vertical-space;
+
+  h2 a {
+    color: $green;
+  }
+
+  a {
+    // Testing Compass.
+    @include hover-link;
+
+    // Testing autoprefixer.
+    transition: 1s;
+  }
+}
+
+.node--view-mode-teaser {
+  @extend %node;
+  height: 30rem;
+  overflow: hidden;
+
+  .node__submitted {
+    font-size: .7rem;
+  }
+
+  //.node__content {
+  //
+  //  .field--type-image {
+  //  }
+  //
+  //  .field--name-body {
+  //  }
+  //
+  //}
+
+  // scss-lint:disable DeclarationOrder
+  @include breakpoint(999px) {
+    // Testing Breakpoint.
+    border: 5px dashed $yellow;
+  }
+}
