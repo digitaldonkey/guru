@@ -45,7 +45,7 @@ function drush_digitaldonkey_guru_subtheme($name) {
   }
 
   /*
-   * Prepare Config files.
+   * Generate theme.info.yml file.
    */
   // Sadly I don't find a way to work with YAML files keeping comments of the
   // base template.

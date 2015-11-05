@@ -7,14 +7,16 @@ https://www.drupal.org/sandbox/digitaldonkey/2599668
 
 This is an example Theme named "digitaldonkey". 
 
-It demonstrate the use of
-
+Features
 <ul>
   <li>gulp as a build tool</li>
   <li>libsass for fast scss compilation</li>
   <li>browserSync for an amazing developing and testing experience</li>
-  <li>singularity css grid system</li>
+  <li>singularity.gs css grid system</li>
   <li>KSS-Node to create stylesheets and maintain your style library</li>
+  <li>Live Editing of scss in site and styleguide</li>
+  <li>The styleguide enables you prototyping in SCSS with custom HTML in the comments section</li>
+  <li>SCSS Linting to drupal SCSS standards</li>
   <li>sourcemaps</li>
   <li>autoprefixer</li>
 </ul>
@@ -32,6 +34,15 @@ https://www.drupal.org/project/issues/search/2599668
 
 ## Getting started
 
+**Create a subtheme**
+You may rename the theme according to your needs or create a subtheme with drush.
+Make sure using drush8. Lullabot tells you <a hred="https://www.lullabot.com/articles/switching-drush-versions">how to use multiple drush versions</a>. 
+```
+drush guru "My Subtheme" 
+```
+
+**Guru theme setup**
+
 1) You should have bower and npm available in your command line.
 If your grid system choice will be singularity you need bower.
 
@@ -48,7 +59,7 @@ bower -v
 2) Install node dependencies
 
 ```
-cd [theme folder] (Out of the box the theme name is digitaldonkey)
+cd [theme folder]
 npm install --global gulp bower browser-sync
 npm install 
 ```
@@ -60,9 +71,10 @@ cd [theme folder]
 bower install --save singularity
 ```
 
-4) Adapt your domain name in the gulpfile to make 
-Edit sites/all/themes/_custom/digitaldonkey/gulpfile.js (or where ever you installed the theme)
-and change the domain "drupaleight.local" to your domain.
+4) **Change your domain and styleguide url** in 
+```
+[theme folder]/gulp.config.js
+```
 
 5) Run gulp in theme folder
 ```
@@ -75,21 +87,31 @@ and check the styleguide in /sites/all/themes/_custom/digitaldonkey/styleguide/
 
 
 ### browser sync
-You need the drupal module link_css to make browserSync working.
+You  **need the drupal module link_css** to make browserSync working.
 https://www.drupal.org/project/link_css
 Here is the reason:
 https://github.com/BrowserSync/browser-sync/issues/10
 
 ### KSS-Node
-Look into the scss files for examples. See: 
+Is a amazing tool to create living styleguides.
+
+Look into the scss files for examples. 
+
+The styleguide is generated into 
+/sites/all/themes/[your theme]/styleguide/
+and should open on the browser using the gulp default task.
+You may change the templates in 
+/sites/all/themes/[your theme]/styleguide-template/
+
+For more information: 
 https://github.com/kss-node/kss-node/wiki/Quick-Start-Guide
 https://www.npmjs.com/package/kss
 https://github.com/kss-node/kss/blob/spec/SPEC.md
 
-You can access the styleguide in:
-/sites/all/themes/_custom/digitaldonkey/styleguide/
+Listen to <a href="https://www.youtube.com/watch?v=y5coJloNutU">John Albin Wilkins at Drupalcon LA 2015</a> in order to learn why you want this. 
 
 ### Libsass
+is a much faster implementation compared to the slow ruby SASS.
 http://sass-lang.com/libsass
 
 **Installing libsass with homebrew**
@@ -97,13 +119,12 @@ http://sass-lang.com/libsass
 brew install libsass
 ```
 
-There are some differences betwenn compass-sass and lib-sass left.
+There are some differences between compass-sass and lib-sass left.
 For details read here:
 http://www.sitepoint.com/switching-ruby-sass-libsass/
 
 Spriting with libsass is not working yet.
 But maybe this https://github.com/wellington/wellington
-
 
 ### Singularity
 You may know singularity from Omega4 theme.
@@ -111,7 +132,24 @@ Known Issue: With lib-sass the background grids are not working (yet).
 http://singularity.gs/
 https://github.com/at-import/Singularity/wiki/Spanning-The-Grid
 
-### More info about the used gulp dependencies
+### SCSS-lint
+Tells you  if you are in order with Drupals SCSS Coding standards while live 
+Editing your SCSS.
+https://github.com/brigade/scss-lint
+This sadly now depends on ruby. 
+TODO: I plan to make ruby/SCSS-Lint optional (decide while creating a subtheme).  
+```
+gem install scss_lint
+```
+The linter's configuration is in scsslint-drupal.yml 
+
+### Digging deeper
+**Checkout the gulpfile.js**
+More info about the used gulp dependencies.
 www.npmjs.com/package/[package-name]
 e.g: https://www.npmjs.com/package/gulp-watch
 
+Guru is using drupal default css classes provided by core classy theme.
+You can change this by changing the "base theme" variable in theme.info.yml
+
+ 

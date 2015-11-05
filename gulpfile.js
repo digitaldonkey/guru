@@ -7,27 +7,9 @@
   ////////////////////////
 
   /**
-   * Local_config.
+   * config.
    */
-  var local_config = {
-      server: {
-        domain: 'drupaleight.local',
-        ip: '127.0.0.1'
-      },
-      autoprefixer: {
-        browsers: [
-          'last 2 versions',
-          'safari 5',
-          'ie 9',
-          'opera 12.1',
-          'ios 6',
-          'android 4'
-        ]
-      },
-      styleguide: {
-        uri: 'http://localhost:3000/sites/all/themes/_custom/digitaldonkey/styleguide/index.html'
-      }
-    },
+  var config = require('./gulp.config.js'),
 
   /**
    * Gulp dependencies.
@@ -48,6 +30,7 @@
 
   // Autoprefixer
   // See: https://github.com/postcss/autoprefixer
+  autoprefixer_cnf = require('./gulp.autoprefixer.config.js'),
   autoprefixer = require('gulp-autoprefixer'),
   scsslint = require('gulp-scss-lint'),
   plumber = require('gulp-plumber'),
@@ -103,16 +86,16 @@
     // Static Server init.
     browserSync.init({
       proxy: {
-        target: local_config.server.ip,
-        reqHeaders: function (config) {
-          return {
-            host: local_config.server.domain
+        target: config.server.ip,
+        reqHeaders: function () {
+            return {
+            host: config.server.domain
           };
         }
       }
     }, function(){
       gutil.log('Finished browserSync init');
-      gulp.start('stylguide_browser');
+      gulp.start('styleguide_browser');
     });
 
     // Initialize watch task for sass.
@@ -124,10 +107,10 @@
     // Initialize watch task for Styleguide template files.
     // Todo: Missing regenerate on Section Changes:
     // On add/edit section generated CSS code. Reload by default will be slower when working only on components.
-    var stylguide_watcher = gulp.watch(
+    var styleguide_watcher = gulp.watch(
       ['styleguide-template/**/index.html','styleguide-template/**/template_config.js'],
       ['styleguide_dev']);
-    stylguide_watcher.on('change', function(event) {
+    styleguide_watcher.on('change', function(event) {
       gutil.log('File ' + event.path + ' was ' + event.type);
     });
 
@@ -163,14 +146,14 @@
       .pipe(development(sourcemaps.write({includeContent: false})))
       .pipe(development(sourcemaps.init({loadMaps: true})))
 
-      //.pipe(sourcemaps.write({includeContent: false}))
-      //.pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(sourcemaps.write({includeContent: false}))
+      .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(autoprefixer({
-        browsers: local_config.autoprefixer.browsers,
+        browsers: autoprefixer_cnf.browsers,
         cascade: true
       }))
       .pipe(development(sourcemaps.write('.')))
-      //.pipe(sourcemaps.write('.'))
+      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest('css'))
       .pipe(browserSync.stream());
 
@@ -243,15 +226,12 @@
    * Open KSS-Styleguide url in default browser.
    *
    */
-  gulp.task('stylguide_browser', function(){
+  gulp.task('styleguide_browser', function(){
     // Open KSS Styleguide.
-    var options = {
-      uri: 'http://localhost:3000'
-    };
-    // There MUST be a valid file sourced. Whih is not important.
+    // There MUST be a valid file sourced. What is not important.
     // See: https://github.com/stevelacy/gulp-open/issues/15.
     gulp.src('./package.json')
-      .pipe(open(local_config.styleguide));
+      .pipe(open(config.server.styleguide));
   });
 
 

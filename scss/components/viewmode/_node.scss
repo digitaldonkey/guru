@@ -10,7 +10,7 @@
 // </h2>
 // <div class="node__content">
 // 	<div data-quickedit-field-id="node/8/field_image/en/teaser" class="field field--name-field-image field--type-image field--label-hidden field__item quickedit-field">
-// 		<a href="/node/8"> <img property="schema:image" src="http:// drupaleight.local/sites/default/files/styles/medium/public/field/image/generateImage_wjcdbc.jpeg?itok=w9lvuZzu" width="162" height="220" alt="Abigo augue eu luptatum obruo ullamcorper." title="Dolus modo natu oppeto qui te." typeof="foaf:Image" class="image-style-medium"> </a>
+// 		<a href="/node/8"> <img property="schema:image" src="/sites/all/themes/_custom/digitaldonkey/logo.svg"  alt="Abigo augue eu luptatum obruo ullamcorper." title="Dolus modo natu oppeto qui te." typeof="foaf:Image" class="image-style-medium"> </a>
 // 	</div>
 // 	<div property="schema:text" data-quickedit-field-id="node/8/body/en/teaser" class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item quickedit-field">
 // 		<p>
@@ -62,9 +62,6 @@
 
 .node--view-mode-teaser {
   @extend %node;
-  height: 30rem;
-  overflow: hidden;
-
   .node__submitted {
     font-size: .7rem;
   }
