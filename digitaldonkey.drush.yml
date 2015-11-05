@@ -1,0 +1,19 @@
+# See: http://blog.riff.org/2015_10_23_drupal_8_tip_of_the_day_replace_hook_drush_command_by_a_yaml_file
+commands:
+  # The 'make-me-a-sandwich' command.
+  guru-subtheme:
+    description: "Creates a Guru subtheme."
+    arguments:
+      filling: 'The name of your subtheme.'
+    options:
+      destination: 'The destination of your subtheme. Defaults to "sites/all/themes".'
+      machine-name: 'The machine-readable name of your subtheme. This will be auto-generated from the human-readable name if omitted.'
+      basetheme: 'Specifies a custom base theme. Defaults to "guru".'
+      enable: 'Automatically enable the subtheme after creation.'
+      set-default: 'Automatically enable the subtheme after creation and make it the default theme.'
+    examples:
+      'drush guru-subtheme "My Theme"': 'Creates an Guru subtheme called "My Theme".'
+      'drush guru-subtheme "My Theme" --destination=sites/example.com/themes': 'Creates an Guru subtheme called "My Theme" in sites/example.com/themes.'
+    aliases: ['guru']
+    # No bootstrap at all.
+    bootstrap: 1
