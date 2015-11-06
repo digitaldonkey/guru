@@ -62,6 +62,11 @@
   // Without gulp works asynchronous!
   runSequence = require('run-sequence'),
 
+  // This is just required for deployment. It has a dependency on pandoc.
+  pandoc = require('gulp-pandoc'),
+  replace = require('gulp-replace'),
+  del = require('del'),
+
   /**
    *   Environments
    *  With this we can use e.g.:
@@ -264,6 +269,38 @@
       }));
   });
 
+  /**
+   * Generate Readme's.
+   *
+   * This task ist just for deployment.
+   *
+   */
+
+  // pandoc -s -t rst --columns=80  --smart --tab-stop=2 --normalize  README.md -o Readme.txt
+  gulp.task('docs', function() {
+    del(['./Readme.txt', './Readme.html']);
+    // Create Drupal Readme.
+    gulp.src('./Readme.md')
+      .pipe(pandoc({
+        from: 'markdown',
+        to: 'rst',
+        ext: '.txt',
+        args: ['--columns=80', '--smart', '--tab-stop=2', '--normalize']
+      }))
+      .pipe(replace(/\n\s.*::\n/g, '\n'))
+      .pipe(gulp.dest('.'));
+
+    // Create HTML Version (for Drupal.org)
+    gulp.src('./Readme.md')
+      .pipe(pandoc({
+      from: 'markdown',
+      to: 'html5+lhs',
+      ext: '.html',
+      args: ['--smart']
+    }))
+    .pipe(gulp.dest('.'));
+
+  });
 
   /**
    * Default Task.
