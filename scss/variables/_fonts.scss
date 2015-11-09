@@ -3,11 +3,16 @@
 //
 // `src: variables/fonts.scss`
 //
+// <p><strong>$base-font: Verdana, 'Lucida Sans Unicode', sans-serif;</strong></p>
+// <p><strong>$base-font-monospace: Menlo, 'Ubuntu Mono', 'Lucida Console', 'Courier New', Courier, monospace;</strong></p>
+//
 // Markup:
+// <p><strong>$base-font: Verdana, 'Lucida Sans Unicode', sans-serif;</strong></p>
 // <p class="base-font">Autem paulatim qui veniam vicis. Eligo elit esca letalis obruo pala plaga utrum. Aliquam brevitas gemino haero importunus mos utrum vulpes zelus. Ibidem minim sed. Ad bene hos odio oppeto. Blandit gilvus incassum nobis premo vindico. Duis letalis lobortis macto praesent. Adipiscing caecus esse praemitto.</p>
+// <p><strong>$base-font-monospace: Menlo, 'Ubuntu Mono', 'Lucida Console', 'Courier New', Courier, monospace;</strong></p>
 // <p class="base-font-monospace">Autem paulatim qui veniam vicis. Eligo elit esca letalis obruo pala plaga utrum. Aliquam brevitas gemino haero importunus mos utrum vulpes zelus. Ibidem minim sed. Ad bene hos odio oppeto. Blandit gilvus incassum nobis premo vindico. Duis letalis lobortis macto praesent. Adipiscing caecus esse praemitto.</p>
 //
-// Styleguide 1.2
+// Styleguide 1.4
 //
 $base-font: Verdana, 'Lucida Sans Unicode', sans-serif;
 $base-font-monospace: Menlo, 'Ubuntu Mono', 'Lucida Console', 'Courier New', Courier, monospace;

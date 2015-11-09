@@ -7,9 +7,9 @@
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Implements drush function defined in digitaldonkey.drush.yml.
+ * Implements drush function defined in guru.drush.yml.
  */
-function drush_digitaldonkey_guru_subtheme($name) {
+function drush_guru_subtheme($name) {
 
   /*
    * Machine name.
@@ -31,7 +31,7 @@ function drush_digitaldonkey_guru_subtheme($name) {
   if (file_exists($destination)) {
     return drush_set_error('GURU_SUBTHEME_PATH', dt('The path @path already exists.', array('@path' => $destination)));
   }
-  drush_print(dt("\nTheme destination:\n @path.", array(
+  drush_print(dt("\nTheme destination:\n @path", array(
     '@path' => $destination,
   )));
 
@@ -48,23 +48,33 @@ function drush_digitaldonkey_guru_subtheme($name) {
    * Generate theme.info.yml file.
    */
   // Sadly I don't find a way to work with YAML files keeping comments of the
-  // base template.
-  $base_theme_yaml = __DIR__ . '/digitaldonkey.info.yml';
+  // base template. _guru_write_yaml_config() let us keep the comments.
+  $base_theme_yaml = __DIR__ . '/guru.info.yml';
   $yaml = Yaml::parse(file_get_contents($base_theme_yaml));
 
   $yaml['name'] = $name;
-  $yaml['base theme'] = 'digitaldonkey';
+  $yaml['base theme'] = 'guru';
   $yaml['libraries'] = array(
     $machine_name . '/global-styling',
   );
 
   $new_theme_yaml = $tmp_theme_path . $machine_name . '.info.yml';
-  _digitaldonkey_write_yaml_config($yaml, $base_theme_yaml, $new_theme_yaml);
+  if (!_guru_write_yaml_config($yaml, $base_theme_yaml, $new_theme_yaml)) {
+    return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $base_theme_yaml, '@destination' => $new_theme_yaml)));
+  }
+
+  // Libraries require renaming.
+  $base_theme_libraries_path = __DIR__ . '/guru.libraries.yml';
+  $libraries_path = $tmp_theme_path . '/' . $machine_name . '.libraries.yml';
+  if (!copy($base_theme_libraries_path, $libraries_path)) {
+    return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $base_theme_libraries_path, '@destination' => $libraries_path)));
+  }
 
   /*
    * Copy theme files.
    */
   $copy_files = TRUE;
+
   // Directories created in destination theme.
   $dirs = array(
     'css',
@@ -89,6 +99,8 @@ function drush_digitaldonkey_guru_subtheme($name) {
     '.gitignore',
     'README.md',
     'gulpfile.js',
+    'gulp.config.js',
+    'gulp.autoprefixer.config.js',
     'package.json',
     'scsslint-drupal.yml',
     'logo.svg',
@@ -114,7 +126,7 @@ function drush_digitaldonkey_guru_subtheme($name) {
         // Copy all Files recursive.
         $file = substr($file, 0, strpos($file, '/*'));
         $source = __DIR__ . DIRECTORY_SEPARATOR . $file;
-        if (!_digitaldonkey_dir_copy_recursive($source, $tmp_theme_path . $file)) {
+        if (!_guru_dir_copy_recursive($source, $tmp_theme_path . $file)) {
           return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $source, '@destination' => $tmp_theme_path . $file)));
         }
 
@@ -125,22 +137,22 @@ function drush_digitaldonkey_guru_subtheme($name) {
   /*
    * Copy files to destination.
    */
-  if (!_digitaldonkey_dir_copy_recursive($tmp_theme_path, $destination)) {
+  if (!_guru_dir_copy_recursive($tmp_theme_path, $destination)) {
     return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $tmp_theme_path, '@destination' => $destination)));
   }
 
   /*
    * Remove temporary files.
    */
-  if (!_digitaldonkey_del_directory($tmp_theme_path)) {
-    return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $source, '@destination' => $tmp_theme_path . $file)));
+  if (!_guru_del_directory($tmp_theme_path)) {
+    return drush_set_error('GURU_CREATE_ERROR', dt('Could delete directory @directory.', array('@directory' => $tmp_theme_path)));
   }
 
   /*
    * Give some Feedback on what we created.
    */
   $changed_files = array();
-  _digitaldonkey_dir_contents($destination, $changed_files);
+  _guru_dir_contents($destination, $changed_files);
   foreach ($changed_files as $k => $file) {
     $changed_files[$k] = ' ' . substr($file, strlen($destination) + 1);
   }
@@ -157,7 +169,7 @@ function drush_digitaldonkey_guru_subtheme($name) {
  * @param string $name
  *   Human readable theme name.
  */
-function drush_digitaldonkey_guru_subtheme_validate($name = NULL) {
+function drush_guru_guru_subtheme_validate($name = NULL) {
 
   $theme_handler = \Drupal::service('theme_handler');
   /*
@@ -229,7 +241,7 @@ function drush_digitaldonkey_guru_subtheme_validate($name = NULL) {
  * See:
  * http://blog.riff.org/2015_10_23_drupal_8_tip_of_the_day_replace_hook_drush_command_by_a_yaml_file.
  */
-function digitaldonkey_drush_command() {
+function guru_drush_command() {
   $file = preg_replace('/(inc|php)$/', 'yml', __FILE__);
   $config = Yaml::parse(file_get_contents($file));
   $items = $config['commands'];
@@ -278,7 +290,7 @@ function drush_guru_generate_theme_name($string) {
  *
  * This Function takes a YAML file and writes a new file with the new Values
  * provided by $yaml, which should be derived from the template file.
- * Experimental: Currently only tested with the digitaldonkey.info.yml.
+ * Experimental: Currently only tested with the guru.info.yml.
  *
  * For YAML file definition see:
  * http://docs.ansible.com/ansible/YAMLSyntax.html
@@ -294,7 +306,7 @@ function drush_guru_generate_theme_name($string) {
  * @return bool
  *   Successful or not.
  */
-function _digitaldonkey_write_yaml_config(array &$yaml, $yaml_template, $save_to) {
+function _guru_write_yaml_config(array &$yaml, $yaml_template, $save_to) {
 
   $yaml_file_array = file($yaml_template);
 
@@ -404,7 +416,7 @@ function _digitaldonkey_write_yaml_config(array &$yaml, $yaml_template, $save_to
  * @return bool
  *   Successful or not.
  */
-function _digitaldonkey_dir_copy_recursive($src, $dest) {
+function _guru_dir_copy_recursive($src, $dest) {
 
   // If source is not a directory stop processing.
   if (!is_dir($src)) {
@@ -424,7 +436,7 @@ function _digitaldonkey_dir_copy_recursive($src, $dest) {
       copy($f->getRealPath(), "$dest/" . $f->getFilename());
     }
     elseif (!$f->isDot() && $f->isDir()) {
-      _digitaldonkey_dir_copy_recursive($f->getRealPath(), "$dest/$f");
+      _guru_dir_copy_recursive($f->getRealPath(), "$dest/$f");
     }
   }
   return TRUE;
@@ -441,7 +453,7 @@ function _digitaldonkey_dir_copy_recursive($src, $dest) {
  * @return bool
  *   Successful or not.
  */
-function _digitaldonkey_dir_contents($dir, &$results = array()) {
+function _guru_dir_contents($dir, &$results = array()) {
   $files = scandir($dir);
   foreach ($files as $key => $value) {
     $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
@@ -449,7 +461,7 @@ function _digitaldonkey_dir_contents($dir, &$results = array()) {
       $results[] = $path;
     }
     elseif (is_dir($path) && $value != "." && $value != "..") {
-      _digitaldonkey_dir_contents($path, $results);
+      _guru_dir_contents($path, $results);
     }
   }
   return $results;
@@ -464,10 +476,10 @@ function _digitaldonkey_dir_contents($dir, &$results = array()) {
  * @return bool
  *   Successful or not.
  */
-function _digitaldonkey_del_directory($dir) {
+function _guru_del_directory($dir) {
   $files = array_diff(scandir($dir), array('.', '..'));
   foreach ($files as $file) {
-    (is_dir("$dir/$file")) ? _digitaldonkey_del_directory("$dir/$file") : unlink("$dir/$file");
+    (is_dir("$dir/$file")) ? _guru_del_directory("$dir/$file") : unlink("$dir/$file");
   }
   return rmdir($dir);
 }

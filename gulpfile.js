@@ -11,71 +11,72 @@
    */
   var config = require('./gulp.config.js'),
 
-  /**
-   * Gulp dependencies.
-   *
-   */
-  gulp = require('gulp'),
+    /**
+     * Gulp dependencies.
+     *
+     */
+    gulp = require('gulp'),
 
   // libsass/sassc implementation:
-  environments = require('gulp-environments'),
-  sass = require('gulp-sass'),
+    environments = require('gulp-environments'),
+    sass = require('gulp-sass'),
 
   // Enable @import 'components/*' with libsass.
-  sassGlob = require('gulp-sass-glob'),
+    sassGlob = require('gulp-sass-glob'),
 
   // How to use sourcemaps:
   // Watch: https://www.youtube.com/watch?v=-ZJeOJGazgE
-  sourcemaps = require('gulp-sourcemaps'),
+    sourcemaps = require('gulp-sourcemaps'),
 
   // Autoprefixer
   // See: https://github.com/postcss/autoprefixer
-  autoprefixer_cnf = require('./gulp.autoprefixer.config.js'),
-  autoprefixer = require('gulp-autoprefixer'),
-  scsslint = require('gulp-scss-lint'),
-  plumber = require('gulp-plumber'),
-  rename = require('gulp-rename'),
+    autoprefixer_cnf = require('./gulp.autoprefixer.config.js'),
+    autoprefixer = require('gulp-autoprefixer'),
+    scsslint = require('gulp-scss-lint'),
+
+    plumber = require('gulp-plumber'),
+    rename = require('gulp-rename'),
 
   // Reload BrowserSync.
   // See: http://www.browsersync.io/docs/options/
-  browserSync = require('browser-sync').create(),
+    browserSync = require('browser-sync').create(),
 
   // Javascript minification and comment removal.
   // Only used in environment production. Usage:
   //    gulp --env production
   // or compile only with:
   //    gulp production
-  uglify = require('gulp-uglify'),
+    uglify = require('gulp-uglify'),
 
   // Logging/debug Helper gutil.
   // e.g.
   // gutil.log('My message ' + gutil.colors.red('is partly red'));
-  gutil = require('gulp-util'),
+    gutil = require('gulp-util'),
 
   // Styleguide (kss-node) requires gulp-shell to be run.
-  shell  = require('gulp-shell'),
+    shell  = require('gulp-shell'),
 
   // Enable opening of KSS-Styleguide in browser.
-  open = require('gulp-open'),
+    open = require('gulp-open'),
 
   // Required in order to have a KSS-Finished callback to reload Styleguide.html.
   // Without gulp works asynchronous!
-  runSequence = require('run-sequence'),
+    runSequence = require('run-sequence'),
 
   // This is just required for deployment. It has a dependency on pandoc.
-  pandoc = require('gulp-pandoc'),
-  replace = require('gulp-replace'),
-  del = require('del'),
+    pandoc = require('gulp-pandoc'),
+    replace = require('gulp-replace'),
+    del = require('del'),
 
-  /**
-   *   Environments
-   *  With this we can use e.g.:
-   *    .pipe(development(sourcemaps.init()))
-   * or
-   *    .pipe(production(uglify()))
-   * var development = environments.development,
-   *    production = environments.production;
-   */
+    /**
+     *   Environments
+     *  With this we can use e.g.:
+     *    .pipe(development(sourcemaps.init()))
+     * or
+     *    .pipe(production(uglify()))
+     * var development = environments.development,
+     *    production = environments.production;
+     */
 
     development = environments.development,
     production = environments.production;
@@ -88,12 +89,19 @@
   gulp.task('serve', ['scss-lint', 'sass', 'styleguide', 'scripts'], function() {
     gutil.log('Current environment: ' + gutil.colors.red((production() ? 'production' : 'development')));
 
+    // Add close-tab on gulp-exit functionality.
+    browserSync.use({
+      plugin: function () { /* noop */ },
+      hooks: {
+        'client:js': require("fs").readFileSync('./browsersync-client-events.js', 'utf-8')
+      }
+    });
     // Static Server init.
     browserSync.init({
       proxy: {
         target: config.server.ip,
         reqHeaders: function () {
-            return {
+          return {
             host: config.server.domain
           };
         }
@@ -109,12 +117,19 @@
       gutil.log('File ' + event.path + ' was ' + event.type);
     });
 
+    var scripts_watcher = gulp.watch('js/*.js', ['scripts']);
+
     // Initialize watch task for Styleguide template files.
     // Todo: Missing regenerate on Section Changes:
     // On add/edit section generated CSS code. Reload by default will be slower when working only on components.
     var styleguide_watcher = gulp.watch(
-      ['styleguide-template/**/index.html','styleguide-template/**/template_config.js'],
+      [
+        'styleguide-template/**/index.html',
+        'styleguide-template/**/template_config.js',
+        'styleguide-template/guru-handlebars/template/public/kss.scss'
+      ],
       ['styleguide_dev']);
+
     styleguide_watcher.on('change', function(event) {
       gutil.log('File ' + event.path + ' was ' + event.type);
     });
@@ -129,7 +144,6 @@
   gulp.task('sass', function () {
     return gulp.src('scss/main.scss')
       .pipe(plumber())
-      //.pipe(sourcemaps.init())
       .pipe(sassGlob())
       .pipe(development(sourcemaps.init()))
       .pipe(sass({
@@ -139,10 +153,10 @@
         precision: 10,
         onError: function (err) {
           gutil.log(err);
-          }
-        }))
-        .on('end', function(){
-          gutil.log('Just an example for the end event :D');
+        }
+      }))
+      .on('end', function(){
+        gutil.log('Just an example for the end event :D');
       })
 
       // Workaround for Sourcemaps.
@@ -158,11 +172,8 @@
         cascade: true
       }))
       .pipe(development(sourcemaps.write('.')))
-      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest('css'))
       .pipe(browserSync.stream());
-
-
   });
 
 
@@ -193,7 +204,7 @@
    * Build KSS-Styleguide and reload browser at end.
    *
    */
-  gulp.task('styleguide_dev', function(callback) {
+  gulp.task('styleguide_dev', ['styleguide-sass'],  function(callback) {
     return runSequence('styleguide', 'styleguide_browser_reload', callback);
   });
 
@@ -209,7 +220,7 @@
       templateData: {
         source:       'scss',
         destination:  'styleguide',
-        template: 'styleguide-template/handlebars/template'
+        template: 'styleguide-template/guru-handlebars/template'
         // Alternative:
         // See: https://github.com/htanjo/kss-node-template
         // template:     'kss-node-template/template'
@@ -219,11 +230,45 @@
 
 
   /**
+   * Compile SASS to css Task.
+   *
+   */
+  gulp.task('styleguide-sass', function () {
+    return gulp.src('styleguide-template/guru-handlebars/template/public/kss.scss')
+      .pipe(plumber())
+      .pipe(sassGlob())
+      .pipe(development(sourcemaps.init()))
+      .pipe(sass({
+        // Remove comments and minify CSS.
+        outputStyle: 'expanded',
+        sourcemap: true,
+        precision: 10,
+        onError: function (err) {
+          gutil.log(err);
+        }
+      }))
+
+      // Workaround for Sourcemaps.
+      .pipe(development(sourcemaps.write({includeContent: false})))
+      .pipe(development(sourcemaps.init({loadMaps: true})))
+
+      .pipe(sourcemaps.write({includeContent: false}))
+      .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(autoprefixer({
+        browsers: autoprefixer_cnf.browsers,
+        cascade: true
+      }))
+      .pipe(development(sourcemaps.write('styleguide-template/guru-handlebars/template/public')))
+      .pipe(gulp.dest('styleguide-template/guru-handlebars/template/public'))
+      .pipe(browserSync.stream());
+  });
+
+  /**
    * KSS-Styleguide browser reload.
    *
    */
   gulp.task('styleguide_browser_reload', function(){
-    browserSync.reload("*.html");
+    browserSync.reload(["*.html", "kss.css"]);
   });
 
 
@@ -276,7 +321,7 @@
    *
    */
 
-  // pandoc -s -t rst --columns=80  --smart --tab-stop=2 --normalize  README.md -o Readme.txt
+    // pandoc -s -t rst --columns=80  --smart --tab-stop=2 --normalize  README.md -o Readme.txt
   gulp.task('docs', function() {
     del(['./Readme.txt', './Readme.html']);
     // Create Drupal Readme.
@@ -293,12 +338,12 @@
     // Create HTML Version (for Drupal.org)
     gulp.src('./Readme.md')
       .pipe(pandoc({
-      from: 'markdown',
-      to: 'html5+lhs',
-      ext: '.html',
-      args: ['--smart']
-    }))
-    .pipe(gulp.dest('.'));
+        from: 'markdown',
+        to: 'html5+lhs',
+        ext: '.html',
+        args: ['--smart']
+      }))
+      .pipe(gulp.dest('.'));
 
   });
 

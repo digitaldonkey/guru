@@ -5,13 +5,13 @@
    * The recommended way for producing HTML markup through JavaScript is to write
    * theming functions. These are similiar to the theming functions that you might
    * know from 'phptemplate' (the default PHP templating engine used by most
-   * Drupal themes including Omega). JavaScript theme functions accept arguments
+   * Drupal themes including guru). JavaScript theme functions accept arguments
    * and can be overriden by sub-themes.
    *
    * In most cases, there is no good reason to NOT wrap your markup producing
    * JavaScript in a theme function.
    */
-  //Drupal.theme.donkeyButton = function (path, title) {
+  //Drupal.theme.guruButton = function (path, title) {
   //  // Create an anchor element with jQuery.
   //  return $('<a href="' + path + '" title="' + title + '">' + title + '</a>');
   //};
@@ -39,7 +39,7 @@
   // *   Drupal.settings directly you should use this because of potential
   // *   modifications made by the Ajax callback that also produced 'context'.
   // */
-  //Drupal.behaviors.digitaldonkeyExampleBehavior = {
+  //Drupal.behaviors.digitalguruExampleBehavior = {
   //  attach: function (context, settings) {
   //    // By using the 'context' variable we make sure that our code only runs on
   //    // the relevant HTML. Furthermore, by using jQuery.once() we make sure that
@@ -47,16 +47,47 @@
   //    // processed previously. By using .once('foo') all processed elements will
   //    // get tagged with a 'foo-processed' class, causing all future invocations
   //    // of this behavior to ignore them.
-  //    console.log($('#block-digitaldonkey-branding', context), 'attach: function');
+  //    console.log($('#block-digitalguru-branding', context), 'attach: function');
   //
-  //    $('#block-digitaldonkey-branding', context).once('foo').each(function() {
+  //    $('#block-digitalguru-branding', context).once('foo').each(function() {
   //      // Since there is no once ID provided here, the key will be "once".
-  //      var button = Drupal.theme('donkeyButton', 'http://drupal.org', 'Button Text: drupal.org');
+  //      var button = Drupal.theme('guruButton', 'http://drupal.org', 'Button Text: drupal.org');
   //      $(this).css({border: '1px solid green'})
   //             .after(button);
   //    });
   //  }
   //};
 
-})(window.jQuery, window, window.Drupal, window.drupalSettings);
+  /**
+   * Renders a widget for displaying the current width of the browser.
+   */
+  Drupal.behaviors.guruBrowserWidth = {
+    attach: function (context) {
 
+      // Loading Data ?!
+      //$('body', context).find('[data-guru-browser-width]').once('guru-browser-width').each(function() {
+      //  // Do something to the elements.
+      //});
+
+      $('body', context).once('guru-browser-indicator').each(function() {
+
+        var indicator = $('<div class="guru-browser-indicator" />').appendTo(this);
+
+        // Bind to the window.resize event to continuously update the width.
+        $(window).on('resize.guru-browser-indicator', function () {
+
+          indicator.text($(this).width() + 'px');
+        }).trigger('resize.guru-browser-indicator');
+
+        $('.guru-browser-indicator', context).on('click', function () {
+
+          $(window.document.body).toggleClass('is-touch-debug');
+        });
+      });
+
+    }
+  };
+
+
+
+})(jQuery, window, window.Drupal, window.drupalSettings);

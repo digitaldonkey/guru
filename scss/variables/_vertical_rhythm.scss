@@ -48,12 +48,11 @@
 //
 
 $base-font-size: 1em;
-$base-line-height: 1.5rem;
-$vertical-space-tiny: .63em;
-$vertical-space: 1.2em;
+$base-line-height: 1.5;
 
 $font-size-global--default: 17px;
 $font-size-global--mobile-font: 13px;
-$font-size-global--mobile-media: 'max-width: 400px';
 $font-size-global--tab-font: 15px;
-$font-size-global--tab-media: 'max-width: 900px';
+
+$vertical-space-tiny: .4em;
+$vertical-space: 1.2em;

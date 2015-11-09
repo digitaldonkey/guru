@@ -1,0 +1,38 @@
+body.is-touch-debug {
+  a {
+    background: $red !important;
+  }
+
+  .guru-browser-indicator {
+    border-left: 3px solid $red;
+  }
+}
+
+body.is-browsersync .guru-browser-indicator {
+  background: $green;
+  bottom: 2em;
+  height: 2em;
+  font-size: .75em;
+  line-height: 2em;
+  padding: 0 .3em;
+  position: fixed;
+  right: 2em;
+  text-align: right;
+  width: auto;
+
+
+
+  &:before {
+    background: $green;
+    content: '';
+    display: block;
+    float: left;
+    height: 2em;
+    padding-right: .5em;
+    right: 6em;
+    text-align: center;
+    width: auto;
+  }
+  // See: scss/variables/_breakpoints.scss.
+  @extend %guru-browser-width;
+}

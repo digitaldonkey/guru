@@ -4,10 +4,11 @@ global-styling:
     theme:
       css/main.css: {}
   js:
-      js/behaviors.js: { scope: footer }
+    js/behaviors.min.js: { scope: footer }
   dependencies:
     - core/jquery
     - core/drupal
-    - core/jquery-once
+    - core/drupalSettings
+    - core/jquery.once
 # For external libraries see:
 # https://www.drupal.org/theme-guide/8/assets#external

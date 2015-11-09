@@ -16,35 +16,73 @@ body {
   margin: 0 auto;
   max-width: 80em;
 
-  .views-row:nth-child(4n+3) {
-    @include grid-span(3, 1, 12);
-  }
 
-  .views-row:nth-child(4n+4) {
-    @include grid-span(3, 4, 12);
-  }
+  .view-frontpage {
 
-  .views-row:nth-child(4n+5) {
-    @include grid-span(3, 7, 12);
-  }
+    @include breakpoint($tab) {
 
-  .views-row:nth-child(4n+6) {
-    @include grid-span(3, 10, 12);
-  }
+      .views-row:nth-child(even) {
+        @include grid-span(6, 1, 12);
+        clear: right;
+      }
 
-  .views-row:nth-child(8n+7) {
-    clear: both;
-  }
+      .views-row:nth-child(odd) {
+        @include grid-span(6, 7, 12);
+      }
 
-  .views-row:nth-child(1) {
-    @include grid-span(6, 1, 12);
-  }
+      .views-row:first-child {
+        @include grid-span(12, 1, 12);
+        // Increasing font size for all elements in Block by setting a block
+        // font size in rem.
+        font-size: 1.1rem;
+      }
+    }
 
-  .views-row:nth-child(2) {
-    @include grid-span(6, 7, 12);
-  }
+    @include breakpoint($large) {
 
-  .views-row:nth-child(3) {
-    clear: both;
+      .views-row:nth-child(1),
+      .views-row:nth-child(2),
+      .views-row:nth-child(3) {
+        // Increasing font size for all elements in Block by setting a block
+        // font size in rem.
+        font-size: 1.2rem;
+      }
+
+      .views-row:nth-child(1) {
+        @include grid-span(4, 1, 12);
+      }
+
+      .views-row:nth-child(2) {
+        @include grid-span(4, 5, 12);
+      }
+
+      .views-row:nth-child(3) {
+        @include grid-span(4, 9, 12);
+      }
+
+      .views-row:nth-child(4) {
+        clear: both;
+      }
+
+      .views-row:nth-child(4n+4) {
+        @include grid-span(3, 1, 12);
+        clear: both;
+      }
+
+      .views-row:nth-child(4n+5) {
+        @include grid-span(3, 4, 12);
+        clear: none;
+      }
+
+      .views-row:nth-child(4n+6) {
+        @include grid-span(3, 7, 12);
+        clear: none;
+      }
+
+      .views-row:nth-child(4n+7) {
+        @include grid-span(3, 10, 12);
+        clear: none;
+      }
+    }
   }
 }

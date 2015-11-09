@@ -11,8 +11,8 @@ module.exports.server = {
   ip: '127.0.0.1',
 
   // This url will be valid with the browserSync Server.
-  // Replace "digitaldonkey" with your subtheme name!
+  // Replace "guru" with your subtheme name!
   styleguide: {
-    uri: 'http://localhost:3000/sites/all/themes/_custom/digitaldonkey/styleguide/index.html'
+    uri: 'http://localhost:3000/sites/all/themes/_custom/guru/styleguide/index.html'
   }
 };

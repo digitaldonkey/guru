@@ -122,7 +122,6 @@ body {
   // Using em units later on enables different base font sizes by component,
   // But keeping everything in space.
   font-size: 1rem;
-  line-height: $base-line-height;
 }
 
 h1,
@@ -132,8 +131,8 @@ h4,
 h5,
 h6 {
   line-height: 1;
-  margin-bottom: .5em;
-  margin-top: 1em;
+  margin-bottom: $vertical-space-tiny;
+  margin-top: $vertical-space-tiny;
 }
 
 h1 {
@@ -142,12 +141,10 @@ h1 {
 
 h2 {
   font-size: 1.8em;
-  margin-bottom: .75em;
 }
 
 h3 {
   font-size: 1.5em;
-  margin-bottom: .75em;
 }
 
 h4 {

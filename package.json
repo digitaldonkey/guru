@@ -1,14 +1,14 @@
 {
-  "name": "digitaldonkey",
+  "name": "guru",
   "version": "1.0.0",
-  "description": "donkeymedia.eu theme",
+  "description": "Drupal Guru Theme Base",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git@r.donkeymedia.eu:donkeymedia-d8-theme-repo.git"
+    "url": "https://github.com/digitaldonkey/drupal8_gulp_theme_base.git"
   },
   "keywords": [
     "drupal",
@@ -22,6 +22,7 @@
   "devDependencies": {
     "browser-sync": "^2.9.7",
     "compass-mixins": "^0.12.7",
+    "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.2",
     "gulp-environments": "^0.1.1",

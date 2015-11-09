@@ -1,0 +1,73 @@
+//
+// Breakpoints.
+//
+// `src: components/_breakpoints.scss`
+//
+// Here you can loarn abeout breakpoint:
+// http://breakpoint-sass.com/
+//
+// Styleguide 1.2
+//
+
+
+//
+// Global Breakpoints
+//
+// <p><strong>$tab: 401px</strong></p>
+// <p><strong>$large: 901px</strong></p>
+//
+// E.g:
+//
+// ```breakpoint($tab) { ... }```
+//
+// Will compile in css to:
+//
+// ```@media (max-width: 400px) { ... }```
+//
+//
+// Styleguide 1.2.1
+//
+
+$tab: 401px;
+$large: 901px;
+
+//
+// Global Font-Size breakpoints
+//
+// These are vice versa in order to stick about with broswer default font Size.
+// Refer *Font-Sizes and Vertical Rhythm* below.
+//
+// <p><strong>$font-size-global--mobile-media: max-width: 400px</strong></p>
+// <p><strong>$font-size-global--tab-media: max-width: 900px</strong></p>
+//
+// Styleguide 1.2.2
+//
+
+$font-size-global--mobile-media: 'max-width: 400px';
+$font-size-global--tab-media: 'max-width: 900px';
+
+//
+// guru-browser-width helper.
+//
+// Displays browser width.
+//
+%guru-browser-width {
+  // scss-lint:disable Disable ImportantRule
+  &:before {
+    content: 'mobile ' !important;
+  }
+
+  @include breakpoint($tab) {
+
+    &:before {
+      content: 'tab ' !important;
+    }
+  }
+
+  @include breakpoint($large) {
+
+    &:before {
+      content: 'large ' !important;
+    }
+  }
+}

@@ -11,6 +11,7 @@ $black:     #222;
 $white:     #fff;
 $yellow:    #f9be37;
 $green:     #25a847;
+$red:       #9c0814;
 
 $gray-light: #cfcfcf;
 $gray-medium: #999;
@@ -39,18 +40,6 @@ $darkblue-darker: #151c22;
 // Styleguide 1.1.1
 //
 
-// Todo needs to go somewhere not abstract.
-.kss-colorblock {
-  background: $white;
-  height: 5rem;
-  padding: .1rem;
-  width: 5rem;
-
-  &.kss-colorblock--inline {
-    display: inline-block;
-  }
-}
-
 //
 // Background CSS classes
 //
@@ -68,9 +57,6 @@ $darkblue-darker: #151c22;
 $bg-one: $green;
 $bg-two: $yellow;
 $bg-three: $darkblue;
-$bg-four: $green;
-$bg-five: $yellow;
-$bg-six: $darkblue;
 
 %bg-one,
 .bg-one {
@@ -85,10 +71,10 @@ $bg-six: $darkblue;
 %bg-two,
 .bg-two {
   background: $bg-two;
-  color: $black;
+  color: $white;
 
   a {
-    color: $black;
+    color: $white;
   }
 }
 
