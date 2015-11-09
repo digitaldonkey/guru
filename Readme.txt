@@ -3,7 +3,7 @@ Gulp based Drupal 8 theme base with kss styleguide
 
 Project page: https://www.drupal.org/sandbox/digitaldonkey/2599668
 
-This is an example Theme named “digitaldonkey”.
+This is an example Theme named “guru”.
 
 **Features**
 
@@ -43,9 +43,9 @@ versions <https://www.lullabot.com/articles/switching-drush-versions>`__.
    system choice will be singularity you need bower.
 
      npm -v
-     2.14.4
+     3.3.9
      bower -v
-     1.4.1
+     1.6.5
 
 2) Install node dependencies
 
@@ -53,10 +53,10 @@ versions <https://www.lullabot.com/articles/switching-drush-versions>`__.
      npm install --global gulp bower browser-sync
      npm install 
 
-3) Install singularity
+3) Install singularity (Currently 1.6.2)
 
      cd [theme folder]
-     bower install --save singularity
+     bower install singularity
 
 4) **Change your domain and styleguide url** in
 
@@ -67,8 +67,8 @@ versions <https://www.lullabot.com/articles/switching-drush-versions>`__.
      cd [theme folder]
      gulp
 
-6) Enable theme in Drupal and check the styleguide in
-   /sites/all/themes/\_custom/digitaldonkey/styleguide/
+6) Enable theme in Drupal and check the styleguide in /sites/all/themes/[theme
+   folder]/styleguide/
 
 browser sync
 ^^^^^^^^^^^^
