@@ -27,7 +27,7 @@ function drush_guru_subtheme($name) {
   /*
    * Destination path.
    */
-  $destination = DRUPAL_ROOT . DIRECTORY_SEPARATOR . drush_get_option('destination', 'themes/custom') . DIRECTORY_SEPARATOR . $machine_name;
+  $destination = DRUPAL_ROOT . DIRECTORY_SEPARATOR . drush_get_option('destination', 'themes') . DIRECTORY_SEPARATOR . $machine_name;
   if (file_exists($destination)) {
     return drush_set_error('GURU_SUBTHEME_PATH', dt('The path @path already exists.', array('@path' => $destination)));
   }
@@ -212,7 +212,7 @@ function drush_guru_guru_subtheme_validate($name = NULL) {
     }
   }
   // Check if the provided destination exists.
-  $destination = drush_get_option('destination', 'themes/custom');
+  $destination = drush_get_option('destination', 'themes');
   if (!is_string($destination)) {
     return drush_set_error('GURU_DESTINATION_INVALID', dt('The --destination option expects a string value.'));
   }
