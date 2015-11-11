@@ -41,8 +41,7 @@ Here is the reason: https://github.com/BrowserSync/browser-sync/issues/10
 
 -  npm
 -  libsass
--  Ruby :/ now there is still a ruby dependency on scss-lint. But I work on
-   getting ruby out.
+-  [STRIKEOUT:Ruby] Just for the second scss-lint option now.
 
 Getting started
 ~~~~~~~~~~~~~~~
@@ -133,17 +132,27 @@ You may know singularity from Omega4 theme. Known Issue: With lib-sass the
 background grids are not working (yet). http://singularity.gs/
 https://github.com/at-import/Singularity/wiki/Spanning-The-Grid
 
-SCSS-lint
-^^^^^^^^^
+SCSS-lint or sass-lint
+^^^^^^^^^^^^^^^^^^^^^^
 
 Tells you if you are in order with Drupals SCSS Coding standards while live
-Editing your SCSS. https://github.com/brigade/scss-lint This sadly now depends
-on ruby. TODO: I plan to make ruby/SCSS-Lint optional (decide while creating a
+Editing your SCSS.
+
+**sass-lint (default)** In sass-lint `disabling by
+comment <https://github.com/sasstools/sass-lint/issues/70>`__ wont work yet. The
+linter’s configuration is in sasslint-drupal.yml
+
+**scss-lint** https://github.com/brigade/scss-lint This sadly now depends on
+ruby. TODO: I plan to make ruby/SCSS-Lint optional (decide while creating a
 subtheme).
 
   gem install scss_lint
 
 The linter’s configuration is in scsslint-drupal.yml
+
+Using scss-lint there is “disabling by comment” enabled.
+
+  // scss-lint:disable ImportantRule
 
 Digging deeper
 ^^^^^^^^^^^^^^
@@ -155,8 +164,7 @@ https://www.npmjs.com/package/gulp-watch
 Guru is using drupal default css classes provided by core classy theme. You can
 change this by changing the “base theme” variable in theme.info.yml
 
-Update Gulp Sass-lint
----------------------
+**Developers: Update Gulp Sass-lint or other node modules**
 
 `Install ncu <https://www.npmjs.com/package/npm-check-updates>`__
 
@@ -168,4 +176,93 @@ Update Gulp Sass-lint
    gulp-util  ^3.0.6  →  ^3.0.7
    sass-lint  ^1.0.0  →  ^1.3.2
 
-  Upgraded /Users/tho/htdocs/drupaleight.local/htdocs/sites/all/themes/_custom/guru/node_modules/gulp-sass-lint/package.json
+  Upgraded .... sites/all/themes/_custom/guru/node_modules/gulp-sass-lint/package.json
+
+HOWTO: Getting started in Drupals Vagrant VM (Debian/Ubuntu)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*Testet with the `Vagrant Drupal
+Development <https://www.drupal.org/node/2008792>`__ Virtual machine.*
+
+Get Drupal 8 running and drush8 running all together the most easy way is using
+a virtual machine created with `Vagrant Drupal
+Development <https://www.drupal.org/node/2008792>`__.
+
+I will assume you have made it so far.
+
+**Install the latest node-js in Ubuntu**
+
+Do you have node installed?
+
+  npm -v
+  3.3.6
+
+If not:
+
+  curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+  sudo apt-get install -y nodejs
+
+**Install global packages**
+
+  npm install --global gulp
+  npm install --global browser-sync
+  npm install --global bower
+
+I had to fix permission Problems, when trying to do npm install –global in the
+vm. And `found a fix <http://stackoverflow.com/a/21712034/308533>`__:
+
+  npm config set prefix '~/.npm-packages'
+
+and add
+
+  export PATH="$PATH:$HOME/.npm-packages/bin"
+
+to the end of you ~/.bashrc
+
+**Testing bower**
+
+  bower -v
+  1.6.5
+
+**Create Subtheme**
+
+  cd [www-data-folder]
+  drush guru "My Theme"
+
+**Local node modules:**
+
+  cd [theme folder]
+  npm install 
+  bower install singularity
+
+**Adapt your config** in
+
+  gulp.config.js
+
+In my VM I Ended up using:
+
+  domain: 'drupal8.dev',
+
+  styleguide: {
+      uri: 'http://drupal8.dev:3000/themes/my_theme/styleguide/index.html'
+    },
+
+**Don’t forget to install link\_css module**
+
+  drush dl
+  drush en link_css -y
+
+Enable the Theme in Drupal UI or with Drush
+
+  drush pm-enable my_theme -y
+  drush config-set system.theme default my_theme -y
+
+**Run gulp and open up a browser**
+
+  cd [theme folder]
+  gulp
+
+If you are on a remote/Vagrant computer browser want start up.
+
+You can use the Urls provided in “External” you should find after browSersync
+Init is finished.
