@@ -13,6 +13,21 @@ module.exports.server = {
   // This url will be valid with the browserSync Server.
   // Replace "guru" with your subtheme name!
   styleguide: {
-    uri: 'http://localhost:3000/sites/all/themes/_custom/guru/styleguide/index.html'
+    uri: 'http://localhost:3000/themes/guru/styleguide/index.html'
+  },
+  // There are two options how to use SCSS-lint
+  linter: {
+    // In sass-lint "disabling by comment" wont work yet. See:
+    // https://github.com/sasstools/sass-lint/issues/70
+    default: 'sass-lint'
+
+    // Using scss-lint there is "disabling by comment" enabled.
+    // e.g: // scss-lint disable single-line-per-selector
+    // See readme for more Info.
+    // default: 'scss-lint'
+
+    // You can disable Linter completly.
+    // default: 'none'
   }
 };
+

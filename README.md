@@ -1,15 +1,9 @@
+### Drupal 8 Guru Theme
 
-### Gulp based Drupal 8 theme base with kss styleguide
+Guru is a gulp based Drupal 8 theme base with kss styleguide
  
-Project page:
-https://www.drupal.org/sandbox/digitaldonkey/2599668
+### Features
 
-
-This is an example Theme named "guru". 
-
-**Features**
-
-- gulp as a build tool
 - libsass for fast scss compilation
 - browserSync for an amazing developing and testing experience
 - singularity.gs css grid system
@@ -17,9 +11,9 @@ This is an example Theme named "guru".
 - Live Editing of scss in site and styleguide
 - The styleguide enables you prototyping in SCSS with custom HTML in the comments section
 - SCSS linting to drupal SCSS standards while live editing
+- gulp as a build tool
 - sourcemaps
 - autoprefixer
-
 
 
 Checkout presentation at Drupalcamp Essen 2015
@@ -30,6 +24,24 @@ http://slides.com/digitaldonkey/create-a-drupal8-theme
 
 Please use drupal issue tracker to provide feedback and share improvements. 
 https://www.drupal.org/project/issues/search/2599668
+
+
+### Dependencies
+
+**Drupal Modules**
+
+You  **need the drupal module link_css** to make browserSync working!
+
+[link_css](https://www.drupal.org/project/link_css)
+
+Here is the reason:
+https://github.com/BrowserSync/browser-sync/issues/10
+
+**Other dependencies**
+
+- npm
+- libsass
+- Ruby :/ now there is still a ruby dependency on scss-lint. But I work on getting ruby out.
 
 
 ### Getting started
@@ -78,25 +90,24 @@ gulp
 ```
 
 6) Enable theme in Drupal
-and check the styleguide in /sites/all/themes/[theme folder]/styleguide/
+and check the styleguide in /themes/custom/[theme folder]/styleguide/
 
 
-#### browser sync
-You  **need the drupal module link_css** to make browserSync working.
-https://www.drupal.org/project/link_css
-Here is the reason:
-https://github.com/BrowserSync/browser-sync/issues/10
 
-#### KSS-Node
+
+### Readme
+
+
+##### KSS-Node
 Is a amazing tool to create living styleguides.
 
 Look into the scss files for examples. 
 
 The styleguide is generated into 
-/sites/all/themes/[your theme]/styleguide/
+/themes/custom/[your theme]/styleguide/
 and should open on the browser using the gulp default task.
 You may change the templates in 
-/sites/all/themes/[your theme]/styleguide-template/
+/themes/custom/[your theme]/styleguide-template/
 
 For more information: 
 https://github.com/kss-node/kss-node/wiki/Quick-Start-Guide
@@ -146,3 +157,19 @@ e.g: https://www.npmjs.com/package/gulp-watch
 
 Guru is using drupal default css classes provided by core classy theme.
 You can change this by changing the "base theme" variable in theme.info.yml
+
+
+## Update Gulp Sass-lint
+[Install ncu](https://www.npmjs.com/package/npm-check-updates)
+
+```
+cd /themes/guru/node_modules/gulp-sass-lint
+ncu --upgradeAll
+
+The following dependencies are satisfied by their declared version range, but the installed versions are behind. You can install the latest versions without modifying your package file by using npm update. If you want to update the dependencies in your package file anyway, use --upgradeAll.
+
+ gulp-util  ^3.0.6  →  ^3.0.7
+ sass-lint  ^1.0.0  →  ^1.3.2
+
+Upgraded /Users/tho/htdocs/drupaleight.local/htdocs/sites/all/themes/_custom/guru/node_modules/gulp-sass-lint/package.json
+```

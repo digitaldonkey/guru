@@ -1,5 +1,7 @@
-body.is-touch-debug {
+// body.is-touch-debug.
+.is-touch-debug {
   a {
+    // scss-lint:disable ImportantRule
     background: $red !important;
   }
 
@@ -8,31 +10,34 @@ body.is-touch-debug {
   }
 }
 
-body.is-browsersync .guru-browser-indicator {
-  background: $green;
-  bottom: 2em;
-  height: 2em;
-  font-size: .75em;
-  line-height: 2em;
-  padding: 0 .3em;
-  position: fixed;
-  right: 2em;
-  text-align: right;
-  width: auto;
-
-
-
-  &:before {
+// body.is-browsersync
+.is-browsersync {
+  .guru-browser-indicator {
     background: $green;
-    content: '';
-    display: block;
-    float: left;
+    bottom: 2em;
+    font-size: .75em;
     height: 2em;
-    padding-right: .5em;
-    right: 6em;
-    text-align: center;
+    line-height: 2em;
+    padding: 0 .3em;
+    position: fixed;
+    right: 2em;
+    text-align: right;
     width: auto;
+
+    &:before {
+      background: $green;
+      content: '';
+      display: block;
+      float: left;
+      height: 2em;
+      padding-right: .5em;
+      right: 6em;
+      text-align: center;
+      width: auto;
+    }
+    // See: scss/variables/_breakpoints.scss.
+    @extend %guru-browser-width;
   }
-  // See: scss/variables/_breakpoints.scss.
-  @extend %guru-browser-width;
+
 }
+

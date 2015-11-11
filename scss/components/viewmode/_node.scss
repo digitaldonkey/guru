@@ -41,8 +41,7 @@
 //
 //
 
-%node,
-.node {
+%node {
   clear: left;
   margin-bottom: $vertical-space;
 
@@ -61,7 +60,7 @@
     color: $gray-medium;
 
     // Testing autoprefixer.
-    transition: .75s;
+    transition: .5s;
 
   }
 

@@ -58,8 +58,7 @@ $bg-one: $green;
 $bg-two: $yellow;
 $bg-three: $darkblue;
 
-%bg-one,
-.bg-one {
+%bg-one {
   background: $bg-one;
   color: $yellow;
 
@@ -68,8 +67,7 @@ $bg-three: $darkblue;
   }
 }
 
-%bg-two,
-.bg-two {
+%bg-two {
   background: $bg-two;
   color: $white;
 
@@ -78,8 +76,7 @@ $bg-three: $darkblue;
   }
 }
 
-%bg-three,
-.bg-three {
+%bg-three {
   background: $bg-three;
   color: $white;
 
