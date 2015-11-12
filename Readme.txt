@@ -224,6 +224,12 @@ to the end of you ~/.bashrc
   bower -v
   1.6.5
 
+**Libsass**
+
+Is harder to get on Ubuntu. See:
+
+http://askubuntu.com/questions/566675/how-to-install-node-sass-gulp-sass-on-ubuntu-14-04-or-linux-mint-17/566681#566681
+
 **Create Subtheme**
 
   cd [www-data-folder]

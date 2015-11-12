@@ -15,7 +15,7 @@
     "drupal8"
   ],
   "author": "Thorsten Krug",
-  "license": "GPL3",
+  "license": "GPL-3.0",
   "dependencies": {
     "gulp-open": "^1.0.0"
   },

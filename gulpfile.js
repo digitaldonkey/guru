@@ -91,17 +91,6 @@
     development = environments.development,
     production = environments.production;
 
-
-  switch (config.server.linter.default) {
-    case 'sass-lint':
-      var sassLint = require('gulp-sass-lint');
-      break;
-    case 'scss-lint':
-      var scssLint = require('gulp-scss-lint');
-      break;
-  }
-
-
   /**
    * Serve Task.
    *
@@ -109,72 +98,100 @@
    * launches browser windows for site and styleguide.
    *
    */
-  gulp.task('serve', function() {
-    gutil.log('Current environment: ' + gutil.colors.red((production() ? 'production' : 'development')));
+  gulp.task('serve', ['sass','scripts'], function() {
 
-    // Add close-tab on gulp-exit functionality.
+    // Close-tab on gulp-exit with a client side script.
     browserSync.use({
       plugin: function () { /* noop */ },
       hooks: {
         'client:js': require("fs").readFileSync('./browsersync-client-events.js', 'utf-8')
       }
     });
+
     // Static Server init.
-    // Make sure Drupal will not send compressed stuff to browserSync.
     browserSync.init({
       proxy: {
-        target: config.server.ip,
+        target: config.current.ip,
         reqHeaders: function () {
           return {
-            host: config.server.domain,
+            host: config.current.domain,
+            // Make sure Drupal will not send compressed stuff to browserSync.
             "accept-encoding": "identity"
           };
         }
       }
-    }, function(){
-      gutil.log('Finished browserSync init');
-      gulp.start('styleguide_browser');
+    },
+    function(){
+
+      // Finished init. Now start Browser and linter.
+      gulp.start('styleguide-browser','linter');
+
+      // Lint after serving to browser.
+      browserSync.emitter.on("stream:changed", function () {
+        gulp.start('linter');
+      });
+
+      /*
+       * Watcher.
+       */
+
+      // Initialize watch task for sass.
+      var sass_watcher = gulp.watch([
+        'scss/**/*.scss',
+        '!scss/**/scsslint_tmp*',
+        '!scss/**/*generated.scss'
+      ], ['sass']);
+
+      // Todo: Missing regenerate on Section Changes:
+      // On add/edit section generated CSS code, you need to reload the Styleguide
+      // manually in Browser or run the styleguide-template task.
+      sass_watcher.on('change', function(event) {
+        gutil.log('File ' + event.path + ' was ' + event.type);
+      });
+
+      // Initialize watch task for javascript files.
+      var scripts_watcher = gulp.watch([
+        'js/*.js',
+        '!js/*.min.js'
+      ], ['scripts']);
+
+      scripts_watcher.on('change', function(event) {
+        gutil.log('scripts_watcher: File ' + event.path + ' was ' + event.type);
+      });
+
+      // Initialize watch task for Styleguide template files.
+      var styleguide_watcher = gulp.watch(
+        [
+          'styleguide-template/**/index.html',
+          'styleguide-template/**/template_config.js',
+          'styleguide-template/guru-handlebars/template/public/kss.scss'
+        ],
+        ['styleguide-template']);
+
+      styleguide_watcher.on('change', function(event) {
+        gutil.log('styleguide_watcher: File ' + event.path + ' was ' + event.type);
+      });
+
+
     });
-
-    // Initialize watch task for sass.
-    var sass_watcher = gulp.watch('scss/**/*.scss', ['sass']);
-
-    // Todo: Missing regenerate on Section Changes:
-    // On add/edit section generated CSS code, you need to reload the Styleguide
-    // manually in Browser or run the styleguide_dev task.
-    sass_watcher.on('change', function(event) {
-      gutil.log('File ' + event.path + ' was ' + event.type);
-    });
-
-    // Initialize watch task for javascript files.
-    var scripts_watcher = gulp.watch('js/*.js', ['scripts']);
-    scripts_watcher.on('change', function(event) {
-
-      runSequence('styleguide', 'scss-lint');
-
-      gutil.log('File ' + event.path + ' was ' + event.type);
-    });
-
-    // Initialize watch task for Styleguide template files.
-    var styleguide_watcher = gulp.watch(
-      [
-        'styleguide-template/**/index.html',
-        'styleguide-template/**/template_config.js',
-        'styleguide-template/guru-handlebars/template/public/kss.scss'
-      ],
-      ['styleguide_dev']);
-    styleguide_watcher.on('change', function(event) {
-      gutil.log('File ' + event.path + ' was ' + event.type);
-    });
-
   });
 
+
+  /**
+   * Meta SASS Task.
+   *
+   * Required to get everything run in the right sequence.
+   * The task abstract generates scss files to be processed later.
+   */
+  gulp.task('sass',['abstract'], function () {
+    runSequence('styleguide', 'sass-compile');
+  });
 
   /**
    * Compile SASS to css Task.
    *
    */
-  gulp.task('sass',['abstract'], function () {
+  gulp.task('sass-compile', function () {
 
     return gulp.src('scss/main.scss')
       .pipe(plumber())
@@ -206,7 +223,8 @@
       }))
       .pipe(development(sourcemaps.write('.')))
       .pipe(gulp.dest('css'))
-      .pipe(browserSync.stream());
+      .pipe(browserSync.stream({match: "**/css/main.css"}));
+
   });
 
 
@@ -229,7 +247,7 @@
       .pipe(gulp.dest('js'))
 
       // Tell browser sync to reload.
-      .pipe(browserSync.stream());
+      .pipe(browserSync.stream({match: "**/js/*min.js"}));
   });
 
 
@@ -237,8 +255,8 @@
    * Build KSS-Styleguide and reload browser at end.
    *
    */
-  gulp.task('styleguide_dev', ['styleguide-sass'],  function(callback) {
-    return runSequence('styleguide', 'styleguide_browser_reload', callback);
+  gulp.task('styleguide-template', ['styleguide-sass'],  function(callback) {
+    return runSequence('styleguide', 'styleguide-browser-reload', callback);
   });
 
 
@@ -246,7 +264,7 @@
    * Only build KSS-Styleguide Task.
    *
    */
-  gulp.task('styleguide',['abstract'], shell.task([
+  gulp.task('styleguide', shell.task([
       // kss-node [source folder of files to parse] [destination folder] --template [location of template files]
       'kss-node <%= source %> <%= destination %> --template <%= template %>'
     ], {
@@ -265,6 +283,7 @@
   /**
    * Compile SASS to css Task.
    *
+   * Recompiling the templates stylesheet.
    */
   gulp.task('styleguide-sass', function () {
     return gulp.src('styleguide-template/guru-handlebars/template/public/kss.scss')
@@ -300,8 +319,8 @@
    * KSS-Styleguide browser reload.
    *
    */
-  gulp.task('styleguide_browser_reload', function(){
-    browserSync.reload(["*.html", "kss.css"]);
+  gulp.task('styleguide-browser-reload', function(){
+    browserSync.reload(["**/*.html", "**/kss.css"]);
   });
 
 
@@ -309,67 +328,95 @@
    * Open KSS-Styleguide url in default browser.
    *
    */
-  gulp.task('styleguide_browser', function(){
+  gulp.task('styleguide-browser', function(){
     // Open KSS Styleguide.
     // There MUST be a valid file sourced. What is not important.
     // See: https://github.com/stevelacy/gulp-open/issues/15.
     gulp.src('./package.json')
-      .pipe(open(config.server.styleguide));
+      .pipe(open(config.current.styleguide));
   });
+
 
 
   /**
-   * SCSS-lint task.
+   * linter SCSS-lint tasks.
    *
-   * This will use the config stored in ./scsslint-drupal.yml or scsslint-drupal.yml
+   *
    * https://github.com/brigade/scss-lint
    */
-  gulp.task('scss-lint',['sass'], function() {
+  var linter = config.current.linter.default;
 
-    switch (config.server.linter.default) {
+  switch (linter) {
 
-      case 'sass-lint':
+    case 'sass-lint':
+      // Config in scsslint-drupal.yml.
+      var sassLint = require('gulp-sass-lint');
+      break;
 
-        // Using sass-lint there is "disabling by comment" is not available.
-        // https://github.com/sasstools/sass-lint/issues/70
+    case 'scss-lint':
+      // Config in  ./scsslint-drupal.yml.
+      var scssLint = require('gulp-scss-lint');
+      break;
 
-        // The exclude is required fo fix a bug. See:
-        // https://github.com/juanfran/gulp-scss-lint/issues/36#issuecomment-113196295
+    default:
+      gutil.log(gutil.colors.red('Scss linting is disabled!'));
+  }
 
-        return gulp.src([
-          'scss/**/*.scss',
-          '!**/*_scsslint_tmp*.scss',
-          // Exclude reset.
-          '!scss/base/__reset.scss'
-        ])
-          .pipe(sassLint({
-            config: './sass-lint-drupal.yml'
-          }))
-          .pipe(sassLint.format())
-          .pipe(sassLint.failOnError());
-
-        break;
-
-      case 'scss-lint':
-
-        // Using scss-lint there is "disabling by comment" enabled.
-        // e.g: // scss-lint disable single-line-per-selector
-        // See: https://github.com/brigade/scss-lint#disabling-linters-via-source
-
-        // This is the code for scss lint.
-        return gulp.src('scss/**/*.scss')
-          .pipe(scssLint({
-            'config': 'scsslint-drupal.yml'
-          }));
-
-        break;
-
-      default:
-        gutil.log(gutil.colors.red('Scss linting is disabled!'));
-        return;
+  /*
+   * Linter wrapper task.
+   */
+  gulp.task('linter', function() {
+    if (typeof linter === 'string' && linter !== 'none') {
+      gulp.start(linter);
     }
+  });
+
+  /*
+   * sass-lint task.
+   */
+  gulp.task('sass-lint', function() {
+
+    // Using sass-lint there is "disabling by comment" is not available.
+    // https://github.com/sasstools/sass-lint/issues/70
+
+    // The exclude is required fo fix a bug. See:
+    // https://github.com/juanfran/gulp-scss-lint/issues/36#issuecomment-113196295
+
+    return gulp.src([
+      'scss/**/*.scss',
+      '!**/*_scsslint_tmp*.scss',
+      // Exclude reset.
+      '!scss/base/__reset.scss'
+    ])
+      .pipe(sassLint({
+        config: './sass-lint-drupal.yml'
+      }))
+      .pipe(sassLint.format())
+      .pipe(sassLint.failOnError());
 
   });
+
+  /*
+   * scss-lint task.
+   */
+  gulp.task('scss-lint', function() {
+
+    // Using scss-lint there is "disabling by comment" enabled.
+    // e.g: // scss-lint disable single-line-per-selector
+    // See: https://github.com/brigade/scss-lint#disabling-linters-via-source
+
+    // This is the code for scss lint.
+    return gulp.src([
+      'scss/**/*.scss',
+      // Excludes.
+      '!**/*_scsslint_tmp*.scss',
+      '!**/*.generated.scss'
+    ])
+    .pipe(scssLint({
+      'config': 'scsslint-drupal.yml'
+    }));
+  });
+
 
 
   /**
@@ -388,16 +435,14 @@
   var all_abstracts = [];
 
   gulp.task('abstract', ['abstract-filter'],  function(callback) {
-    var destination_dir = "./scss/base/",
-      gulp_template = '_abstract-to-concrete.generated.scss',
-      gulp_template_dir = './gulp-templates/';
 
-    return gulp.src(gulp_template_dir + gulp_template)
+    return gulp.src(config.current.abstract.gulp_template_dir + config.current.abstract.gulp_template)
       .pipe(template({
-        filename: destination_dir + gulp_template,
+        filename: config.current.abstract.destination_dir + config.current.abstract.gulp_template,
         abstracts: all_abstracts
       }))
-      .pipe(gulp.dest(destination_dir));
+      .pipe(gulp.dest(config.current.abstract.destination_dir));
+
   });
 
   // Filter all scss files for abstracts.
@@ -424,7 +469,8 @@
         }
       }
     });
-    return gulp.src(['scss/**/*.scss', '!**/*.generated.scss']).pipe(filter);
+    return gulp.src(['scss/**/*.scss', '!**/*.generated.scss', '!**/*_node_scsslint_tmp*']).pipe(filter);
+
   });
 
   /**
@@ -480,6 +526,9 @@
    * Default environment is "development".
    * gulp --env production
    */
-  gulp.task('default', ['serve']);
+  gulp.task('default', function(){
+    gutil.log('Current environment: ' + gutil.colors.red((production() ? 'production' : 'development')));
+    gulp.start(['serve']);
+  });
 
 }());
