@@ -6,7 +6,7 @@ Guru is a gulp based Drupal 8 theme base with kss styleguide
 
 - libsass for fast scss compilation
 - browserSync for an amazing developing and testing experience
-- singularity.gs css grid system
+- singularity.gs css grid system (you may know from omega4)
 - KSS-Node to create stylesheets and maintain your style library
 - Live Editing of scss in site and styleguide
 - The styleguide enables you prototyping in SCSS with custom HTML in the comments section
@@ -164,18 +164,22 @@ Using scss-lint there is "disabling by comment" enabled.
 ```
 
     
-#### Digging deeper
-**Checkout the gulpfile.js**
-More info about the used gulp dependencies.
+### Digging deeper
+#### Checkout the gulpfile.js
+
+It contains all the tasks, is heavily commented and will give you an overview, whats actually happening. 
+
+You may get info about the used gulp dependencies at npmjs:
 www.npmjs.com/package/[package-name]
 e.g: https://www.npmjs.com/package/gulp-watch
+
+#### You don't like Drupals deault CSS classes?
 
 Guru is using drupal default css classes provided by core classy theme.
 You can change this by changing the "base theme" variable in theme.info.yml
 
 
-
-**Developers: Update Gulp Sass-lint or other node modules**
+#### Developers: Update Gulp Sass-lint or other node modules
 
 [Install ncu](https://www.npmjs.com/package/npm-check-updates)
 
@@ -291,6 +295,19 @@ styleguide: {
 drush dl
 drush en link_css -y
 ```
+
+Link_css requires scss cache to be off (for development).
+
+
+```
+# Read
+drush8 config-get system.performance
+# Set
+drush8 config-set system.performance css.preprocess 0 -y
+drush8 config-set system.performance js.preprocess 0 -y
+drush8 config-set system.performance cache.page.max_age 0 -y
+```
+
 
 Enable the Theme in Drupal UI or with Drush
 
