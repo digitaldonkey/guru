@@ -15,7 +15,7 @@
      * Gulp dependencies.
      *
      */
-    gulp = require('gulp'),
+    gulp = require('gulp-help')(require('gulp')),
 
   // libsass/sassc implementation:
     environments = require('gulp-environments'),
@@ -98,7 +98,7 @@
    * launches browser windows for site and styleguide.
    *
    */
-  gulp.task('serve', ['sass','scripts'], function() {
+  gulp.task('serve', 'Starts browserSync.', ['sass','scripts'], function() {
 
     // Close-tab on gulp-exit with a client side script.
     browserSync.use({
@@ -174,6 +174,13 @@
 
 
     });
+  },
+  {
+    // gulp-help options.
+    options: {
+      'env=development': 'In development environment (default)',
+      'env=production': 'In production environment everything is minifyed.'
+    }
   });
 
 
@@ -183,7 +190,7 @@
    * Required to get everything run in the right sequence.
    * The task abstract generates scss files to be processed later.
    */
-  gulp.task('sass',['abstract'], function () {
+  gulp.task('sass', 'Compile Styleguide and SCSS.',['abstract'], function () {
     runSequence('styleguide', 'sass-compile');
   });
 
@@ -191,7 +198,7 @@
    * Compile SASS to css Task.
    *
    */
-  gulp.task('sass-compile', function () {
+  gulp.task('sass-compile', 'Compile SCSS only.',  function () {
 
     return gulp.src('scss/main.scss')
       .pipe(plumber())
@@ -232,7 +239,7 @@
    * Script Task.
    *
    */
-  gulp.task('scripts', function() {
+  gulp.task('scripts', 'Compile Javascripts.', function() {
 
     // Get all JS files in folder, exclude minified ones.
     gulp.src(['js/**/*.js', '!js/**/*.min.js'])
@@ -255,7 +262,7 @@
    * Build KSS-Styleguide and reload browser at end.
    *
    */
-  gulp.task('styleguide-template', ['styleguide-sass'],  function(callback) {
+  gulp.task('styleguide-template', 'Build KSS-Styleguide and reload browser.', ['styleguide-sass'],  function(callback) {
     return runSequence('styleguide', 'styleguide-browser-reload', callback);
   });
 
@@ -264,7 +271,7 @@
    * Only build KSS-Styleguide Task.
    *
    */
-  gulp.task('styleguide', shell.task([
+  gulp.task('styleguide', 'Only build KSS-Styleguide.', shell.task([
       // kss-node [source folder of files to parse] [destination folder] --template [location of template files]
       'kss-node <%= source %> <%= destination %> --template <%= template %>'
     ], {
@@ -285,7 +292,7 @@
    *
    * Recompiling the templates stylesheet.
    */
-  gulp.task('styleguide-sass', function () {
+  gulp.task('styleguide-sass', 'Compiling the KSS templates stylesheet.',function () {
     return gulp.src('styleguide-template/guru-handlebars/template/public/kss.scss')
       .pipe(plumber())
       .pipe(sassGlob())
@@ -319,7 +326,7 @@
    * KSS-Styleguide browser reload.
    *
    */
-  gulp.task('styleguide-browser-reload', function(){
+  gulp.task('styleguide-browser-reload', false, function(){
     browserSync.reload(["**/*.html", "**/kss.css"]);
   });
 
@@ -328,7 +335,7 @@
    * Open KSS-Styleguide url in default browser.
    *
    */
-  gulp.task('styleguide-browser', function(){
+  gulp.task('styleguide-browser', false, function(){
     // Open KSS Styleguide.
     // There MUST be a valid file sourced. What is not important.
     // See: https://github.com/stevelacy/gulp-open/issues/15.
@@ -365,7 +372,7 @@
   /*
    * Linter wrapper task.
    */
-  gulp.task('linter', function() {
+  gulp.task('linter', 'Run current linter.', function() {
     if (typeof linter === 'string' && linter !== 'none') {
       gulp.start(linter);
     }
@@ -374,7 +381,7 @@
   /*
    * sass-lint task.
    */
-  gulp.task('sass-lint', function() {
+  gulp.task('sass-lint', 'Lint SCSS using sass-lint.', function() {
 
     // Using sass-lint there is "disabling by comment" is not available.
     // https://github.com/sasstools/sass-lint/issues/70
@@ -399,7 +406,7 @@
   /*
    * scss-lint task.
    */
-  gulp.task('scss-lint', function() {
+  gulp.task('scss-lint', 'Lint SCSS using scss-lint.', function() {
 
     // Using scss-lint there is "disabling by comment" enabled.
     // e.g: // scss-lint disable single-line-per-selector
@@ -434,7 +441,7 @@
    */
   var all_abstracts = [];
 
-  gulp.task('abstract', ['abstract-filter'],  function(callback) {
+  gulp.task('abstract', 'Parsing SCSS and generate abstract SCSS file.',['abstract-filter'],  function(callback) {
 
     return gulp.src(config.current.abstract.gulp_template_dir + config.current.abstract.gulp_template)
       .pipe(template({
@@ -446,7 +453,7 @@
   });
 
   // Filter all scss files for abstracts.
-  gulp.task('abstract-filter', function(){
+  gulp.task('abstract-filter', false, function(){
 
     // Filter out all abstract classes.
     // Names only for now.
@@ -483,7 +490,7 @@
    * gulp --env production
    *
    */
-  gulp.task('production', function(){
+  gulp.task('production', 'Run task in production environment.', function(){
     environments.current(production);
     gulp.start(['sass', 'styleguide', 'scripts']);
   });
@@ -494,7 +501,7 @@
    *
    * This task ist just for deployment.
    */
-  gulp.task('readme', function() {
+  gulp.task('readme', 'Generates Readme.txt from Readme.md.',function() {
     del(['./Readme.txt', './Readme.html']);
     // Create Drupal Readme.
     gulp.src('./Readme.md')
@@ -526,7 +533,7 @@
    * Default environment is "development".
    * gulp --env production
    */
-  gulp.task('default', function(){
+  gulp.task('default', false, function(){
     gutil.log('Current environment: ' + gutil.colors.red((production() ? 'production' : 'development')));
     gulp.start(['serve']);
   });

@@ -165,6 +165,13 @@ Using scss-lint there is "disabling by comment" enabled.
 
     
 ### Digging deeper
+
+In order to see which tasks are available run:
+
+```
+gulp help
+```
+
 #### Checkout the gulpfile.js
 
 It contains all the tasks, is heavily commented and will give you an overview, whats actually happening. 
