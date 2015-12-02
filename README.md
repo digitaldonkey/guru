@@ -303,7 +303,7 @@ drush dl
 drush en link_css -y
 ```
 
-Link_css requires scss cache to be off (for development).
+Link_css requires aggregation to be turned off (for development).
 
 
 ```

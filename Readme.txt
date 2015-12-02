@@ -272,7 +272,7 @@ In my VM I Ended up using:
   drush dl
   drush en link_css -y
 
-Link\_css requires scss cache to be off (for development).
+Link\_css requires aggregation to be turned off (for development).
 
   # Read
   drush8 config-get system.performance
