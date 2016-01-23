@@ -1,8 +1,8 @@
 global-styling:
   version: 1.x
-  css:
-    theme:
-      css/main.css: {}
+#  css:
+#    theme:
+#      css/main.css: {}
   js:
     js/behaviors.min.js: { scope: footer }
   dependencies:

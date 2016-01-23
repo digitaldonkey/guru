@@ -61,32 +61,34 @@
   /**
    * Renders a widget for displaying the current width of the browser.
    */
-  Drupal.behaviors.guruBrowserWidth = {
-    attach: function (context) {
+  if ($(window.document.body).hasClass('user-logged-in')) {
+    Drupal.behaviors.guruBrowserWidth = {
+      attach: function (context) {
 
-      // Loading Data ?!
-      //$('body', context).find('[data-guru-browser-width]').once('guru-browser-width').each(function() {
-      //  // Do something to the elements.
-      //});
+        // Loading Data ?!
+        //$('body', context).find('[data-guru-browser-width]').once('guru-browser-width').each(function() {
+        //  // Do something to the elements.
+        //});
 
-      $('body', context).once('guru-browser-indicator').each(function() {
+        $('body', context).once('guru-browser-indicator').each(function() {
 
-        var indicator = $('<div class="guru-browser-indicator" />').appendTo(this);
+          var indicator = $('<div class="guru-browser-indicator" />').appendTo(this);
 
-        // Bind to the window.resize event to continuously update the width.
-        $(window).on('resize.guru-browser-indicator', function () {
+          // Bind to the window.resize event to continuously update the width.
+          $(window).on('resize.guru-browser-indicator', function () {
 
-          indicator.text($(this).width() + 'px');
-        }).trigger('resize.guru-browser-indicator');
+            indicator.text($(this).width() + 'px');
+          }).trigger('resize.guru-browser-indicator');
 
-        $('.guru-browser-indicator', context).on('click', function () {
+          $('.guru-browser-indicator', context).on('click', function () {
 
-          $(window.document.body).toggleClass('is-touch-debug');
+            $(window.document.body).toggleClass('is-touch-debug');
+          });
         });
-      });
 
-    }
-  };
+      }
+    };
+  }
 
 
 
