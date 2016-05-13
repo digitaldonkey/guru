@@ -76,8 +76,6 @@
     template = require('gulp-template'),
     path = require('path'),
 
-  // debug = require('gulp-debug'),
-
     /**
      *   Environments
      *  With this we can use e.g.:
@@ -141,7 +139,7 @@
 
     // Todo: Missing regenerate on Section Changes:
     // On add/edit section generated CSS code, you need to reload the Styleguide
-    // manually in Browser or run the styleguide_dev task.
+    // manually in Browser or run the styleguide-dev task.
     sass_watcher.on('change', function(event) {
       gutil.log('File ' + event.path + ' was ' + event.type);
     });
@@ -158,11 +156,11 @@
     // Initialize watch task for Styleguide template files.
     var styleguide_watcher = gulp.watch(
       [
-        'styleguide-template/**/index.html',
-        'styleguide-template/**/template_config.js',
-        'styleguide-template/guru-handlebars/template/public/kss.scss'
+        config.server.styleguide.template + '/**/*.hbs',
+        config.server.styleguide.template + '/**/*.js',
+        config.server.styleguide.template + '/**/*.scss'
       ],
-      ['styleguide_dev']);
+      ['styleguide-dev']);
     styleguide_watcher.on('change', function(event) {
       gutil.log('File ' + event.path + ' was ' + event.type);
     });
@@ -237,7 +235,7 @@
    * Build KSS-Styleguide and reload browser at end.
    *
    */
-  gulp.task('styleguide_dev', ['styleguide-sass'],  function(callback) {
+  gulp.task('styleguide-dev', ['styleguide-sass'],  function(callback) {
     return runSequence('styleguide', 'styleguide_browser_reload', callback);
   });
 
@@ -248,15 +246,13 @@
    */
   gulp.task('styleguide',['abstract'], shell.task([
       // kss-node [source folder of files to parse] [destination folder] --template [location of template files]
-      'kss-node <%= source %> <%= destination %> --template <%= template %>'
+      'kss --source <%= source %> --destination <%= destination %> --builder <%= template %> --homepage <%= homepage %>'
     ], {
       templateData: {
         source:       'scss',
         destination:  'styleguide',
-        template: 'styleguide-template/guru-handlebars/template'
-        // Alternative:
-        // See: https://github.com/htanjo/kss-node-template
-        // template:     'kss-node-template/template'
+        template: config.server.styleguide.template,
+        homepage: config.server.styleguide.homepage
       }
     }
   ));
@@ -267,7 +263,8 @@
    *
    */
   gulp.task('styleguide-sass', function () {
-    return gulp.src('styleguide-template/guru-handlebars/template/public/kss.scss')
+
+    return gulp.src(config.server.styleguide.scss)
       .pipe(plumber())
       .pipe(sassGlob())
       .pipe(development(sourcemaps.init()))
@@ -285,14 +282,14 @@
       .pipe(development(sourcemaps.write({includeContent: false})))
       .pipe(development(sourcemaps.init({loadMaps: true})))
 
-      .pipe(sourcemaps.write({includeContent: false}))
-      .pipe(sourcemaps.init({loadMaps: true}))
-      .pipe(autoprefixer({
-        browsers: autoprefixer_cnf.browsers,
-        cascade: true
-      }))
-      .pipe(development(sourcemaps.write('styleguide-template/guru-handlebars/template/public')))
-      .pipe(gulp.dest('styleguide-template/guru-handlebars/template/public'))
+      // TODO
+
+      //.pipe(autoprefixer({
+      //  browsers: autoprefixer_cnf.browsers,
+      //  cascade: true
+      //}))
+      .pipe(development(sourcemaps.write('.')))
+      .pipe(gulp.dest(config.server.styleguide.destination))
       .pipe(browserSync.stream());
   });
 
@@ -301,7 +298,7 @@
    *
    */
   gulp.task('styleguide_browser_reload', function(){
-    browserSync.reload(["*.html", "kss.css"]);
+    browserSync.reload(["*.html", "*.css"]);
   });
 
 
@@ -408,6 +405,7 @@
     // https://regex101.com/r/lG4eG8/4
     // If someone writes a better regex we might include the mixing itself
     // in the Styleguide.
+
     var filter = gulpFilter(function(file) {
 
       var reg = /%([a-zA-Z-_]*)\s?\{[\s,]*\n(?=.*|\n\s)(?!\n}\s+\n)/gmi,

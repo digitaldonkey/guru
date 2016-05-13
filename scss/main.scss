@@ -1,4 +1,9 @@
-@import '../node_modules/compass-mixins/lib/compass';
+//@import '../node_modules/compass-mixins/lib/compass';
+// compass-mixins are broken on node-sass@^3.5.0
+// See: https://github.com/Igosuki/compass-mixins/issues/84
+// Replacing with https://www.npmjs.com/package/compass-sass-mixins
+@import '../bower_components/compass-sass-mixins/lib/compass';
+
 @import '../bower_components/breakpoint-sass/stylesheets/breakpoint';
 @import '../bower_components/singularity/stylesheets/singularitygs';
 
