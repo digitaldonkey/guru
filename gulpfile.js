@@ -246,11 +246,11 @@
    */
   gulp.task('styleguide',['abstract'], shell.task([
       // kss-node [source folder of files to parse] [destination folder] --template [location of template files]
-      'kss --source <%= source %> --destination <%= destination %> --builder <%= template %> --homepage <%= homepage %>'
+      'node_modules/kss/bin/kss --source <%= source %> --destination <%= destination %> --builder <%= template %> --homepage <%= homepage %>'
     ], {
       templateData: {
         source:       'scss',
-        destination:  'styleguide',
+        destination:  config.server.styleguide.destination,
         template: config.server.styleguide.template,
         homepage: config.server.styleguide.homepage
       }
@@ -345,8 +345,6 @@
           .pipe(sassLint.format())
           .pipe(sassLint.failOnError());
 
-        break;
-
       case 'scss-lint':
 
         // Using scss-lint there is "disabling by comment" enabled.
@@ -358,8 +356,6 @@
           .pipe(scssLint({
             'config': 'scsslint-drupal.yml'
           }));
-
-        break;
 
       default:
         gutil.log(gutil.colors.red('Scss linting is disabled!'));

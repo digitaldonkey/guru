@@ -27,13 +27,13 @@ module.exports.server = {
 
     // SCSS to CSS for the styleguide CSS.
     scss: 'styleguide-template/guru-handlebars/kss-assets/kss.scss',
-    destination: 'styleguide-template/guru-handlebars/kss-assets'
+    destination: 'styleguide'
   },
 
   // There are two options how to use SCSS-lint
   linter: {
     // In sass-lint "disabling by comment" wont work yet. See:
-    // https://github.com/sasstools/sass-lint/issues/70
+    // https://github.com/sasstools/sass-lint/pull/677
     // default: 'sass-lint'
 
     // Using scss-lint there is "disabling by comment" enabled.
