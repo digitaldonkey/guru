@@ -1,0 +1,27 @@
+{
+  "name": "guru",
+  "description": "Bower components for guru theme",
+  "main": "bower.js",
+  "authors": [
+    "Thorsten Krug"
+  ],
+  "license": "GPL3",
+  "keywords": [
+    "drupal",
+    "drupal8"
+  ],
+  "moduleType": [],
+  "homepage": "https://www.drupal.org/sandbox/digitaldonkey/2599668",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "compass-sass-mixins": "master",
+    "singularity": "~1.7.0"
+  }
+}

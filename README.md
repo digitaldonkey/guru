@@ -39,7 +39,7 @@ https://github.com/BrowserSync/browser-sync/issues/10
 
 **Other dependencies**
 
-- npm
+- npm, bower
 - libsass
 -  ~~Ruby~~ Just for the second scss-lint option now.
 
@@ -60,7 +60,7 @@ drush guru "My Subtheme"
 If your grid system choice will be singularity you need bower.
 ```
 npm -v
-3.3.9
+3.8.3
 bower -v
 1.6.5
 ```
@@ -72,10 +72,10 @@ npm install --global gulp bower browser-sync
 npm install 
 ```
 
-3) Install singularity (Currently 1.6.2)
+3) Install singularity (Currently 1.7.0) and compass-sass-mixins
 ```
 cd [theme folder]
-bower install singularity
+bower install
 ```
 
 4) **Change your domain and styleguide url** in
@@ -106,6 +106,9 @@ Look into the scss files for examples.
 The styleguide is generated into 
 /themes/custom/[your theme]/styleguide/
 and should open on the browser using the gulp default task.
+
+In order to only compile the styleguide use `gulp styleguide`
+
 You may change the templates in 
 /themes/custom/[your theme]/styleguide-template/
 
@@ -133,25 +136,30 @@ Spriting with libsass is not working yet.
 But maybe this https://github.com/wellington/wellington
 
 #### Singularity
-You may know singularity from Omega4 theme.
-Known Issue: With lib-sass the background grids are not working (yet).
-http://singularity.gs/
-https://github.com/at-import/Singularity/wiki/Spanning-The-Grid
+You may know singularity from Omega4 theme.  
+
+Read the [introduction](https://github.com/at-import/Singularity) or the extensive [docs](https://github.com/at-import/Singularity) 
 
 #### SCSS-lint or sass-lint
 
-Tells you  if you are in order with Drupals SCSS Coding standards while live 
-Editing your SCSS.
+Linters for SCSS files help you to write cleaner code. Errors are logged to the console id a linter is enabled. 
 
-**sass-lint (default)**
-In sass-lint [disabling by comment](https://github.com/sasstools/sass-lint/issues/70) wont work yet. 
-The linter's configuration is in sasslint-drupal.yml 
 
+**disabled (default)**
+
+No Linting. You may change settings in gulp.config.js in order to use the following options.
+
+**sass-lint**
+In sass-lint it is currently not possible to [disabling linters by comment](https://github.com/sasstools/sass-lint/issues/70). 
+As soon as https://github.com/sasstools/sass-lint/pull/677 is committed to sass-lint I will drop scss-lint support.  
+
+The sass-lint configuration is in sasslint-drupal.yml 
 
 **scss-lint**
 https://github.com/brigade/scss-lint
+
 This sadly now depends on ruby. 
-TODO: I plan to make ruby/SCSS-Lint optional (decide while creating a subtheme).  
+
 ```
 gem install scss_lint
 ```
@@ -165,31 +173,14 @@ Using scss-lint there is "disabling by comment" enabled.
 
     
 #### Digging deeper
-**Checkout the gulpfile.js**
-More info about the used gulp dependencies.
-www.npmjs.com/package/[package-name]
-e.g: https://www.npmjs.com/package/gulp-watch
 
-Guru is using drupal default css classes provided by core classy theme.
+In order to understand the underlying gulp processesing you should have a look in the gulpfile.js. There you find all gulp tasks and can figure out what they do.
+
+Check out package.json and bower.json if you want to know more about about all packages involved. 
+
+Guru is using drupal default css classes provided by core classy theme. 
 You can change this by changing the "base theme" variable in theme.info.yml
-
-
-
-**Developers: Update Gulp Sass-lint or other node modules**
-
-[Install ncu](https://www.npmjs.com/package/npm-check-updates)
-
-```
-cd /themes/guru/node_modules/gulp-sass-lint
-ncu --upgradeAll
-
-The following dependencies are satisfied by their declared version range, but the installed versions are behind. You can install the latest versions without modifying your package file by using npm update. If you want to update the dependencies in your package file anyway, use --upgradeAll.
-
- gulp-util  ^3.0.6  →  ^3.0.7
- sass-lint  ^1.0.0  →  ^1.3.2
-
-Upgraded .... sites/all/themes/_custom/guru/node_modules/gulp-sass-lint/package.json
-```
+At [lulabot](https://www.lullabot.com/articles/a-tale-of-two-base-themes-in-drupal-8-core) you can read about Drupal 8 base themes.
 
 
 ### HOWTO: Getting started in Drupals Vagrant VM (Debian/Ubuntu) 
