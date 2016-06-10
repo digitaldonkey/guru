@@ -1,0 +1,22 @@
+//
+// Site Logo
+//
+// .site-logo Inline SVG logo.
+//
+// Markup:
+// <div class="site-logo" style="width: 24em; height: 15em;"></div>
+//
+// Styleguide Components - Header - Site logo
+//
+.site-logo {
+
+  @extend %svg-guru-logo;
+
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+  height: 8em;
+  margin: $vertical-space $vertical-space-tiny $vertical-space-tiny 0;
+  max-width: 100%;
+  width: 16em;
+}

@@ -1,0 +1,104 @@
+//
+// Views Layouts
+//
+// Check out the file for singularitygs grid examples.
+//
+// Styleguide Abstractions - Views Layouts
+//
+
+%views-default {
+
+  .views-row {
+    margin-bottom: $vertical-space;
+  }
+
+  @include breakpoint($tab) {
+
+    @include add-gutter(1 / 10);
+
+    .views-row:nth-child(even) {
+      @include grid-span(1, 1, 2);
+      clear: both;
+    }
+
+    .views-row:nth-child(odd) {
+      @include grid-span(1, 2, 2);
+    }
+
+    .views-row:first-child {
+      @include grid-span(2, 1, 2);
+      // Increasing font size for all elements in Block by setting a block
+      // font size in rem.
+      font-size: 1.1rem;
+    }
+  }
+
+  @include breakpoint($large) {
+
+    @include add-grid(12);
+    @include add-gutter(1 / 2);
+
+    // Reset tab.
+    .views-row {
+      font-size: 1rem;
+    }
+
+    .views-row:nth-child(1) {
+      // Increasing font size for all elements in Block by setting a block
+      // font size in rem.
+      font-size: 1.2rem;
+    }
+
+    .views-row:nth-child(1) {
+      @include grid-span(8, 1, 12);
+    }
+
+    .views-row:nth-child(2) {
+      @include grid-span(4, 9, 12);
+    }
+
+    .views-row:nth-child(3n+3) {
+      // border: 1px dotted #0674ff;
+      @include grid-span(4, 1, 12);
+      clear: both;
+    }
+
+    .views-row:nth-child(3n+4) {
+      // border: 1px dotted #ffc90b;
+      @include grid-span(4, 5, 12);
+      clear: none;
+    }
+
+    .views-row:nth-child(3n+5) {
+      @include grid-span(4, 9, 12);
+      // border: 1px dotted red;
+      clear: none;
+    }
+  }
+
+
+}
+
+
+%view-quadro {
+
+  .views-row {
+    margin-bottom: $vertical-space;
+  }
+
+  @include breakpoint($pad) {
+
+    .views-row:nth-child(odd) {
+      @include grid-span(6, 1, 12);
+    }
+
+    .views-row:nth-child(even) {
+      @include grid-span(6, 7, 12);
+    }
+
+    .views-row:nth-child(2n+1) {
+      clear: both;
+    }
+  }
+
+}

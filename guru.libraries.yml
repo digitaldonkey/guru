@@ -3,8 +3,10 @@ global-styling:
   css:
     theme:
       css/main.css: {}
+browser-indicator:
+  version: 1.x
   js:
-    js/behaviors.min.js: { scope: footer }
+    js/behaviors.min.js: {}
   dependencies:
     - core/jquery
     - core/drupal

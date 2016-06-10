@@ -7,11 +7,12 @@
   <meta name="description" content="">
   <meta name="generator" content="kss-node">
   <meta name="viewport" content="width=device-width">
-
-  <link rel="stylesheet" href="kss-assets/kss.css">
   {{{styles}}}
 </head>
 <body id="kss-node">
+<!-- BODY START -->
+<link rel="stylesheet" href="kss-assets/kss.css">
+
 <div class="kss-sidebar kss-style">
   <header class="kss-header">
     <h1 class="kss-doc-title">{{options.title}}</h1>
@@ -81,6 +82,12 @@
           </a>
         </h{{depth}}>
 
+      {{#if sourceFile.name}}
+        <div class="kss-source kss-style">
+          Source: <code>{{sourceFile.name}}</code>
+        </div>
+      {{/if}}
+
         {{#if description}}
           <div class="kss-description">
             {{{description}}}
@@ -107,7 +114,7 @@
         {{/if}}
       </div>
 
-      {{#if example}}
+      {{#if markup}}
         <div class="kss-modifier__wrapper">
           <div class="kss-modifier__heading kss-style">
             Example{{#if modifiers}}s{{/if}}
@@ -135,16 +142,8 @@
             </div>
           {{/each}}
         </div>
-        {{#if example}}
-          <div class="kss-markup kss-style">
-            <pre class="prettyprint linenums lang-html"><code data-language="html">{{markup}}</code></pre>
-          </div>
-        {{/if}}
-      {{/if}}
-
-      {{#if sourceFile.name}}
-        <div class="kss-source kss-style">
-          Source: <code>{{sourceFile.name}}</code>, line {{sourceFile.line}}
+        <div class="kss-markup kss-style">
+          <pre class="prettyprint linenums lang-html"><code data-language="html">{{markup}}</code></pre>
         </div>
       {{/if}}
 
@@ -158,7 +157,19 @@
 <script src="kss-assets/scrollspy.js"></script>
 <script src="kss-assets/prettify.js"></script>
 <script>
-  prettyPrint();
+
+  /**
+   * Initialize prettyPrint
+   * and hide codeblocks after in order to display them by clicking "Show Source".
+  */
+  prettyPrint(function(){
+    var codeblocks = document.getElementsByClassName('prettyprint');
+    Array.prototype.forEach.call(codeblocks, function(el) {
+      el.className += " is-hidden";
+      el.insertAdjacentHTML('beforebegin', '&nbsp;<a href="#" onclick="this.nextSibling.classList.remove(\'is-hidden\'); this.parentNode.removeChild(this); return false">Show Source</a>');
+    });
+
+  });
   var spy = new ScrollSpy('#kss-node', {
     nav: '.kss-nav__menu-child > li > a',
     className: 'is-in-viewport'
@@ -175,5 +186,6 @@
 {{/if}}
 
 <!-- Automatically built using <a href="https://github.com/kss-node/kss-node">kss-node</a>. -->
+<!-- BODY END -->
 </body>
 </html>

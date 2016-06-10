@@ -96,20 +96,25 @@ function drush_guru_subtheme($name) {
   // Relative to base_theme
   // Use "path/*" to copy directories recursive.
   $files = array(
-    '.gitignore',
-    'README.md',
-    'gulpfile.js',
-    'gulp.config.js',
-    'gulp.autoprefixer.config.js',
-    'package.json',
-    'scsslint-drupal.yml',
-    'browsersync-client-events.js',
-    'logo.svg',
     'css/.gitkeep',
+    'gulp-tasks/*',
+    'gulp-templates/*',
     'js/behaviors.js',
-    'js/behaviors.min.js',
     'scss/*',
     'styleguide-template/*',
+    'svg/*',
+    'templates/*',
+    '.gitignore',
+    'browsersync-client-events.js',
+    'bower.json',
+    'gulp.config.js',
+    'gulpfile.js',
+    'kss-readme.md',
+    'logo.svg',
+    'package.json',
+    'README.md',
+    'scsslint-drupal.yml',
+    'sasslint-drupal.yml',
   );
   if ($copy_files) {
     foreach ($files as $file) {

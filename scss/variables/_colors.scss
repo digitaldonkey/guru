@@ -2,16 +2,21 @@
 //
 // Color palette
 //
-// `src: variables/_colors.scss`
-//
-// Styleguide 1.1
+// Styleguide Variables - Color pallete
 //
 
 $black:     #222;
 $white:     #fff;
-$yellow:    #f9be37;
-$green:     #25a847;
-$red:       #9c0814;
+
+$red:       #d20a11;
+
+$green:  #6ba928;
+$yellow:    #fc0;
+
+// Backgrounds
+$yellowgreen: #9acd32;
+$yellowgreen-mid: #c3cd55;
+$yellowgreen-light: #e0ff5e;
 
 $gray-light: #cfcfcf;
 $gray-medium: #999;
@@ -21,9 +26,19 @@ $darkblue-lighter: #343b43;
 $darkblue: #202930;
 $darkblue-darker: #151c22;
 
+$text-shadow-default: 1px 1px $gray-dark;
+
+$border-radius-default: .5em;
+$interactive-background: rgba(0, 0, 0, .1);
+
+// Default link colors:
+$link-color: $black;
+$link-color-visited: lighten($link-color, 10%);
+$link-color-hover: darken($link-color, 10%);
+
 
 //
-// Color palete
+// Color palette
 //
 // .kss-colorblock is just a Helper to show Color-Variables
 //
@@ -37,7 +52,7 @@ $darkblue-darker: #151c22;
 // #999999 - $gray-medium: #999999;
 // #4a4a4a - $gray-dark: #4a4a4a;
 //
-// Styleguide 1.1.1
+// Styleguide Variables - Color pallete - Colors
 //
 
 //
@@ -47,41 +62,47 @@ $darkblue-darker: #151c22;
 // Markup:
 // <div class="kss-colorblock {{modifier_class}}">{{modifier_class}}</div>
 //
-// .bg-one - %bg-one .bg-one $yellow
-// .bg-two - %bg-two %bg-two $green
-// .bg-three - %bg-three .bg-three $gray-medium
+// .bg-one - %bg-one .bg-one $yellowgreen-light
+// .bg-two - %bg-two %bg-two $yellowgreen-mid
+// .bg-three - %bg-three .bg-three $yellowgreen
 //
-// Styleguide 1.1.2
+// Styleguide Variables - Color pallete - Backgrounds
 //
 
-$bg-one: $green;
-$bg-two: $yellow;
-$bg-three: $darkblue;
+$bg-one: $gray-medium;
+$bg-two: $yellowgreen-mid;
+$bg-three: $yellowgreen;
+
+$frontpage-bg-1: $bg-one;
+$frontpage-bg-2: $bg-two;
+$frontpage-bg-3: $bg-one;
+$frontpage-bg-4: $bg-three;
+
 
 %bg-one {
   background: $bg-one;
-  color: $yellow;
+  color: $black;
 
   a {
-    color: $yellow;
+    color: $black;
   }
 }
 
 %bg-two {
   background: $bg-two;
-  color: $white;
+  color: $black;
 
   a {
-    color: $white;
+    color: $black;
   }
 }
 
 %bg-three {
   background: $bg-three;
-  color: $white;
+  color: $black;
 
   a {
-    color: $white;
+    color: $black;
   }
 }
 

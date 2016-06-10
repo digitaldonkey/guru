@@ -1,22 +1,25 @@
 //
 // Breakpoints.
 //
-// `src: components/_breakpoints.scss`
-//
 // Here you can loarn abeout breakpoint:
 // http://breakpoint-sass.com/
 //
-// Styleguide 1.2
+// Styleguide Variables - Breakpoints
 //
 
 
 //
 // Global Breakpoints
 //
+// <p>Using breakpoints with em units in order to make scale with user defined base font sizes.<br />(Strg + "+" or Strg + "-")<br /></p>
+// <p><strong>$tab: 25.0625em (401px)</strong></p>
+// <p><strong>$pad: 30.0625em (481px)</strong></p>
 // <p><strong>$tab: 401px</strong></p>
-// <p><strong>$large: 901px</strong></p>
+// <p> &nbsp;</p>
+// <p>Primary Menu has it's own breakpoint. Adjust depending on the length of menu entries in Primary Menu:</p>
+// <p><strong>$breakpoint-primary-menu: 38.75em (620px)</strong></p>
 //
-// E.g:
+// <strong>Usage</strong>
 //
 // ```breakpoint($tab) { ... }```
 //
@@ -24,12 +27,49 @@
 //
 // ```@media (max-width: 400px) { ... }```
 //
-//
-// Styleguide 1.2.1
+// Styleguide Variables - Breakpoints - Global Breakpoints
 //
 
-$tab: 401px;
-$large: 901px;
+$tab: 25.0625em;
+$pad: 30.0625em;
+$large: 56.32em;
+
+$breakpoint-primary-menu: 38.75em;
+
+
+
+//
+// guru-browser-width helper.
+//
+// Displays browser width.
+//
+%guru-browser-width {
+  // scss-lint:disable Disable ImportantRule
+  &::before {
+    content: 'mobile ' !important;
+  }
+
+  @include breakpoint($tab) {
+
+    &::before {
+      content: 'tab ' !important;
+    }
+  }
+
+  @include breakpoint($pad) {
+
+    &::before {
+      content: 'pad ' !important;
+    }
+  }
+
+  @include breakpoint($large) {
+
+    &::before {
+      content: 'large ' !important;
+    }
+  }
+}
 
 //
 // Global Font-Size breakpoints
@@ -40,34 +80,22 @@ $large: 901px;
 // <p><strong>$font-size-global--mobile-media: max-width: 400px</strong></p>
 // <p><strong>$font-size-global--tab-media: max-width: 900px</strong></p>
 //
-// Styleguide 1.2.2
+// Styleguide Variables - Breakpoints - Font size breakpoints
 //
 
 $font-size-global--mobile-media: 'max-width: 400px';
-$font-size-global--tab-media: 'max-width: 900px';
+$font-size-global--tab-media: 'max-width: 1280px';
+
 
 //
-// guru-browser-width helper.
+// Global paddings and Margins
 //
-// Displays browser width.
+// <p><strong>$global-page-pad: 4%</strong></p>
+// <p><strong>$global-max-width: 80em</strong><br />
+//  This is the Maximum Content Width. Set as max-widht.
+// </p>
 //
-%guru-browser-width {
-  // scss-lint:disable Disable ImportantRule
-  &:before {
-    content: 'mobile ' !important;
-  }
-
-  @include breakpoint($tab) {
-
-    &:before {
-      content: 'tab ' !important;
-    }
-  }
-
-  @include breakpoint($large) {
-
-    &:before {
-      content: 'large ' !important;
-    }
-  }
-}
+// Styleguide Variables - Breakpoints - Global margins
+//
+$global-page-pad: 3%;
+$global-max-width: 80em;
