@@ -109,6 +109,7 @@ function drush_guru_subtheme($name) {
     'bower.json',
     'gulp.config.js',
     'gulpfile.js',
+    // 'guru.theme', --> RENAME - or can we just use it from the base theme?
     'kss-readme.md',
     'logo.svg',
     'package.json',
@@ -363,7 +364,7 @@ function _guru_write_yaml_config(array &$yaml, $yaml_template, $save_to) {
               // Prepare values.
               $sub_values = array();
               foreach ($yaml[$key] as $k => $v) {
-                $sub_values[] = $prefix__2 . $k . ': ' . $v . "\n";
+                $sub_values[] = $prefix__2 . $k . ": '" . $v . "'\n";
               }
               $value = $sub_values;
               $remove_lines[] = $next_line;
@@ -381,7 +382,7 @@ function _guru_write_yaml_config(array &$yaml, $yaml_template, $save_to) {
         // Prepare Values.
         if ($prefix) {
           foreach ($value as $k => $v) {
-            $value[$k] = preg_replace("/\r|\n/", "", $prefix) . '- ' . $v . "\n";
+            $value[$k] = preg_replace("/\r|\n/", "", $prefix) . "- '" . $v . "'\n";
           }
         }
         // Replacing lines prepared above.
