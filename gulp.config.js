@@ -43,10 +43,10 @@ module.exports = {
     // Using scss-lint there is "disabling by comment" enabled.
     // e.g: // scss-lint disable single-line-per-selector
     // See readme for more Info.
-    default: 'scss-lint' // Finished 'scss-lint' after 1.28 s.
+    //default: 'scss-lint' // Finished 'scss-lint' after 1.28 s.
 
     // You can disable Linter.
-    //default: false
+    default: false
   },
   autoprefixer: {
     // For autoprefixer see: https://github.com/postcss/autoprefixer

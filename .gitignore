@@ -51,3 +51,6 @@ Readme.html
 # Exclude generated Files.
 scss/**/*.generated.scss
 
+# Exclude generated KSS Assets
+styleguide-template/guru-handlebars/kss-assets/kss.css
+styleguide-template/guru-handlebars/kss-assets/kss.css.map

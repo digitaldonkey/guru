@@ -82,7 +82,7 @@ Here is the reason: https://github.com/BrowserSync/browser-sync/issues/10
 
 **Other dependencies**
 
--  libsass - a c-based sass compiler
+-  `libsass <http://sass-lang.com/libsass>`__ - a c-based sass compiler
 -  npm, bower - frontend tooling.
 -  [STRIKEOUT:Ruby] Just for the second scss-lint option now. But sass-lint will
    be ready soon to fully replace scss-lint, providing about double speed.
@@ -95,29 +95,45 @@ a subtheme with drush. Make sure using drush8. Lullabot tells you `how to use
 multiple drush
 versions <https://www.lullabot.com/articles/switching-drush-versions>`__.
 
-  drush guru "My Subtheme" 
+In order to create a subtheme with drush, guru theme needs to be installed and
+set as default!
+
+  cd [www-data-folder]
+  drush pm-enable guru
+  drush config-set system.theme default guru
+  drush guru "My Theme"
 
 **Guru theme setup**
 
-1) You should have bower and npm available in your command line. If your grid
-   system choice will be singularity you need bower.
+1) You should have node, npm and sassc available in your command line.
 
-     node -v
-     v6.2.0
-     npm -v
-     3.8.9
-     bower -v
-     1.6.5
+  node -v
+   v6.2.0
+   
+  npm -v
+   3.8.9
+
+  sassc -v
+   sassc: 3.3.6-8-g1949
+   libsass: 3.3.6-70-g4acba
+   sass2scss: 1.0.6
+   sass: 3.4 
+
+You may use `homebrew <http://brew.sh/>`__ on a Mac or check out “Getting
+started in Drupal’s Vagrant VM” below for an Ubuntu example. Windows users may
+look at `VDD <https://www.drupal.org/project/vdd>`__ too or struggle their own
+way and commit back the lessons learned ;).
 
 2) Install node dependencies
 
-     cd [theme folder]
-     npm install 
+  npm install -g npm-run
+  cd [theme folder]
+  npm install 
 
 3) Install singularity (Currently 1.7.0) and compass-sass-mixins
 
      cd [theme folder]
-     bower install
+     npm-run bower install
 
 4) **Change your domain and theme url** in
 
@@ -126,9 +142,9 @@ versions <https://www.lullabot.com/articles/switching-drush-versions>`__.
 5) Run gulp in theme folder
 
      cd [theme folder]
-     gulp
+     npm-run gulp
 
-6) Enable theme in Drupal and check the styleguide in /themes/custom/[theme
+6) Enable theme in Drupal and check the styleguide in /themes/[theme
    folder]/styleguide/
 
 More readings about the theme
@@ -183,9 +199,6 @@ http://sass-lang.com/libsass
 
 There are some differences between compass-sass and lib-sass left. For details
 read here: http://www.sitepoint.com/switching-ruby-sass-libsass/
-
-Spriting with libsass is not working yet. But maybe this
-https://github.com/wellington/wellington
 
 Singularity
 ~~~~~~~~~~~
@@ -328,8 +341,8 @@ change this by changing the “base theme” variable in theme.info.yml At
 `lulabot <https://www.lullabot.com/articles/a-tale-of-two-base-themes-in-drupal-8-core>`__
 you can read about Drupal 8 base themes.
 
-HOWTO: Getting started in Drupals Vagrant VM (Debian/Ubuntu)
-------------------------------------------------------------
+HOWTO: Getting started in Drupal’s Vagrant VM (Debian/Ubuntu)
+-------------------------------------------------------------
 
 *Testet with the `Vagrant Drupal
 Development <https://www.drupal.org/node/2008792>`__ Virtual machine.*
@@ -338,71 +351,110 @@ Get Drupal 8 running and drush8 running all together the most easy way is using
 a virtual machine created with `Vagrant Drupal
 Development <https://www.drupal.org/node/2008792>`__.
 
-I will assume you have made it so far.
+I will assume you are running drupal in vdd machine and want to install frontend
+compiling within the VM.
+
+You may decide if to cpmpile your sass locally, which should be faster. In this
+case npm and sassc should be installed on you local machine. But for this
+tutorial I will assume we install everything within the VM.
 
 **Install the latest node-js in Ubuntu**
 
 Do you have node installed?
 
   npm -v
-  3.3.6
+  3.8.9
 
-If not:
+If npm is not available:
 
   curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
   sudo apt-get install -y nodejs
 
-**Install global packages**
+**check for libsass (sassc)**
 
-  npm install --global gulp
-  npm install --global browser-sync
-  npm install --global bower
+  sassc- v
 
-I had to fix permission Problems, when trying to do npm install –global in the
-vm. And `found a fix <http://stackoverflow.com/a/21712034/308533>`__:
+If you don’t have sassc you need to install it. There is a `debian
+package <https://tracker.debian.org/pkg/libsass>`__, but I ended up installing
+it from source as discribed `here <http://askubuntu.com/a/785324/555592>`__
 
-  npm config set prefix '~/.npm-packages'
+**BrowserSync in Drupal VDD**
 
-and add
+Browsersync basically starts up a local webserver to enable live reloading.
+After launching browserSync you website will be available at localhost:3000.
 
-  export PATH="$PATH:$HOME/.npm-packages/bin"
+If you run gulp/browserSync locally everything is fine. But in order to run it
+from within the VM and reach browserSync instance from outside the Virtual
+machine you need to forward ports to the host system.
 
-to the end of you ~/.bashrc
+You can do this by changing the VDD Vagrantfile.
 
-**Testing bower**
+Change the forwarded\_ports array in vdd/config.json file to add the ports 3000
+and 3001.
 
-  bower -v
-  1.6.5
+  "forwarded_ports": [
+    {
+      "guest_port": 3000,
+      "host_port": 3300,
+      "protocol": "tcp"
+    },
+    {
+      "guest_port": 3001,
+      "host_port": 3301,
+      "protocol": "tcp"
+    }
+  ]
+
+After you require to reload vagrant
+
+  vagrant reload
 
 **Create Subtheme**
 
+In order to create a subtheme guru theme needs to be installed and set as
+default!
+
   cd [www-data-folder]
+  drush pm-enable guru
+  drush config-set system.theme default guru
   drush guru "My Theme"
 
-**Local node modules:**
+**Install node and bower modules**
+
+I try to keep all node modules locally but on global we will need:
+
+  sudo npm install -g npm-run
+
+If you can’t install as root, `there is a
+workaround <http://stackoverflow.com/a/21712034/308533>`__.
 
   cd [theme folder]
   npm install 
-  bower install singularity
+  npm-run bower install
 
 **Adapt your config** in
 
   gulp.config.js
 
-In my VM I Ended up using:
+In this specific case with VDD and the default ip you will need to change\`only
+the string:
 
-  domain: 'drupal8.dev',
-
-  styleguide: {
-      uri: 'http://drupal8.dev:3000/themes/my_theme/styleguide/index.html'
-    },
+\`themes/guru -> themes/my\_theme
 
 **Don’t forget to install link\_css module**
 
   drush dl
   drush en link_css -y
 
-Enable the Theme in Drupal UI or with Drush
+The link\_css module does nothing but converting drupals @import(file.css) to
+<link rel=“stylesheet” href=“stylesheet.css”> while **JS/CSS aggregation is
+disabled**. So make sure you deactivate aggregation in order to work woth
+browserSync:
+
+  drush config-set system.performance css.preprocess 0 -y
+  drush config-set system.performance js.preprocess 0 -y
+
+Enable the new Theme in Drupal UI or with Drush:
 
   drush pm-enable my_theme -y
   drush config-set system.theme default my_theme -y
@@ -410,9 +462,16 @@ Enable the Theme in Drupal UI or with Drush
 **Run gulp and open up a browser**
 
   cd [theme folder]
-  gulp
+  npm-run gulp
 
-If you are on a remote/Vagrant computer browser want start up.
+On a local machine your default browser will launch your Drupal site at
+http://localhost:3000 and a second tab with the styleguide at
+http://localhost:3000/themes/yourtheme/styleguide/index.html.
 
-You can use the Urls provided in “External” you should find after browSersync
-Init is finished.
+In the virtual machine you should reach you website at the ip you find at the
+end of the startup script (“Proxying: http://192.168.44.44”)
+
+Sou your local browser should show your drupal site at http://192.168.44.44:3000
+and the browserSync UI at http://192.168.44.44:3000 and the stylguide at
+http://192.168.44.44:3000/themes/my\_theme/styleguide/index.html (Dont miss the
+index.html or drupal will deny access).

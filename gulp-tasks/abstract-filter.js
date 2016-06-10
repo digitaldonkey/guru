@@ -50,7 +50,6 @@ module.exports = {
       }
     });
 
-    gulp.src(['scss/**/*.scss', '!**/*.generated.scss']).pipe(filter);
-    cb();
+    return gulp.src(['scss/**/*.scss', '!**/*.generated.scss']).pipe(filter);
   }
 };
