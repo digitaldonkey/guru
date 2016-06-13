@@ -8,6 +8,11 @@ screenshot: screenshot.png
 # Inherit from base theme.
 base theme: classy
 
+// Using inline-logo.
+settings:
+  features:
+    logo: false
+
 # -- Libraries ---------------------------------------------------
 libraries:
   - guru/global-styling

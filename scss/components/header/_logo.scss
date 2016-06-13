@@ -1,14 +1,14 @@
 //
 // Site Logo
 //
-// .site-logo Inline SVG logo.
+// .site-logo / .site-logo--inline Inline SVG logo.
 //
 // Markup:
 // <div class="site-logo" style="width: 24em; height: 15em;"></div>
 //
 // Styleguide Components - Header - Site logo
 //
-.site-logo {
+.site-logo--inline {
 
   @extend %svg-guru-logo;
 
