@@ -1,0 +1,4 @@
+# Using inline-logo, by disableing the logo.
+settings:
+  features:
+    logo: false

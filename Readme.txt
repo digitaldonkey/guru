@@ -352,11 +352,11 @@ a virtual machine created with `Vagrant Drupal
 Development <https://www.drupal.org/node/2008792>`__.
 
 I will assume you are running drupal in vdd machine and want to install frontend
-compiling within the VM.
+compiling within the VM as a reference, but generally I recommend to compile
+your sass locally, which is much faster. In this case npm and sassc should be
+installed on you local machine not in the VM.
 
-You may decide if to cpmpile your sass locally, which should be faster. In this
-case npm and sassc should be installed on you local machine. But for this
-tutorial I will assume we install everything within the VM.
+But for this tutorial I will assume we install everything within the VM.
 
 **Install the latest node-js in Ubuntu**
 
@@ -372,25 +372,25 @@ If npm is not available:
 
 **check for libsass (sassc)**
 
-  sassc- v
+  sassc -v
 
-If you don’t have sassc you need to install it. There is a `debian
-package <https://tracker.debian.org/pkg/libsass>`__, but I ended up installing
-it from source as discribed `here <http://askubuntu.com/a/785324/555592>`__
+If you don’t have sassc you need to install it. I ended up installing it from
+source as discribed `here <http://askubuntu.com/a/785324/555592>`__, because the
+`debian package <https://tracker.debian.org/pkg/libsass>`__ is in unstable and
+3.3.4 instead of 3.3.6.
 
-**BrowserSync in Drupal VDD**
+**BrowserSync in a virtual machine**
 
 Browsersync basically starts up a local webserver to enable live reloading.
-After launching browserSync you website will be available at localhost:3000.
+Running the gulp task on you local machine and your Drupal site will be
+available trough browserSync at localhost:3000.
 
-If you run gulp/browserSync locally everything is fine. But in order to run it
-from within the VM and reach browserSync instance from outside the Virtual
-machine you need to forward ports to the host system.
+In order to run gulp in the VM and reach browserSync instance from outside the
+Virtual machine you need to forward ports to the host system. You can do this by
+changing the VDD Vagrantfile.
 
-You can do this by changing the VDD Vagrantfile.
-
-Change the forwarded\_ports array in vdd/config.json file to add the ports 3000
-and 3001.
+Change the *forwarded\_ports* array in ***vdd/config.json*** file to add the
+ports **3000** and **3001**.
 
   "forwarded_ports": [
     {
@@ -415,8 +415,8 @@ In order to create a subtheme guru theme needs to be installed and set as
 default!
 
   cd [www-data-folder]
-  drush pm-enable guru
-  drush config-set system.theme default guru
+  drush pm-enable guru -y
+  drush config-set system.theme default guru -y
   drush guru "My Theme"
 
 **Install node and bower modules**
@@ -443,13 +443,12 @@ the string:
 
 **Don’t forget to install link\_css module**
 
-  drush dl
   drush en link_css -y
 
 The link\_css module does nothing but converting drupals @import(file.css) to
-<link rel=“stylesheet” href=“stylesheet.css”> while **JS/CSS aggregation is
-disabled**. So make sure you deactivate aggregation in order to work woth
-browserSync:
+<link rel=“stylesheet” href=“stylesheet.css”> while JS/CSS aggregation is
+*disabled*. Make sure you **deactivate aggregation in order to work woth
+browserSync**.
 
   drush config-set system.performance css.preprocess 0 -y
   drush config-set system.performance js.preprocess 0 -y

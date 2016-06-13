@@ -73,7 +73,6 @@ function drush_guru_subtheme($name) {
   /*
    * Copy theme files.
    */
-  $copy_files = TRUE;
 
   // Directories created in destination theme.
   $dirs = array(
@@ -83,12 +82,11 @@ function drush_guru_subtheme($name) {
     'styleguide-template',
     'templates',
   );
-  if ($copy_files) {
-    foreach ($dirs as $dir) {
-      $path = $tmp_theme_path . $dir;
-      if (!mkdir($path)) {
-        return drush_set_error('GURU_CREATE_ERROR', dt('Could not create @path.', array('@path' => $path)));
-      }
+
+  foreach ($dirs as $dir) {
+    $path = $tmp_theme_path . $dir;
+    if (!mkdir($path)) {
+      return drush_set_error('GURU_CREATE_ERROR', dt('Could not create @path.', array('@path' => $path)));
     }
   }
 
@@ -97,6 +95,7 @@ function drush_guru_subtheme($name) {
   // Use "path/*" to copy directories recursive.
   $files = array(
     'css/.gitkeep',
+    'config/*',
     'gulp-tasks/*',
     'gulp-templates/*',
     'js/behaviors.js',
@@ -109,7 +108,7 @@ function drush_guru_subtheme($name) {
     'bower.json',
     'gulp.config.js',
     'gulpfile.js',
-    // 'guru.theme', --> RENAME - or can we just use it from the base theme?
+    // 'guru.theme', --> We just load the library it from the base theme!
     'kss-readme.md',
     'logo.svg',
     'package.json',
@@ -117,26 +116,33 @@ function drush_guru_subtheme($name) {
     'scsslint-drupal.yml',
     'sasslint-drupal.yml',
   );
-  if ($copy_files) {
-    foreach ($files as $file) {
-      $is_recursive = strpos($file, '/*');
-      if ($is_recursive == FALSE) {
-        // Copy File.
-        $source = __DIR__ . DIRECTORY_SEPARATOR . $file;
-        if (!copy($source, $tmp_theme_path . $file)) {
-          return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $source, '@destination' => $tmp_theme_path . $file)));
-        }
-      }
-      else {
-        // Copy all Files recursive.
-        $file = substr($file, 0, strpos($file, '/*'));
-        $source = __DIR__ . DIRECTORY_SEPARATOR . $file;
-        if (!_guru_dir_copy_recursive($source, $tmp_theme_path . $file)) {
-          return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $source, '@destination' => $tmp_theme_path . $file)));
-        }
 
+  foreach ($files as $file) {
+    $is_recursive = strpos($file, '/*');
+    if ($is_recursive == FALSE) {
+      // Copy File.
+      $source = __DIR__ . DIRECTORY_SEPARATOR . $file;
+
+      if (!copy($source, $tmp_theme_path . $file)) {
+        return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $source, '@destination' => $tmp_theme_path . $file)));
       }
     }
+    else {
+      // Copy all Files recursive.
+      $file = substr($file, 0, strpos($file, '/*'));
+      $source = __DIR__ . DIRECTORY_SEPARATOR . $file;
+      if (!_guru_dir_copy_recursive($source, $tmp_theme_path . $file)) {
+        return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $source, '@destination' => $tmp_theme_path . $file)));
+      }
+
+    }
+  }
+
+  // Rename config/install/guru.settings.yml:
+  $settings_src = $tmp_theme_path . '/' . 'config/install/guru.settings.yml';
+  $settings_dest = $tmp_theme_path . '/config/install/' . $machine_name . '.settings.yml';
+  if (!rename($settings_src, $settings_dest)) {
+    return drush_set_error('GURU_CREATE_ERROR', dt('Could not rename @file. to @destination', array('@file' => $settings_src, '@destination' => $settings_dest)));
   }
 
   /*
@@ -161,7 +167,7 @@ function drush_guru_subtheme($name) {
   foreach ($changed_files as $k => $file) {
     $changed_files[$k] = ' ' . substr($file, strlen($destination) + 1);
   }
-  drush_print(dt("Files copied or created:", array()));
+  drush_print(dt("## Files copied or created ##", array()));
   drush_print(implode("\n", $changed_files));
 
   return TRUE;
