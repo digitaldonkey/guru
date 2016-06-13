@@ -30,12 +30,11 @@ module.exports = {
       gulp_template = '_abstract-to-concrete.generated.scss',
       gulp_template_dir = './gulp-templates/';
 
-    gulp.src(gulp_template_dir + gulp_template)
+    return gulp.src(gulp_template_dir + gulp_template)
       .pipe(plug.template({
         filename: destination_dir + gulp_template,
         abstracts: conf.abstracts_list
       }))
       .pipe(gulp.dest(destination_dir));
-    cb();
   }
 };
