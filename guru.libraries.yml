@@ -1,10 +1,10 @@
 global-styling:
-  version: 1.x
+  version: VERSION
   css:
     theme:
       css/main.css: {}
 browser-indicator:
-  version: 1.x
+  version: VERSION
   js:
     js/behaviors.min.js: {}
   dependencies:
