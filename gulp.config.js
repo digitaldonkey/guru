@@ -17,6 +17,8 @@ module.exports = {
   //
   // You may change other options later, but only the above is required!
   //
+
+  //  KSS-Styleguide
   styleguide: {
 
     // Create your own styleguide template with kss:
@@ -33,23 +35,37 @@ module.exports = {
     isEnabled: true
   },
 
+  // SCSS-Linting
+  //
   // There are two options how to use SCSS-lint
+  // In sass-lint "disabling by comment" wont work yet,
+  // but the compile time is about half compared with scss-lint (ruby):
+  //
+  //   sass-lint: 578ms vs scss-lint: 1.28s
+  //
   linter: {
+
+    // By default linting is disabled.
+    default: false
+
     // In sass-lint "disabling by comment" wont work yet. See:
     // https://github.com/sasstools/sass-lint/pull/677
+    // See: https://github.com/sasstools/sass-lint
 
-    // default: 'sass-lint' // Finished 'scss-lint' after 578 ms
+    // default: 'sass-lint'
 
     // Using scss-lint there is "disabling by comment" enabled.
     // e.g: // scss-lint disable single-line-per-selector
-    // See readme for more Info.
-    //default: 'scss-lint' // Finished 'scss-lint' after 1.28 s.
+    //
+    // See: https://github.com/brigade/scss-lint
 
-    // You can disable Linter.
-    default: false
+    // default: 'scss-lint'
+
   },
+
+  //  Autoprefixer
+  // For configuration see: https://github.com/postcss/autoprefixer
   autoprefixer: {
-    // For autoprefixer see: https://github.com/postcss/autoprefixer
     browsers: [
       'last 2 versions',
       'safari 5',
