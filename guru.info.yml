@@ -45,7 +45,7 @@ regions:
   content: Content
   sidebar_first: 'Sidebar first'
   sidebar_second: 'Sidebar second'
-  footer_first: 'Footer First'
+  footer: 'Footer First'
   footer_second: 'Footer Second'
   footer_third: 'Footer Third'
   breadcrumb: Breadcrumb
