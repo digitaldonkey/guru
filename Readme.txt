@@ -46,7 +46,7 @@ Workflow Features
 -  SVGgo and inline SVG to easily use inline SVG images.
 -  Automated **documentation of SASS mixins** in the styleguide to focus on code
    reuse
--  Filly **variableized** SCSS code. E.g. change colors in only one place.
+-  Fully **variableized** SCSS code. E.g. change colors in only one place.
 -  KSS **Styleguide Template** integrated and ready to modify within the
    workflow
 -  Automated minifying of JS and CSS code
