@@ -12,22 +12,40 @@ base theme: classy
 libraries:
   - guru/global-styling
 
-# You can also remove stylesheets.
+
+# Remove stylesheets.
 stylesheets-remove:
+  - 'core/assets/vendor/normalize-css/normalize.css'
   - '@classy/css/layout.css'
-  - core/assets/vendor/normalize-css/normalize.css
+  - '@classy/css/components/menu.css'
+
+# Example: Override a CSS file from classy theme.
+#
+# I would not recommend overriding files which have svg's included like the menu.css,
+# because then the svg-code would be included in main.css AND in menu.css.
+# -> So what I did is Exclude the classy's menu.css and include it in main.css in "components" section.
+#
+# See: https://www.drupal.org/theme-guide/8/assets#override-extend
+#
+#libraries-override:
+#  classy/base:
+#    css:
+#      component:
+#        css/components/menu.css: css/menu.css
 
 # -- Regions ---------------------------------------------------
 # Default Regions see:
 # https://api.drupal.org/api/drupal/core%21modules%21system%21templates%21page.html.twig/8
 regions:
   header: Header
-  primary_menu: Primary Menu
-  secondary_menu: Secondary Menu
+  primary_menu: 'Primary Menu (Responsive burger menu)'
+  secondary_menu: 'Secondary Menu'
   highlighted: Highlighted
   help: Help
   content: Content
   sidebar_first: 'Sidebar first'
   sidebar_second: 'Sidebar second'
-  footer: Footer
+  footer: 'Footer First'
+  footer_second: 'Footer Second'
+  footer_third: 'Footer Third'
   breadcrumb: Breadcrumb

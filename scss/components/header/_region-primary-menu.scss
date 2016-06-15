@@ -1,0 +1,217 @@
+//
+// Region primary menu
+//
+// .region-primary-menu
+//
+// There is a hidden Checkbox Hack used in order to have a non -javascript burger-Menu
+// See: http://codepen.io/TimPietrusky/pen/gqlhA
+// Markup:
+//  <div class="region region-primary-menu layout-content">
+//  <input type="checkbox" class="fake-checkbox" id="main-menu-button">
+//  <label for="main-menu-button" onclick=""></label>
+//  <div class="main-menu--wrapper">
+//  <!-- BEGIN OUTPUT from 'core/themes/classy/templates/block/block--system-menu-block.html.twig' -->
+//  <nav role="navigation" aria-labelledby="block-donkeymedia-theme-main-menu-menu" id="block-donkeymedia-theme-main-menu" class="contextual-region block block-menu navigation menu--main">
+//  <div data-contextual-id="block:block=donkeymedia_theme_main_menu:langcode=en|menu:menu=main:langcode=en" class="contextual" role="form">
+//  <!-- BEGIN OUTPUT from 'core/themes/classy/templates/navigation/links.html.twig' -->
+//  <!-- END OUTPUT from 'core/themes/classy/templates/navigation/links.html.twig' -->
+//  </div>
+//  <!-- BEGIN OUTPUT from 'core/themes/classy/templates/navigation/menu.html.twig' -->
+//  <ul class="menu">
+//  <li class="menu-item">
+//  <a href="/" data-drupal-link-system-path="<front>">Home</a>
+//  </li>
+//  <li class="menu-item">
+//  <a href="/development-blog" data-drupal-link-system-path="development-blog">Blog [EN]</a>
+//  </li>
+//  <li class="menu-item">
+//  <a href="/references" data-drupal-link-system-path="references">References [EN]</a>
+//  </li>
+//  </ul>
+//  <!-- END OUTPUT from 'core/themes/classy/templates/navigation/menu.html.twig' -->
+//  </nav>
+//  <!-- END OUTPUT from 'core/themes/classy/templates/block/block--system-menu-block.html.twig' -->
+//  <!-- BEGIN OUTPUT from 'core/themes/classy/templates/block/block--system-menu-block.html.twig' -->
+//  <nav role="navigation" aria-labelledby="block-donkeymedia-theme-account-menu-menu" id="block-donkeymedia-theme-account-menu" class="contextual-region block block-menu navigation menu--account">
+//  <div data-contextual-id="block:block=donkeymedia_theme_account_menu:langcode=en|menu:menu=account:langcode=en" class="contextual" role="form">
+//  <!-- BEGIN OUTPUT from 'core/themes/classy/templates/navigation/links.html.twig' -->
+//  <!-- END OUTPUT from 'core/themes/classy/templates/navigation/links.html.twig' -->
+//  </div>
+//  <!-- BEGIN OUTPUT from 'core/themes/classy/templates/navigation/menu.html.twig' -->
+//  <ul class="menu">
+//  <li class="menu-item">
+//  <a href="/user" data-drupal-link-system-path="user">My account</a>
+//  </li>
+//  <li class="menu-item">
+//  <a href="/user/logout" data-drupal-link-system-path="user/logout">Log out</a>
+//  </li>
+//  </ul>
+//  <!-- END OUTPUT from 'core/themes/classy/templates/navigation/menu.html.twig' -->
+//  </nav>
+//  <!-- END OUTPUT from 'core/themes/classy/templates/block/block--system-menu-block.html.twig' -->
+//  <!-- BEGIN OUTPUT from 'themes/git_repos/donkeymedia_theme/templates/block/block--language-block.html.twig' -->
+//  <div class="language-switcher-language-url contextual-region block block-language block-language-blocklanguage-interface" id="block-donkeymedia-theme-languageswitcher" role="navigation">
+//  <div data-contextual-id="block:block=donkeymedia_theme_languageswitcher:langcode=en" class="contextual" role="form">
+//  <!-- BEGIN OUTPUT from 'core/themes/classy/templates/navigation/links.html.twig' -->
+//  <!-- END OUTPUT from 'core/themes/classy/templates/navigation/links.html.twig' -->
+//  </div>
+//  <!-- BEGIN OUTPUT from 'core/themes/classy/templates/navigation/links.html.twig' -->
+//  <ul class="links"><li hreflang="en" data-drupal-link-system-path="node/22" class="en is-active"><a href="/node/22" class="language-link is-active" hreflang="en" data-drupal-link-system-path="node/22">English</a></li><li hreflang="de" data-drupal-link-system-path="node/22" class="de"><a href="/de/node/22" class="language-link" hreflang="de" data-drupal-link-system-path="node/22">Deutsch</a></li></ul>
+//  <!-- END OUTPUT from 'core/themes/classy/templates/navigation/links.html.twig' -->
+//  </div>
+//  <!-- END OUTPUT from 'themes/git_repos/donkeymedia_theme/templates/block/block--language-block.html.twig' -->
+//  </div>
+//  </div>
+//
+// Styleguide Components - Header - Region primary menu
+//
+
+// scss-lint:disable VendorPrefix
+
+
+// Advanced Checkbox Hack: Fix for Android.
+
+body {
+  -webkit-animation: bugfix infinite 1s;
+}
+
+@-webkit-keyframes bugfix {
+  from { padding: 0; }
+  to { padding: 0; }
+}
+
+// END: Advanced Checkbox Hack: Fix for Android.
+
+
+.region-primary-menu {
+  padding-bottom: $vertical-space-tiny;
+
+  label {
+    display: block;
+    float: right;
+    font-size: 16px;
+    height: 36px;
+    line-height: 36px;
+    position: relative;
+    width: auto;
+  }
+
+  label::after {
+    content: '\2261';
+    display: inline-block;
+    float: right;
+    font-size: 30px;
+    line-height: 30px;
+    padding-left: .25em;
+    padding-top: .1em;
+  }
+
+  a {
+    display: inline-block;
+    margin-bottom: .4em;
+    padding-left: .1em;
+    padding-right: .1em;
+    width: 98.5%;
+
+    &.is-active {
+      display: none;
+    }
+  }
+
+  .fake-checkbox {
+    left: -9999px;
+    position: absolute;
+    top: -9999px;
+  }
+
+
+  ul {
+    margin-left: 0;
+  }
+
+  // Fix ::before "margin" for menus.
+  .links a {
+    padding-left: 1.25em;
+  }
+
+  .main-menu--wrapper {
+    clear: both;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease-in-out;
+  }
+
+  .fake-checkbox:checked ~ .main-menu--wrapper {
+    max-height: 30rem;
+
+    .block,
+    > ul,
+    li {
+      display: block;
+      float: left;
+      padding: 0;
+      width: 100%;
+    }
+
+  }
+}
+
+@media screen and (min-width: $breakpoint-primary-menu) {
+
+  .region-primary-menu {
+    padding-bottom: $vertical-space;
+    padding-top: $vertical-space-tiny;
+    position: relative;
+    width: auto;
+
+    a {
+      padding-left: 1em;
+      padding-right: 1em;
+      width: auto;
+
+      &.is-active {
+        display: inline-block;
+      }
+    }
+
+    label {
+      cursor: pointer;
+      display: none;
+      list-style: none;
+      padding: 0;
+      text-decoration: none;
+      transition: color .3s ease-in-out-out;
+      user-select: none;
+      width: 100%;
+    }
+
+    .fake-checkbox:checked ~ .main-menu--wrapper,
+    .main-menu--wrapper {
+      display: block;
+      max-height: none;
+      overflow: visible;
+
+      .block,
+      .menu,
+      .links {
+        @include inline-list;
+        display: inline-block;
+      }
+
+      // scss-lint:disable SelectorDepth
+      .block,
+      > ul,
+      ul:not(.contextual-links) li {
+        display: inline-block;
+        width: auto;
+      }
+
+      li {
+        // scss-lint:disable ImportantRule
+        background-color: transparent !important;
+      }
+    }
+
+  }
+}
+

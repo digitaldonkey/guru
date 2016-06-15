@@ -1,0 +1,114 @@
+//
+// menu.css
+//
+// Overriding @classy/components/menu.css
+//
+// The file is excluded in theme.info.yml and included as a component.
+// Keeping menu.css as a separate file would result in double include of the %svg-chevron code.
+// This is a normal SMACSS component replacing  classy's menu, actually not an override of the file itself.
+// See modules/menu.scss.example in order to use override.
+//
+// Markup:
+//<ul class="menu">
+//<li class="menu-item menu-item--collapsed">
+//<a href="http://www.example.com/" title="Description of fre.">fre</a>
+//</li>
+//<li class="menu-item menu-item--collapsed">
+//<a href="/node/5" title="Description of wauaspi." data-drupal-link-system-path="node/5">Accumsan Bene Dignissim In Nulla Tation</a>
+//</li>
+//<li class="menu-item menu-item--collapsed">
+//<a href="http://www.example.com/" title="Description of ro.">ro</a>
+//</li>
+//<li class="menu-item menu-item--collapsed">
+//<a href="/" title="Description of thu." data-drupal-link-system-path="<front>" class="is-active">thu</a>
+//</li>
+//<li class="menu-item">
+//<a href="http://www.example.com/" title="Description of sheslohu.">sheslohu</a>
+//</li>
+//<li class="menu-item">
+//<a href="/node/33" title="Description of phohawuuut." data-drupal-link-system-path="node/33">Lobortis Luptatum</a>
+//</li>
+//<li class="menu-item menu-item--collapsed">
+//<a href="/node/25" title="Description of lutriw." data-drupal-link-system-path="node/25">Dignissim Humo Iustum</a>
+//</li>
+//<li class="menu-item">
+//<a href="/" title="Description of swuphorisof." data-drupal-link-system-path="<front>" class="is-active">swuphorisof</a>
+//</li>
+//<li class="menu-item menu-item--collapsed">
+//<a href="http://www.example.com/" title="Description of clusechec.">clusechec</a>
+//</li>
+//<li class="menu-item">
+//<a href="/node/34" title="Description of wraw." data-drupal-link-system-path="node/34">Appellatio Minim Odio Sit Wisi</a>
+//</li>
+//<li class="menu-item menu-item--collapsed">
+//<a href="http://www.example.com/" title="Description of pe.">pe</a>
+//</li>
+//<li class="menu-item menu-item--collapsed">
+//<a href="/" title="Description of guhuc." data-drupal-link-system-path="<front>" class="is-active">guhuc</a>
+//</li>
+//<li class="menu-item">
+//<a href="http://www.example.com/" title="Description of wocicr.">wocicr</a>
+//</li>
+//<li class="menu-item menu-item--collapsed">
+//<a href="/" title="Description of nuspun." data-drupal-link-system-path="<front>" class="is-active">nuspun</a>
+//</li>
+//</ul>
+//
+// Styleguide Modules - menu.css
+
+.menu {
+
+  list-style: none;
+  padding: 0;
+  text-align: left; // LTR.
+
+  // Submenu.
+  .menu {
+    margin-left: 1em;
+  }
+
+  [dir="rtl"] & {
+    text-align: right;
+  }
+
+  .menu-item {
+    // scss-lint:disable NestingDepth
+    margin: 0;
+    padding-top: .2em;
+
+    a {
+      padding: $link-padding-y 0;
+
+      &::before {
+        background-repeat: no-repeat;
+        background-size: contain;
+        content: '';
+        display: inline-block;
+        height: 1em;
+        padding-left: .25em;
+        vertical-align: -.15em;
+        width: 1em;
+      }
+    }
+
+    &.menu-item--expanded {
+      >a::before {
+        @extend %svg-chevron;
+        transform: rotate(90deg);
+      }
+    }
+
+    &.menu-item--collapsed {
+      a::before {
+        @extend %svg-chevron;
+      }
+    }
+
+    [dir="rtl"] &.menu-item--collapsed {
+      // scss-lint:disable SelectorDepth
+      a::before {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}

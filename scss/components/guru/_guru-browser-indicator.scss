@@ -1,3 +1,28 @@
+//
+// Guru browser width indicator
+//
+// .guru-browser-indicator is only available for users with "administer nodes" permission currently.
+//
+// See: guru/guru.theme
+//
+// Weight: 99
+//
+// Styleguide Components - Broser width indicator
+//
+.site-logo {
+
+  @extend %svg-guru-logo;
+
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+  height: 8em;
+  margin: $vertical-space $vertical-space-tiny $vertical-space-tiny 0;
+  max-width: 100%;
+  width: 16em;
+}
+
+
 // body.is-touch-debug.
 .is-touch-debug {
   a {
@@ -11,8 +36,13 @@
 }
 
 // body.is-browsersync
+.user-logged-in,
 .is-browsersync {
   .guru-browser-indicator {
+
+    // See: scss/variables/_breakpoints.scss.
+    @extend %guru-browser-width;
+
     background: $green;
     bottom: 2em;
     font-size: .75em;
@@ -24,7 +54,7 @@
     text-align: right;
     width: auto;
 
-    &:before {
+    &::before {
       background: $green;
       content: '';
       display: block;
@@ -35,9 +65,6 @@
       text-align: center;
       width: auto;
     }
-    // See: scss/variables/_breakpoints.scss.
-    @extend %guru-browser-width;
   }
-
 }
 

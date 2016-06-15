@@ -5,11 +5,13 @@
 
 
 $kss-colors-background: #fff;
-$gray-medium: #999;
+$gray-light: #efefef;
+$gray-medium: #777;
+$kss-dark: #444;
 
-$kss-colors-foreground: #444;
+$kss-colors-foreground: $kss-dark;
 $kss-colors-heading        : #111;
-$kss-colors-quotes         : #666;
+$kss-colors-quotes         : $gray-medium;
 
 $kss-colors-link           : #0645ad;
 $kss-colors-link-visited   : #0645ad;
@@ -27,28 +29,6 @@ $kss-vertical-rhythm       : $kss-font-size * 1.5;
 // ------------------------------------------------------------------------------
 
 .kss-style {
-  //color: $kss-colors-foreground;
-  //font-family: $kss-font-body;
-  //font-size: $kss-font-size;
-  //line-height: $kss-vertical-rhythm;
-  //
-  //a {
-  //  color: $kss-colors-link;
-  //  text-decoration: none;
-  //  transition-property: color;
-  //  transition-duration: 0.5s;
-  //
-  //  &:visited { color: $kss-colors-link-visited; }
-  //  &:hover,
-  //  &:focus   { color: $kss-colors-link-hover;   }
-  //  &:active  { color: $kss-colors-link-active;  }
-  //
-  //  &:hover,
-  //  &:active {
-  //    outline: 0;
-  //  }
-  //}
-
 
   td:not(.no-kss-style) {
     vertical-align: top;
@@ -84,7 +64,8 @@ $kss-vertical-rhythm       : $kss-font-size * 1.5;
     /* Old browsers */
     background-color: #eee;
     @include filter-gradient(#eee, #ffffff, horizontal);
-    @include background(linear-gradient(left, #eee 0%, #eee 20%, #ffffff 20%, #ffffff 100%));
+
+    @include background(linear-gradient(to right, $gray-light 0%, $gray-light 20%, #ffffff 20%, #ffffff 100%));
 
     .kss-main,
     .kss-sidebar {
@@ -155,6 +136,7 @@ $kss-vertical-rhythm       : $kss-font-size * 1.5;
     margin-bottom: ($kss-vertical-rhythm/2);
     padding: 0;
     list-style-type: none;
+    font-family: Ubuntu, Verdana, Sans-Serif;
   }
 
   .kss-nav__menu-item {
@@ -162,7 +144,7 @@ $kss-vertical-rhythm       : $kss-font-size * 1.5;
     padding-right: $kss-vertical-rhythm;
 
     a {
-      color: #777;
+      color: $gray-medium;
       text-decoration: none;
     }
     a:hover {
@@ -200,9 +182,9 @@ $kss-vertical-rhythm       : $kss-font-size * 1.5;
   }
 
   .kss-nav__ref {
-    color: #333;
+    color: $gray-medium;
+    font-size: .9em;
     font-weight: bold;
-
     &:after {
       content: ' ';
     }
@@ -323,6 +305,8 @@ $kss-vertical-rhythm       : $kss-font-size * 1.5;
     padding: 1px 0; // Contain the example's margins.
     margin: 0 0 ($kss-vertical-rhythm - 1px) 0;
 
+    @include clearfix;
+
     &:last-child {
       margin: 0;
     }
@@ -413,4 +397,11 @@ $kss-vertical-rhythm       : $kss-font-size * 1.5;
       background: #fcfcfc;
     }
   }
+
+
+
+
+}
+.is-hidden {
+  display: none;
 }

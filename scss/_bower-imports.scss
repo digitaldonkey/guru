@@ -1,0 +1,23 @@
+//
+// Bower Imports
+//
+// Compiling with Libsass (sassc) has some limitations using Compass.
+// Luckily there are some replacements:
+//
+// * <a target="_blanc" href="https://github.com/askucher/compass-sass-mixins">compass-sass-mixins</a> will give you all Compass functions.
+// * <a target="_blanc" href="http://breakpoint-sass.com">breakpoint-sass</a> helps you to create media queries in sass easily. Detailed <a target="_blanc" href="https://github.com/at-import/breakpoint/wiki">documentation</a>. It's required by Singulatitygs.
+// * <a target="_blanc" href="https://github.com/at-import/Singularity#setting-up-a-basic-grid">singularity grid system</a> is a cool grid system. You may know it from Drupal Omega 4 theme. Detailed <a target="_blanc" href="https://github.com/at-import/Singularity/wiki">Documentation</a> or check Level Up's <a target="_blanc" href="https://www.youtube.com/watch?v=LJMo1PETS2w">video tutorial</a>.
+//
+// Weight: -10
+//
+// Styleguide Abstractions - Bower Imports
+//
+
+//@import '../node_modules/compass-mixins/lib/compass';
+// compass-mixins are broken on node-sass@^3.5.0
+// See: https://github.com/Igosuki/compass-mixins/issues/84
+// Replacing with https://www.npmjs.com/package/compass-sass-mixins
+@import '../bower_components/compass-sass-mixins/lib/compass';
+
+@import '../bower_components/breakpoint-sass/stylesheets/breakpoint';
+@import '../bower_components/singularity/stylesheets/singularitygs';

@@ -109,6 +109,7 @@ class KssBuilderHandlebars extends KssBuilderBaseHandlebars {
          * @param  {Mixed} query The section query
          */
         this.Handlebars.registerHelper('eachSection', function(query, options) {
+
           let styleGuide = options.data.root.styleGuide;
 
           if (!query.match(/\bx\b|\*/g)) {

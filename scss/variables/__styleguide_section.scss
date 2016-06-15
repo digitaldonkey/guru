@@ -1,8 +1,11 @@
 //
 // Variables
 //
-// `src: variables/__styleguide_section.scss`
+// There should only be variables, mixins (@mymixing(){...}) and extends (@extend %myextend{}) in the variables section.
 //
+// The reason: If you create a second css file and include it in Drupal, you may want to include all mixings and variables. If you have output there, it will be doubled up in the webbrowser.
 //
-// Styleguide 1
+// Weight: -50
+//
+// Styleguide Variables
 //

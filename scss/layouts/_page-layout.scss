@@ -1,88 +1,53 @@
+//
+// Global Page Layout
+//
+// .layout-container is the width Limit. See $global-max-width in Variables.
+//
+// Set debugging to true in order to show background grids in main.scss to:
+// `@include sgs-change('debug', true);`
+// After sgs-change you can use singularity's `@include background-grid();
+//
+// Check out abstractions/_views-layouts.scss in order to get more Grid examples and see https://github.com/at-import/Singularity for a introduction.
+//
+// Styleguide Layouts - Page
+//
+
+html,
 body {
-  padding: 1%;
+  height: 100%;
 }
 
+
 .layout-container {
+  @include clearfix();
+
+  display: block;
+  // Global max-width.
+  margin: auto;
+  max-width: $global-max-width;
+
+  // Global mobile First Margin.
+  padding-left: $global-page-pad;
+  padding-right: $global-page-pad;
+}
+
+body > footer {
+  clear: both;
+}
+
+
+.layout-container > header,
+.layout-container > div,
+.layout-container > main {
+
+  @include background-grid();
 
   @include add-grid(12);
   @include add-gutter(1 / 3);
+}
 
-  // Background Grids aren't working with libsass yet.
-  // @include sgs-change('debug', true); -> Error: https://github.com/at-import/Singularity/issues/211
-  //@include sgs-change('debug', true);
-  //@include background-grid();
-
-  height: 100%;
-  margin: 0 auto;
-  max-width: 80em;
-
-
-  .view-frontpage {
-
-    @include breakpoint($tab) {
-
-      .views-row:nth-child(even) {
-        @include grid-span(6, 1, 12);
-        clear: right;
-      }
-
-      .views-row:nth-child(odd) {
-        @include grid-span(6, 7, 12);
-      }
-
-      .views-row:first-child {
-        @include grid-span(12, 1, 12);
-        // Increasing font size for all elements in Block by setting a block
-        // font size in rem.
-        font-size: 1.1rem;
-      }
-    }
-
-    @include breakpoint($large) {
-
-      .views-row:nth-child(1),
-      .views-row:nth-child(2),
-      .views-row:nth-child(3) {
-        // Increasing font size for all elements in Block by setting a block
-        // font size in rem.
-        font-size: 1.2rem;
-      }
-
-      .views-row:nth-child(1) {
-        @include grid-span(4, 1, 12);
-      }
-
-      .views-row:nth-child(2) {
-        @include grid-span(4, 5, 12);
-      }
-
-      .views-row:nth-child(3) {
-        @include grid-span(4, 9, 12);
-      }
-
-      .views-row:nth-child(4) {
-        clear: both;
-      }
-
-      .views-row:nth-child(4n+4) {
-        @include grid-span(3, 1, 12);
-        clear: both;
-      }
-
-      .views-row:nth-child(4n+5) {
-        @include grid-span(3, 4, 12);
-        clear: none;
-      }
-
-      .views-row:nth-child(4n+6) {
-        @include grid-span(3, 7, 12);
-        clear: none;
-      }
-
-      .views-row:nth-child(4n+7) {
-        @include grid-span(3, 10, 12);
-        clear: none;
-      }
-    }
-  }
+// Example Layout for startpage.
+// See: abstractions/layouts/_views-layouts.scss
+.view-frontpage {
+  @extend %view-quadro;
 }

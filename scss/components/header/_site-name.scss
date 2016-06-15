@@ -1,0 +1,22 @@
+//
+// Site Name
+//
+// .site-name
+//
+// Markup:
+//<div class="site-name">
+//<a href="/" title="Home" rel="home">drupal8.dev</a>
+//</div>
+//
+// Styleguide Components - Header - Site name
+//
+.site-name {
+
+  margin-bottom: $vertical-space-tiny;
+  text-align: center;
+
+  @include breakpoint($pad) {
+    float: right;
+    margin-top: 6em;
+  }
+}
