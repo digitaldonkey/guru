@@ -39,7 +39,7 @@ css/*.css
 css/*.css.map
 
 # Minifyed js files
-js/js/*.min.js
+js/*.min.js
 
 # Exclude generated styleguide Files.
 styleguide/*
@@ -51,3 +51,6 @@ Readme.html
 # Exclude generated Files.
 scss/**/*.generated.scss
 
+# Exclude generated KSS Assets
+styleguide-template/guru-handlebars/kss-assets/kss.css
+styleguide-template/guru-handlebars/kss-assets/kss.css.map

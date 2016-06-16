@@ -1,7 +1,5 @@
 //
-// Font Variants
-//
-// `src: variables/fonts.scss`
+// Fonts
 //
 // <p><strong>$base-font: Verdana, 'Lucida Sans Unicode', sans-serif;</strong></p>
 // <p><strong>$base-font-monospace: Menlo, 'Ubuntu Mono', 'Lucida Console', 'Courier New', Courier, monospace;</strong></p>
@@ -12,17 +10,89 @@
 // <p><strong>$base-font-monospace: Menlo, 'Ubuntu Mono', 'Lucida Console', 'Courier New', Courier, monospace;</strong></p>
 // <p class="base-font-monospace">Autem paulatim qui veniam vicis. Eligo elit esca letalis obruo pala plaga utrum. Aliquam brevitas gemino haero importunus mos utrum vulpes zelus. Ibidem minim sed. Ad bene hos odio oppeto. Blandit gilvus incassum nobis premo vindico. Duis letalis lobortis macto praesent. Adipiscing caecus esse praemitto.</p>
 //
-// Styleguide 1.4
+// Styleguide Variables - Fonts
 //
-$base-font: Verdana, 'Lucida Sans Unicode', sans-serif;
+
+
+
+$base-font:  Arial, sans-serif;
 $base-font-monospace: Menlo, 'Ubuntu Mono', 'Lucida Console', 'Courier New', Courier, monospace;
 
-.base-font,
+
+$headings-font: Arial, sans-serif;
+
 %base-font {
   font-family: $base-font;
 }
 
-.base-font-monospace,
 %base-font-monospace {
   font-family: $base-font-monospace;
 }
+
+
+//
+// Font-Sizes and Vertical Rhythm.
+//
+// <p>We will try to make vertical rythms based on the font-size settings used by the bwowser. This will enable most browsers tos scale our design propperly on font-Size changes (Strg + "+").</p>
+// <p>Base Font size is set 100%, which will be in most browsers 16px.</p>
+// <p>The default vertical margins gonna be the same as the base-lineheight.</p>
+// <p>This is an informal and Variable Section. Styles will be applyed in base/_typography.scss.</p>
+//
+// <h3>Global base font Sizes</h3>
+// <p>Are fixed Pixel values applied to the html tag. They scale responsively according to the following: <br></p>
+//
+// <p><strong>$font-size-global--default: 17px</strong></p>
+// <p>Should be close to browser font size of 16px and is the default for larger screens.<br></p>
+// <p><strong>$font-size-global--tab: 15px</strong></p
+// <p>A little smaller fonts on screens up to $font-size-global--tab-media: (max-width: 900px)<br></p>
+// <p><strong>$font-size-global--mobile: 13px</strong></p>
+// <p>A little smaller fonts on screens up to $font-size-global--mobile-media (max-width: 400px)<br><br></p>
+//
+// <p><strong>This size is changed by the Browser when you (Strg+"+" or Strg+"-") and will be respected with any media query.</strong></p>
+//
+// <h4>Use "em" in modules, that should be able to scale.</h4>
+// <p>In SCSS components use relative font-sizes defined in em</p>
+// <p>The Variable <strong>$base-font-size</strong> is defined in em everything will scale with the base font sizes from above. Including the Vertical spacing Units <br><strong>$vertical-space-tiny</strong><br> and <br><strong>$vertical-space</strong><br> which might scale too.</p>
+//
+// <h4>Change font-size in a local context</h4>
+// <p>Redefine Component context by using rem.<br></p>
+//
+// <p>If you want to have a block with a different font-size, <strong>set the size in rem</strong> to your block. Everything should scale, because REM relates to the size set for the html element. The base font sizes from above.</p>
+//
+// <p><br>This is based on the Article <a href="https:// css-tricks.com/rems-ems/">Font Size Idea: px at the Root, rem for Components, em for Text Elements</a> at css-tricks.com<br></p>
+//
+// <div style="background: lightcyan;">
+// <h3>A block using default font-size</h3>
+// <p>Donec sed tellus eget sapien fringilla nonummy. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus.</p>
+// </div>
+// <div style="font-size: 1.3rem; background: lightcyan;">
+// <h3>A block using a font-base-site of 1.3 rem.</h3>
+// <p>Donec sed tellus eget sapien fringilla nonummy. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus.</p>
+// </div>
+// <div style="font-size: 2rem; background: lightcyan;">
+// <h3>Now font-size context is 2rem.</h3>
+// <p>Donec sed tellus eget sapien fringilla nonummy. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus.</p>
+// </div>
+//
+// Styleguide Variables - Fonts - Vertical Rythm
+//
+
+$base-font-size: 1em;
+$base-line-height: 1.5;
+
+$font-size-global--default: 17px;
+$font-size-global--mobile-font: 13px;
+$font-size-global--tab-font: 15px;
+
+$vertical-space-tiny: .8em;
+$vertical-space: 2.8em;
+
+// Global text max width to keep textes readable.
+$global-text-max-width: 50rem;
+
+@mixin text-max-width() {
+  max-width: $global-text-max-width;
+}
+
+$link-padding-x: 1em;
+$link-padding-y: .25em;

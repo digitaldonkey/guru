@@ -1,0 +1,74 @@
+// Recursive Includes:
+// This will work with libsass only because od gulp-sass-glob
+@import '../_bower-imports.scss';
+@import '../variables/**/*.scss';
+@import '../abstractions/**/*.scss';
+
+// Example: Override a CSS file from classy theme.
+//
+// I would not recommend overriding files which have inline SVG's included like the menu.css,
+// because then the svg-code would be included in main.css AND in menu.css.
+// -> So what I did is Exclude the classy's menu.css and include it in main.css in "components" section.
+//
+// You would need something like the following in yourtheme.info.yml
+// libraries-override:
+//   classy/base:
+//     css:
+//       component:
+//         css/components/menu.css: css/menu.css
+//
+// See: https://www.drupal.org/theme-guide/8/assets#override-extend
+
+.menu {
+
+  list-style: none;
+  padding: 0;
+  text-align: left; /* LTR */
+
+  // Submenu.
+  .menu {
+    margin-left: 1em;
+  }
+
+  [dir="rtl"] & {
+    text-align: right;
+  }
+
+  .menu-item {
+    padding-top: 0.2em;
+    margin: 0;
+
+    a {
+      padding: $link-padding-y 0;
+      &:before {
+        content: '';
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        background-repeat: no-repeat;
+        background-size: contain;
+        vertical-align: -.15em;
+        padding-left: .25em;
+      }
+    }
+
+    &.menu-item--expanded {
+      >a:before {
+        @extend %svg-chevron;
+        transform: rotate(90deg);
+      }
+    }
+
+    &.menu-item--collapsed {
+      a:before {
+        @extend %svg-chevron;
+      }
+    }
+
+    [dir="rtl"] &.menu-item--collapsed {
+      a:before {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}

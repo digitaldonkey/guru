@@ -1,10 +1,11 @@
 //
 // Abstractions
 //
-// `src: abstractions/__styleguide_section.scss`
+// **Any file in the abstract section must not output any CSS**
 //
+// There should only be <a href="http://sass-lang.com/guide#topic-6">mixins</a> (@mymixing(){...}) and <a href="http://sass-lang.com/guide#topic-7">extends</a> (@extend %myextend{}).
 //
-// **Any file in this section must not output any CSS**
+// The reason: If you create a second css file and include it in Drupal, you may want to include all mixings and variables. If you have output there, it will be doubled up in the webbrowser.
 //
-// Styleguide 2
+// Styleguide Abstractions
 //

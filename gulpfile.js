@@ -2,483 +2,64 @@
   /*jslint node: true */
   'use strict';
 
-  ////////////////////////
-  // Required
-  ////////////////////////
+  // Configuration file.
+  var conf = require('./gulp.config.js');
+
+  // Dependencies
+  // will be loaded from package.json.
+  // See: https://www.npmjs.com/package/gulp-load-plugins
+  var plug = require('gulp-load-plugins')({
+    DEBUG: false,
+    pattern: [
+      // The glob(s) to search for:
+      'gulp-*', 'gulp.*',
+      // Add non-prefixed plugins:
+      'kss', 'del', 'recursive-readdir', 'yargs', 'run-sequence', 'path'
+    ],
+    rename: {
+      'gulp-util': 'gutil'
+    }
+  });
+
+  // Init gulp with gulp-help.
+  var gulp = plug.help(require('gulp'));
+
+  // Initialize variables.
+  init(gulp, conf, plug);
+
 
   /**
-   * config.
-   */
-  var config = require('./gulp.config.js'),
+   * Default Task.
+   *
+   * This task is run if you type "gulp".
+   * Default environment is "development".
+   * gulp --env production
+  */
+  gulp.task('default', 'The default task is run if you just type "gulp"', [], function (cb) {
+    return plug.sequence('help', 'serve', cb);
+  });
 
-    /**
-     * Gulp dependencies.
-     *
-     */
-    gulp = require('gulp-help')(require('gulp')),
-
-  // libsass/sassc implementation:
-    environments = require('gulp-environments'),
-    sass = require('gulp-sass'),
-
-  // Enable @import 'components/*' with libsass.
-    sassGlob = require('gulp-sass-glob'),
-
-  // How to use sourcemaps:
-  // Watch: https://www.youtube.com/watch?v=-ZJeOJGazgE
-    sourcemaps = require('gulp-sourcemaps'),
-
-  // Autoprefixer
-  // See: https://github.com/postcss/autoprefixer
-    autoprefixer_cnf = require('./gulp.autoprefixer.config.js'),
-    autoprefixer = require('gulp-autoprefixer'),
-
-    plumber = require('gulp-plumber'),
-    rename = require('gulp-rename'),
-
-  // Reload BrowserSync.
-  // See: http://www.browsersync.io/docs/options/
-    browserSync = require('browser-sync').create(),
-
-  // Javascript minification and comment removal.
-  // Only used in environment production. Usage:
-  //    gulp --env production
-  // or compile only with:
-  //    gulp production
-    uglify = require('gulp-uglify'),
-
-  // Logging/debug Helper gutil.
-  // e.g.
-  // gutil.log('My message ' + gutil.colors.red('is partly red'));
-    gutil = require('gulp-util'),
-
-  // Styleguide (kss-node) requires gulp-shell to be run.
-    shell  = require('gulp-shell'),
-
-  // Enable opening of KSS-Styleguide in browser.
-    open = require('gulp-open'),
-
-  // Required in order to have a KSS-Finished callback to reload Styleguide.html.
-  // Without gulp works asynchronous!
-    runSequence = require('run-sequence').use(gulp),
-
-  // This is just required for deployment. It has a dependency on pandoc.
-    pandoc = require('gulp-pandoc'),
-
-  // Required Abstract-to-real-CSS Task: abstract
-    del = require('del'),
-
-  // Filtering for Abstracts.
-    gulpFilter = require('gulp-filter'),
-    replace = require('gulp-replace'),
-
-  // Enables rewriting templets. See: /gulp-templates/...
-    template = require('gulp-template'),
-    path = require('path'),
-
-  // debug = require('gulp-debug'),
-
-    /**
-     *   Environments
-     *  With this we can use e.g.:
-     *    .pipe(development(sourcemaps.init()))
-     * or
-     *    .pipe(production(uglify()))
-     * var development = environments.development,
-     *    production = environments.production;
-     */
-
-    development = environments.development,
-    production = environments.production;
 
   /**
-   * Serve Task.
+   * Serve Task - This is the default task.
+   *
+   * This task is executed when you just type gulp in the theme directory.
    *
    * Compiles everything in the current environment, starts up a dev server and
    * launches browser windows for site and styleguide.
-   *
    */
-  gulp.task('serve', 'Starts browserSync.', ['sass','scripts'], function() {
-
-    // Close-tab on gulp-exit with a client side script.
-    browserSync.use({
-      plugin: function () { /* noop */ },
-      hooks: {
-        'client:js': require("fs").readFileSync('./browsersync-client-events.js', 'utf-8')
-      }
-    });
-
-    // Static Server init.
-    browserSync.init({
-      proxy: {
-        target: config.current.ip,
-        reqHeaders: function () {
-          return {
-            host: config.current.domain,
-            // Make sure Drupal will not send compressed stuff to browserSync.
-            "accept-encoding": "identity"
-          };
-        }
-      }
-    },
-    function(){
-
-      // Finished init. Now start Browser and linter.
-      gulp.start('styleguide-browser','linter');
-
-      // Lint after serving to browser.
-      browserSync.emitter.on("stream:changed", function () {
-        gulp.start('linter');
-      });
-
-      /*
-       * Watcher.
-       */
-
-      // Initialize watch task for sass.
-      var sass_watcher = gulp.watch([
-        'scss/**/*.scss',
-        '!scss/**/scsslint_tmp*',
-        '!scss/**/*generated.scss'
-      ], ['sass']);
-
-      // Todo: Missing regenerate on Section Changes:
-      // On add/edit section generated CSS code, you need to reload the Styleguide
-      // manually in Browser or run the styleguide-template task.
-      sass_watcher.on('change', function(event) {
-        gutil.log('File ' + event.path + ' was ' + event.type);
-      });
-
-      // Initialize watch task for javascript files.
-      var scripts_watcher = gulp.watch([
-        'js/*.js',
-        '!js/*.min.js'
-      ], ['scripts']);
-
-      scripts_watcher.on('change', function(event) {
-        gutil.log('scripts_watcher: File ' + event.path + ' was ' + event.type);
-      });
-
-      // Initialize watch task for Styleguide template files.
-      var styleguide_watcher = gulp.watch(
-        [
-          'styleguide-template/**/index.html',
-          'styleguide-template/**/template_config.js',
-          'styleguide-template/guru-handlebars/template/public/kss.scss'
-        ],
-        ['styleguide-template']);
-
-      styleguide_watcher.on('change', function(event) {
-        gutil.log('styleguide_watcher: File ' + event.path + ' was ' + event.type);
-      });
-
-
-    });
-  },
-  {
-    // gulp-help options.
-    options: {
-      'env=development': 'In development environment (default)',
-      'env=production': 'In production environment everything is minifyed.'
-    }
+  gulp.task('serve', '♥♥♥ Build, start browserSync, init watching and launch browser.', function(cb) {
+    // Initialize watch task and launch a window with styleguide.
+    return plug.sequence(
+      ['build'],
+      ['browser-sync-init'],
+      ['styleguide-browser-launch']
+    );
+  }, {
+    aliases: ['s', 'server']
   });
 
 
-  /**
-   * Meta SASS Task.
-   *
-   * Required to get everything run in the right sequence.
-   * The task abstract generates scss files to be processed later.
-   */
-  gulp.task('sass', 'Compile Styleguide and SCSS.',['abstract'], function () {
-    runSequence('styleguide', 'sass-compile');
-  });
-
-  /**
-   * Compile SASS to css Task.
-   *
-   */
-  gulp.task('sass-compile', 'Compile SCSS only.',  function () {
-
-    return gulp.src('scss/main.scss')
-      .pipe(plumber())
-      .pipe(sassGlob())
-      .pipe(development(sourcemaps.init()))
-      .pipe(sass({
-        // Remove comments and minify CSS.
-        outputStyle: (production() ? 'compressed': 'expanded'),
-        sourcemap: true,
-        precision: 10,
-        onError: function (err) {
-          gutil.log(err);
-        }
-      }))
-      .on('end', function(){
-        // gutil.log('Just an example for the end event :D');
-      })
-
-      // Workaround for Sourcemaps.
-      // See: https://github.com/floridoo/gulp-sourcemaps/issues/60
-      .pipe(development(sourcemaps.write({includeContent: false})))
-      .pipe(development(sourcemaps.init({loadMaps: true})))
-
-      .pipe(sourcemaps.write({includeContent: false}))
-      .pipe(sourcemaps.init({loadMaps: true}))
-      .pipe(autoprefixer({
-        browsers: autoprefixer_cnf.browsers,
-        cascade: true
-      }))
-      .pipe(development(sourcemaps.write('.')))
-      .pipe(gulp.dest('css'))
-      .pipe(browserSync.stream({match: "**/css/main.css"}));
-
-  });
-
-
-  /**
-   * Script Task.
-   *
-   */
-  gulp.task('scripts', 'Compile Javascripts.', function() {
-
-    // Get all JS files in folder, exclude minified ones.
-    gulp.src(['js/**/*.js', '!js/**/*.min.js'])
-
-      // Rename th output files.
-      .pipe(rename({suffix: '.min'}))
-
-      // Minify using gulp-uglify.
-      .pipe(production(uglify()))
-
-      // Save output files.
-      .pipe(gulp.dest('js'))
-
-      // Tell browser sync to reload.
-      .pipe(browserSync.stream({match: "**/js/*min.js"}));
-  });
-
-
-  /**
-   * Build KSS-Styleguide and reload browser at end.
-   *
-   */
-  gulp.task('styleguide-template', 'Build KSS-Styleguide and reload browser.', ['styleguide-sass'],  function(callback) {
-    return runSequence('styleguide', 'styleguide-browser-reload', callback);
-  });
-
-
-  /**
-   * Only build KSS-Styleguide Task.
-   *
-   */
-  gulp.task('styleguide', 'Only build KSS-Styleguide.', shell.task([
-      // kss-node [source folder of files to parse] [destination folder] --template [location of template files]
-      'kss-node <%= source %> <%= destination %> --template <%= template %>'
-    ], {
-      templateData: {
-        source:       'scss',
-        destination:  'styleguide',
-        template: 'styleguide-template/guru-handlebars/template'
-        // Alternative:
-        // See: https://github.com/htanjo/kss-node-template
-        // template:     'kss-node-template/template'
-      }
-    }
-  ));
-
-
-  /**
-   * Compile SASS to css Task.
-   *
-   * Recompiling the templates stylesheet.
-   */
-  gulp.task('styleguide-sass', 'Compiling the KSS templates stylesheet.',function () {
-    return gulp.src('styleguide-template/guru-handlebars/template/public/kss.scss')
-      .pipe(plumber())
-      .pipe(sassGlob())
-      .pipe(development(sourcemaps.init()))
-      .pipe(sass({
-        // Remove comments and minify CSS.
-        outputStyle: 'expanded',
-        sourcemap: true,
-        precision: 10,
-        onError: function (err) {
-          gutil.log(err);
-        }
-      }))
-
-      // Workaround for Sourcemaps.
-      .pipe(development(sourcemaps.write({includeContent: false})))
-      .pipe(development(sourcemaps.init({loadMaps: true})))
-
-      .pipe(sourcemaps.write({includeContent: false}))
-      .pipe(sourcemaps.init({loadMaps: true}))
-      .pipe(autoprefixer({
-        browsers: autoprefixer_cnf.browsers,
-        cascade: true
-      }))
-      .pipe(development(sourcemaps.write('styleguide-template/guru-handlebars/template/public')))
-      .pipe(gulp.dest('styleguide-template/guru-handlebars/template/public'))
-      .pipe(browserSync.stream());
-  });
-
-  /**
-   * KSS-Styleguide browser reload.
-   *
-   */
-  gulp.task('styleguide-browser-reload', false, function(){
-    browserSync.reload(["**/*.html", "**/kss.css"]);
-  });
-
-
-  /**
-   * Open KSS-Styleguide url in default browser.
-   *
-   */
-  gulp.task('styleguide-browser', false, function(){
-    // Open KSS Styleguide.
-    // There MUST be a valid file sourced. What is not important.
-    // See: https://github.com/stevelacy/gulp-open/issues/15.
-    gulp.src('./package.json')
-      .pipe(open(config.current.styleguide));
-  });
-
-
-
-  /**
-   * linter SCSS-lint tasks.
-   *
-   *
-   * https://github.com/brigade/scss-lint
-   */
-  var linter = config.current.linter.default;
-
-  switch (linter) {
-
-    case 'sass-lint':
-      // Config in scsslint-drupal.yml.
-      var sassLint = require('gulp-sass-lint');
-      break;
-
-    case 'scss-lint':
-      // Config in  ./scsslint-drupal.yml.
-      var scssLint = require('gulp-scss-lint');
-      break;
-
-    default:
-      gutil.log(gutil.colors.red('Scss linting is disabled!'));
-  }
-
-  /*
-   * Linter wrapper task.
-   */
-  gulp.task('linter', 'Run current linter.', function() {
-    if (typeof linter === 'string' && linter !== 'none') {
-      gulp.start(linter);
-    }
-  });
-
-  /*
-   * sass-lint task.
-   */
-  gulp.task('sass-lint', 'Lint SCSS using sass-lint.', function() {
-
-    // Using sass-lint there is "disabling by comment" is not available.
-    // https://github.com/sasstools/sass-lint/issues/70
-
-    // The exclude is required fo fix a bug. See:
-    // https://github.com/juanfran/gulp-scss-lint/issues/36#issuecomment-113196295
-
-    return gulp.src([
-      'scss/**/*.scss',
-      '!**/*_scsslint_tmp*.scss',
-      // Exclude reset.
-      '!scss/base/__reset.scss'
-    ])
-      .pipe(sassLint({
-        config: './sass-lint-drupal.yml'
-      }))
-      .pipe(sassLint.format())
-      .pipe(sassLint.failOnError());
-
-  });
-
-  /*
-   * scss-lint task.
-   */
-  gulp.task('scss-lint', 'Lint SCSS using scss-lint.', function() {
-
-    // Using scss-lint there is "disabling by comment" enabled.
-    // e.g: // scss-lint disable single-line-per-selector
-    // See: https://github.com/brigade/scss-lint#disabling-linters-via-source
-
-    // This is the code for scss lint.
-    return gulp.src([
-      'scss/**/*.scss',
-      // Excludes.
-      '!**/*_scsslint_tmp*.scss',
-      '!**/*.generated.scss'
-    ])
-    .pipe(scssLint({
-      'config': 'scsslint-drupal.yml'
-    }));
-  });
-
-
-
-  /**
-   * Experimental SCSS-Abstract preprocessor.
-   *
-   * This should generate a additional SCSS file including all Extends used in
-   * the project like the following example:
-   *
-   * .abstract-class {
-   *   @extend abstract-class;
-   * }
-   *
-   * This enables you to include Abstractions and Variables section everywhere,
-   * without generating any output.
-   */
-  var all_abstracts = [];
-
-  gulp.task('abstract', 'Parsing SCSS and generate abstract SCSS file.',['abstract-filter'],  function(callback) {
-
-    return gulp.src(config.current.abstract.gulp_template_dir + config.current.abstract.gulp_template)
-      .pipe(template({
-        filename: config.current.abstract.destination_dir + config.current.abstract.gulp_template,
-        abstracts: all_abstracts
-      }))
-      .pipe(gulp.dest(config.current.abstract.destination_dir));
-
-  });
-
-  // Filter all scss files for abstracts.
-  gulp.task('abstract-filter', false, function(){
-
-    // Filter out all abstract classes.
-    // Names only for now.
-    // https://regex101.com/r/lG4eG8/4
-    // If someone writes a better regex we might include the mixing itself
-    // in the Styleguide.
-    var filter = gulpFilter(function(file) {
-
-      var reg = /%([a-zA-Z-_]*)\s?\{[\s,]*\n(?=.*|\n\s)(?!\n}\s+\n)/gmi,
-        item,
-        text;
-
-      if (file.contents.length) {
-        text = file.contents.toString();
-        while ((item = reg.exec(text)) !== null) {
-          all_abstracts.push({
-            id: item[1],
-            path: path.relative('.', file.path)
-          });
-        }
-      }
-    });
-    return gulp.src(['scss/**/*.scss', '!**/*.generated.scss', '!**/*_node_scsslint_tmp*']).pipe(filter);
-
-  });
 
   /**
    * Default Task for Production.
@@ -490,52 +71,236 @@
    * gulp --env production
    *
    */
-  gulp.task('production', 'Run task in production environment.', function(){
-    environments.current(production);
-    gulp.start(['sass', 'styleguide', 'scripts']);
+  gulp.task('production', '♥ Runs all tasks once in production mode. JS/CSS minification will take place.', function(cb){
+    plug.environments.current(plug.environments.production);
+    return plug.sequence('build', cb);
+    },
+    // Options for gulp-help.
+    {
+    aliases: ['p', 'prod']
+  });
+
+
+
+  /**
+   * Build.
+   *
+   * This task will compile everything.
+   *
+   */
+  gulp.task('build', 'Runs all build tasks once. This task is called by serve and production tasks --> the parameters can be used with all other tasks.', function(cb){
+    plug.sequence(
+      ['svg-generate-abstract'],
+      ['scripts', 'kss-sass', 'styleguide-and-sass'],
+      cb
+    );
+  }, {
+    // Options for gulp-help.
+    options: {
+      'env=development (default)': 'Run all tasks in development mode. Sourcemaps, no minification.',
+      'env=production': 'Alternatively you can run all tasks in production mode.',
+      'no-styleguide': 'Disable styleguide rendering.',
+      'no-linter': 'Disable current linter.'
+    }
+  });
+
+
+
+  /**
+   * Watch Task - Initializing watch-tasks.
+   *
+   */
+  gulp.task('watch', 'Watch all tasks. Implied by serve task, but can be run independently. E.g: Running browsersync in a docker environment.', function(cb) {
+
+    plug.gutil.log('Current environment: ' + plug.gutil.colors.red((plug.environments.production() ? 'production' : 'development')));
+
+    //
+    // SASS watcher:
+    //
+    gulp.watch(['scss/**/*.scss', '!**/*.generated.scss'], ['styleguide-and-sass'])
+      .on('change', function(event, y) {
+        plug.gutil.log('File ' + event.path + ' was ' + event.type);
+      });
+
+    //
+    // JAVASCRIPT watcher
+    //
+    gulp.watch(['js/**/*.js', '!js/**/*.min.js'], ['scripts'])
+      .on('change', function(event) {
+
+        plug.gutil.log('File ' + event.path + ' was ' + event.type);
+
+        var filename = event.path.replace(/^.*[\\\/]/, '').replace('.js', '.min.js');
+
+        plug.gutil.log('#javascript watcher: filename: ' + filename);
+
+        // Tell browser sync to reload.
+        plug.bs.reload('**/' + filename, {stream: true});
+
+      });
+
+    //
+    // SVG watcher
+    //
+    gulp.watch('svg/**/*.svg', ['svg'])
+      .on('change', function(event) {
+        plug.gutil.log('File ' + event.path + ' was ' + event.type);
+      });
+
+    //
+    // STYLEGUIDE TEMPLATE watcher
+    //
+    gulp.watch(
+      [
+        conf.styleguide.template + '/**/*.hbs',
+        conf.styleguide.template + '/**/*.js',
+        conf.styleguide.template + '/**/*.scss'
+      ],
+      ['kss-template']
+    )
+    .on('change', function(event) {
+      plug.gutil.log('File ' + event.path + ' was ' + event.type);
+    });
+
+
+    //
+    // STYLEGUIDE_HTML reload watcher
+    //
+    gulp.watch(['css/**/*.css'])
+      .on('change', function(event) {
+
+        plug.gutil.log('#css_watcher ' + event.path + ' was ' + event.type);
+
+        var filename = event.path.replace(/^.*[\\\/]/, '');
+
+        plug.gutil.log('#css_watcher: filename: ' + filename);
+
+        plug.bs.reload('**/' + filename);
+    });
+
+    //
+    // STYLEGUIDE_HTML reload watcher
+    //
+    gulp.watch(conf.styleguide.destination + '/**/*.html')
+        .on('change', function(event) {
+
+          //plug.gutil.log('#styleguide watcher  ' + event.path + ' was ' + event.type);
+
+          var filename = event.path.replace(/^.*[\\\/]/, '');
+
+          // BrowserSync will trigger full reload if anything but css is changed.
+          gulp.src(event.path)
+            .pipe(plug.cached(event.path, {optimizeMemory: true}))
+            // .pipe(plug.debug({title: 'Change detected at ' + filename}))
+            .pipe(plug.bs.reload({stream: true}));
+        });
+
+    cb();
+  }); // END watch.
+
+
+
+  /**
+   * Build Styleguide and Sass.
+   *
+  */
+  gulp.task('styleguide-and-sass', 'Default rendering wrapper task.', ['abstract'], function(cb){
+
+    // Enable commandline arg --no-styleguide.
+    if (conf.argv.styleguide !== undefined) {
+      conf.styleguide.isEnabled = conf.argv.styleguide;
+    }
+
+    if (conf.styleguide.isEnabled) {
+      plug.sequence(['styleguide', 'sass']);
+    }
+    else {
+      return plug.sequence(['sass']);
+    }
+
+    if (conf.linter.default) {
+      plug.sequence(['scss-lint']);
+    }
+    cb();
   });
 
 
   /**
-   * Generate Readme's.
+   * Inline SVG abstracts.
    *
-   * This task ist just for deployment.
-   */
-  gulp.task('readme', 'Generates Readme.txt from Readme.md.',function() {
-    del(['./Readme.txt', './Readme.html']);
-    // Create Drupal Readme.
-    gulp.src('./Readme.md')
-      .pipe(pandoc({
-        from: 'markdown',
-        to: 'rst',
-        ext: '.txt',
-        args: ['--columns=80', '--smart', '--tab-stop=2', '--normalize']
-      }))
-      .pipe(replace(/\n\s.*::\n/g, '\n'))
-      .pipe(gulp.dest('.'));
-
-    // Create HTML Version (for Drupal.org)
-    gulp.src('./Readme.md')
-      .pipe(pandoc({
-        from: 'markdown',
-        to: 'html5+lhs',
-        ext: '.html',
-        args: ['--smart']
-      }))
-      .pipe(gulp.dest('.'));
+   * Avoiding long SCSS compile times by generating extends for each file in /svg directory.
+   *
+   * Basically we will create a css file "kss-inline-svg.generated.css" containing:
+   *
+   *  .svg-<filename>{ background url(background: url("data:image/svg+xml;charset=utf-8,....")}
+   *
+   * for each <file>.svg found in /svg and subfolders
+   * and scss file "abstractions/_inline-svg.generated.scss" containing
+   *
+   * %svg-<filename> {background: url("data:image/svg+xml;charset=utf-8,....")}
+   *
+   * Checkout gulp-tasks/svg-generate-abstract.js for details and templates in "gulp-templates".
+  */
+  gulp.task('svg', 'Generates inline-svg extends ("abstractions/_inline-svg.generated.scss" and "kss-inline-svg.generated.css").', ['svg-generate-abstract'], function(cb){
+    return plug.sequence(
+      ['sass'],
+      ['styleguide'],
+      ['styleguide-browser-reload']
+    );
   });
 
 
   /**
-   * Default Task.
+   * Build KSS-Styleguide and reload browser at end.
    *
-   * This task is run if you type "gulp".
-   * Default environment is "development".
-   * gulp --env production
-   */
-  gulp.task('default', false, function(){
-    gutil.log('Current environment: ' + gutil.colors.red((production() ? 'production' : 'development')));
-    gulp.start(['serve']);
+  */
+  gulp.task('kss-template', 'Rerender Styleguide template.', ['kss-sass'],  function(cb) {
+    return plug.sequence('styleguide-and-sass', cb);
   });
+
+
+  /**
+  * Inistialize variables.
+  *
+  */
+  function init(gulp, conf, plug) {
+
+    // Initialize BrowserSync.
+    // See: http://www.browsersync.io/docs/options/
+    plug.bs = require('browser-sync').create();
+
+    // Required to run tasks in series. By default gulp runs asynchronously.
+    plug.sequence = plug.runSequence.use(gulp);
+
+    // Add command line arguments to conf.
+    conf.argv = plug.yargs.argv;
+
+    // Initialize abstract array.
+    conf.abstracts_list = [];
+
+    // Initialize default postcss processors.
+    // See: https://github.com/postcss/gulp-postcss
+    conf.postcssProcessors = [
+      require('autoprefixer')(conf.autoprefixer)
+    ];
+
+    // Autoload Tasks:
+    //
+    // All not-meta tasks are located in the directory:
+    //
+    //   ./gulp-tasks/<taskname>.js
+    //
+    // https://github.com/digitaldonkey/gulp-require-tasks
+    // Forked gulp-require-tasks to support gulp help!
+    //
+    // Concept based on:
+    // http://macr.ae/article/splitting-gulpfile-multiple-files.html#approach-two
+    //
+    plug.requireTasks({
+      path:  __dirname + '/gulp-tasks',
+      arguments: [conf, plug],
+      gulp: gulp
+    });
+  }
 
 }());

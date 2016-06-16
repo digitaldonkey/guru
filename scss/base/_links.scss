@@ -1,0 +1,91 @@
+//
+// Links
+//
+// Markup:
+// <p class="no-kss-style">This is a <a href="/bla" title="Internal link">internal link</a>.</p>
+// <p class="no-kss-style">This is a <a href="http://donkeymedia.eu" title="External link">external link</a>.</p>
+// <p class="no-kss-style">This is a <a href="#test" title="Internal reference">internal reference</a> (#bla).</p>
+//
+// Styleguide Base - Typography - Links
+//
+
+
+// Marking external links:
+// Is done by a[href^="http"]:not([href*=$exclude-domain]
+//   href^="http" - considers any href starting with http* as external
+// You should exclude a unique part of your domain.
+//   href*=$exclude-domain - if the href contains $exclude-domain string in any part
+// it will be considered local. This is required, because sometimes people set extenal
+// links not correctly and drupal files containing a full path to the file.
+
+// E.g: http://mydomain.com will be condsidered a internal link.
+$exclude-domain: 'mydomain.';
+
+a {
+  color: $link-color;
+}
+
+a:visited {
+  color: $link-color-visited;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: $link-color-hover;
+}
+
+// External Links
+a[href^="http"]:not([href*="#{$exclude-domain}"]) {
+  &:not([role="button"])::after {
+
+    @extend %svg-external-link;
+
+    background-repeat: no-repeat;
+    background-size: contain;
+    content: '';
+    display: inline-block;
+    font-size: .9em;
+    height: 1em;
+    margin-left: .4em;
+    margin-right: .4em;
+    text-decoration: none;
+
+    // Using Text intend for RTL compatibility.
+    text-indent: $vertical-space-tiny / 2;
+
+    vertical-align: -.1em;
+    white-space: nowrap;
+    width: 1em;
+
+    // Fix Drupal file links.
+    .file & {
+      display: none;
+    }
+  }
+}
+
+// Internal references Links
+// scss-lint:disable QualifyingElement
+a[href^="#"]::after {
+
+  @extend %svg-chevron;
+
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  content: '';
+  display: inline-block;
+  font-size: .8em;
+  height: 1em;
+  margin-left: .2em;
+  text-decoration: none;
+
+  // Using Text intend for RTL compatibility.
+  text-indent: $vertical-space-tiny / 2;
+  transform: rotate(90deg);
+  vertical-align: -.2em;
+  white-space: nowrap;
+  width: 1em;
+}
+

@@ -1,10 +1,12 @@
 global-styling:
-  version: 1.x
-#  css:
-#    theme:
-#      css/main.css: {}
+  version: VERSION
+  css:
+    theme:
+      css/main.css: {}
+browser-indicator:
+  version: VERSION
   js:
-    js/behaviors.min.js: { scope: footer }
+    js/behaviors.min.js: {}
   dependencies:
     - core/jquery
     - core/drupal

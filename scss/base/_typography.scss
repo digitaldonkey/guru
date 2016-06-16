@@ -1,8 +1,6 @@
 //
 // Typography
 //
-// `src: base/_typography.scss`
-//
 // Markup:
 // <h1>CSS Basic Elements</h1>
 //
@@ -96,8 +94,9 @@
 // "This stylesheet is going to help so freaking much." <br />-Blockquote
 // </blockquote>
 //
-// Styleguide 3.1
+// Styleguide Base - Typography
 //
+
 
 
 // See expanation in styleguide in variables/_vertical_rhythm.scss
@@ -130,6 +129,7 @@ h3,
 h4,
 h5,
 h6 {
+  font-family: $headings-font;
   line-height: 1;
   margin-bottom: $vertical-space-tiny;
   margin-top: $vertical-space-tiny;

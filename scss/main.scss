@@ -1,12 +1,12 @@
-@import '../node_modules/compass-mixins/lib/compass';
-@import '../bower_components/breakpoint-sass/stylesheets/breakpoint';
-@import '../bower_components/singularity/stylesheets/singularitygs';
-
 // Recursive Includes:
 // This will work with libsass only because od gulp-sass-glob
-// This module is stupit. Don't allow Single quotes.
-// scss-lint:disable StringQuotes
-@import "variables/*";
-@import "base/*";
-@import "layouts/*";
-@import "components/*";
+@import 'bower-imports';
+@import 'variables/**/*';
+@import 'abstractions/**/*';
+@import 'base/**/*';
+@import 'layouts/**/*';
+@import 'components/**/*';
+
+// Set debugging to true in order to show background grids.
+// Using singularity @include background-grid();
+@include sgs-change('debug', false);

@@ -1,48 +1,78 @@
 /*jslint node: true */
 
-module.exports.current = {
+module.exports = {
 
   // Your domain. Set to "" in order to use default domain
-  domain: 'drupaleight.local',
+  domain: 'drupal8.dev',
 
   // Using IP for browserSync to skip DNS resolve time.
   // Change only if you know why you should. You may change browserSync.init()
   // in gulpfile.js for other options.
-  ip: '127.0.0.1',
+  //ip: '127.0.0.1',
+  ip: '192.168.44.44', // Drupal VDD default.
 
-  // This url will be valid with the browserSync Server.
-  // Replace "guru" with your subtheme name!
+  // Change to match your them location.
+  themePath: 'themes/guru', // No trailing slashes.
+
+  //
+  // You may change other options later, but only the above is required!
+  //
+
+  //  KSS-Styleguide
   styleguide: {
-    uri: 'http://localhost:3000/themes/guru/styleguide/index.html'
+
+    // Create your own styleguide template with kss:
+    // kss --clone styleguide-template/your-handlebars-template
+    // See: https://www.npmjs.com/package/kss.
+    template: 'styleguide-template/guru-handlebars',
+
+    // Index page of the styleguide is located in the scss folder.
+    homepage: 'homepage.md',
+
+    // SCSS to CSS for the styleguide CSS.
+    assets: 'styleguide-template/guru-handlebars/kss-assets',
+    destination: 'styleguide',
+    isEnabled: true
   },
+
+  // SCSS-Linting
+  //
+  // There are two options how to use SCSS-lint
+  // In sass-lint "disabling by comment" wont work yet,
+  // but the compile time is about half compared with scss-lint (ruby):
+  //
+  //   sass-lint: 578ms vs scss-lint: 1.28s
+  //
   linter: {
-    //
-    // There are two options how to use SCSS-lint
-    //
+
+    // By default linting is disabled.
+    default: false
+
     // In sass-lint "disabling by comment" wont work yet. See:
-    // https://github.com/sasstools/sass-lint/issues/70
-    //default: 'sass-lint'
+    // https://github.com/sasstools/sass-lint/pull/677
+    // See: https://github.com/sasstools/sass-lint
+
+    // default: 'sass-lint'
 
     // Using scss-lint there is "disabling by comment" enabled.
     // e.g: // scss-lint disable single-line-per-selector
-    // See readme for more Info.
-     default: 'scss-lint'
+    //
+    // See: https://github.com/brigade/scss-lint
 
-    // You can disable Linter completly.
-    // default: 'none'
+    // default: 'scss-lint'
+
   },
-  abstract: {
-    //
-    // The abstract Task
-    //
-    // will search in all SCSS files for abstracts like
-    // %my-cool-name{ ... } and generate a SCSS file, with
-    // concrete (.my-cool-name{ @extends %my-cool-name; })
-    // CSS classes.
-    gulp_template_dir: './gulp-templates/',
-    // Make sure the name contains ".generated.scss"!
-    gulp_template: '_abstract-to-concrete.generated.scss',
-    destination_dir: "./scss/base/"
+
+  //  Autoprefixer
+  // For configuration see: https://github.com/postcss/autoprefixer
+  autoprefixer: {
+    browsers: [
+      'last 2 versions',
+      'safari 5',
+      'ie 9',
+      'opera 12.1',
+      'ios 6',
+      'android 4'
+    ]
   }
 };
-

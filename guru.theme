@@ -1,0 +1,18 @@
+<?php
+/**
+ * @file
+ * The former template.php.
+ */
+
+/**
+ * Implements hook_page_attachments_alter().
+ *
+ * Add browser width Indicator for users within admin permissions.
+ */
+function guru_page_attachments_alter(&$page) {
+
+  // TODO: Themes seem not be able to add permissions: sneaking in somewhere.
+  if (\Drupal::currentUser()->hasPermission('administer nodes')) {
+    $page['#attached']['library'][] = 'guru/browser-indicator';
+  }
+}

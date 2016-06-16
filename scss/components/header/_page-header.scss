@@ -1,0 +1,28 @@
+//
+// Page Header
+//
+// .page-header
+//
+// Markup:
+//<header class="page-header" role="banner">
+//  <div class="layout-container">
+//   <p>This is <a href="/">Test</a></p>
+//  </div>
+//</header>
+//
+// Styleguide Components - Header - Page Header
+//
+.page-header {
+  background: $bg-one;
+  color: $white;
+
+  a {
+    color: $white;
+    text-decoration: none;
+
+    &::after,
+    &::before {
+      color: $white;
+    }
+  }
+}

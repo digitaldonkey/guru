@@ -73,7 +73,6 @@ function drush_guru_subtheme($name) {
   /*
    * Copy theme files.
    */
-  $copy_files = TRUE;
 
   // Directories created in destination theme.
   $dirs = array(
@@ -83,12 +82,11 @@ function drush_guru_subtheme($name) {
     'styleguide-template',
     'templates',
   );
-  if ($copy_files) {
-    foreach ($dirs as $dir) {
-      $path = $tmp_theme_path . $dir;
-      if (!mkdir($path)) {
-        return drush_set_error('GURU_CREATE_ERROR', dt('Could not create @path.', array('@path' => $path)));
-      }
+
+  foreach ($dirs as $dir) {
+    $path = $tmp_theme_path . $dir;
+    if (!mkdir($path)) {
+      return drush_set_error('GURU_CREATE_ERROR', dt('Could not create @path.', array('@path' => $path)));
     }
   }
 
@@ -96,41 +94,55 @@ function drush_guru_subtheme($name) {
   // Relative to base_theme
   // Use "path/*" to copy directories recursive.
   $files = array(
-    '.gitignore',
-    'README.md',
-    'gulpfile.js',
-    'gulp.config.js',
-    'gulp.autoprefixer.config.js',
-    'package.json',
-    'scsslint-drupal.yml',
-    'browsersync-client-events.js',
-    'logo.svg',
     'css/.gitkeep',
+    'config/*',
+    'gulp-tasks/*',
+    'gulp-templates/*',
     'js/behaviors.js',
-    'js/behaviors.min.js',
     'scss/*',
     'styleguide-template/*',
+    'svg/*',
+    'templates/*',
+    '.gitignore',
+    'browsersync-client-events.js',
+    'bower.json',
+    'gulp.config.js',
+    'gulpfile.js',
+    // 'guru.theme', --> We just load the library it from the base theme!
+    'kss-readme.md',
+    'logo.svg',
+    'package.json',
+    'README.md',
+    'scsslint-drupal.yml',
+    'sasslint-drupal.yml',
   );
-  if ($copy_files) {
-    foreach ($files as $file) {
-      $is_recursive = strpos($file, '/*');
-      if ($is_recursive == FALSE) {
-        // Copy File.
-        $source = __DIR__ . DIRECTORY_SEPARATOR . $file;
-        if (!copy($source, $tmp_theme_path . $file)) {
-          return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $source, '@destination' => $tmp_theme_path . $file)));
-        }
-      }
-      else {
-        // Copy all Files recursive.
-        $file = substr($file, 0, strpos($file, '/*'));
-        $source = __DIR__ . DIRECTORY_SEPARATOR . $file;
-        if (!_guru_dir_copy_recursive($source, $tmp_theme_path . $file)) {
-          return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $source, '@destination' => $tmp_theme_path . $file)));
-        }
 
+  foreach ($files as $file) {
+    $is_recursive = strpos($file, '/*');
+    if ($is_recursive == FALSE) {
+      // Copy File.
+      $source = __DIR__ . DIRECTORY_SEPARATOR . $file;
+
+      if (!copy($source, $tmp_theme_path . $file)) {
+        return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $source, '@destination' => $tmp_theme_path . $file)));
       }
     }
+    else {
+      // Copy all Files recursive.
+      $file = substr($file, 0, strpos($file, '/*'));
+      $source = __DIR__ . DIRECTORY_SEPARATOR . $file;
+      if (!_guru_dir_copy_recursive($source, $tmp_theme_path . $file)) {
+        return drush_set_error('GURU_CREATE_ERROR', dt('Could not copy @file. to @destination', array('@file' => $source, '@destination' => $tmp_theme_path . $file)));
+      }
+
+    }
+  }
+
+  // Rename config/install/guru.settings.yml:
+  $settings_src = $tmp_theme_path . '/' . 'config/install/guru.settings.yml';
+  $settings_dest = $tmp_theme_path . '/config/install/' . $machine_name . '.settings.yml';
+  if (!rename($settings_src, $settings_dest)) {
+    return drush_set_error('GURU_CREATE_ERROR', dt('Could not rename @file. to @destination', array('@file' => $settings_src, '@destination' => $settings_dest)));
   }
 
   /*
@@ -155,7 +167,7 @@ function drush_guru_subtheme($name) {
   foreach ($changed_files as $k => $file) {
     $changed_files[$k] = ' ' . substr($file, strlen($destination) + 1);
   }
-  drush_print(dt("Files copied or created:", array()));
+  drush_print(dt("## Files copied or created ##", array()));
   drush_print(implode("\n", $changed_files));
 
   return TRUE;
@@ -358,7 +370,7 @@ function _guru_write_yaml_config(array &$yaml, $yaml_template, $save_to) {
               // Prepare values.
               $sub_values = array();
               foreach ($yaml[$key] as $k => $v) {
-                $sub_values[] = $prefix__2 . $k . ': ' . $v . "\n";
+                $sub_values[] = $prefix__2 . $k . ": '" . $v . "'\n";
               }
               $value = $sub_values;
               $remove_lines[] = $next_line;
@@ -376,7 +388,7 @@ function _guru_write_yaml_config(array &$yaml, $yaml_template, $save_to) {
         // Prepare Values.
         if ($prefix) {
           foreach ($value as $k => $v) {
-            $value[$k] = preg_replace("/\r|\n/", "", $prefix) . '- ' . $v . "\n";
+            $value[$k] = preg_replace("/\r|\n/", "", $prefix) . "- '" . $v . "'\n";
           }
         }
         // Replacing lines prepared above.
