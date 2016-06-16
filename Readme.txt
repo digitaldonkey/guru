@@ -1,11 +1,11 @@
 Drupal 8 Guru Theme
 ===================
 
-Guru is Drupal 8 theme base with kss styleguide.
+Guru is a Drupal 8 base theme with kss styleguide.
 
 It’s not a ready made out of the box theme you just need to enable, but a a gulp
-based theme workflow to enable *in browser* style *guide driven* theme
-development.
+based theme workflow to enable *in browser* style *guide driven* and mobile
+first theme development.
 
 Target audience
 ~~~~~~~~~~~~~~~
@@ -14,17 +14,19 @@ Target audience for the guru theme are frontend developers want to use
 `SMACSS <https://smacss.com/>`__ to structure SCSS and
 `KSS <http://warpspire.com/kss/>`__ to document the SCSS code.
 
-The focus of Guru theme is fastest possible compillation of SCSS and a
+The focus of Guru theme is fastest possible compilation of SCSS and a
 documentation of code.
 
 By rendering a living styleguide out of the SCSS comments section (think of it
 as PHP doc for SCSS) you gonna have great reference for your Co-workers, PM’s
 and Designers. It will help you to avoid CSS bloat because you and your team
-will know what you allready have implemented and enable you a high level of code
+will know what you already have implemented and enable you a high level of code
 reuse.
 
-The look and feel of the theme is entirely in your own hands, but you gonna have
-a bunch of features enabeling high development speed:
+The look and feel of the theme is entirely in your own hands. You will have a
+bunch of features enhancing development speed and tons of examples rendering
+into a full styleguide. The styleguide comes with a template and can be adapted
+to your requirements very easily.
 
 Workflow Features
 ~~~~~~~~~~~~~~~~~
@@ -52,7 +54,7 @@ Workflow Features
 -  Automated minifying of JS and CSS code
 -  Compatibility ie 9+ (like drupal core)
 -  Drush based subtheme generation
--  Compatible with docker environements and vagrant (Drupal vdd)
+-  Compatible with Docker environements and Vagrant (Drupal VDD)
 
 Design features
 ~~~~~~~~~~~~~~~
@@ -68,6 +70,8 @@ are some. You may use or decide to do your own.
    size of you links fit tab standards.
 -  Based on drupal core classy theme, giving you well known css class names
 -  Layout examples for the Grid system
+-  Tons of Styleguide-ready SCSS comments rendering into a styleguide structured
+   by SMACSS principles
 
 Dependencies
 ~~~~~~~~~~~~
@@ -90,9 +94,8 @@ Here is the reason: https://github.com/BrowserSync/browser-sync/issues/10
 Getting started
 ---------------
 
-**Create a subtheme** You may rename the theme according to your needs or create
-a subtheme with drush. Make sure using drush8. Lullabot tells you `how to use
-multiple drush
+**Create a subtheme** You should create a subtheme with drush. Lullabot tells
+you `how to use multiple drush
 versions <https://www.lullabot.com/articles/switching-drush-versions>`__.
 
 In order to create a subtheme with drush, guru theme needs to be installed and
@@ -149,6 +152,12 @@ way and commit back the lessons learned ;).
 
 More readings about the theme
 -----------------------------
+
+Introduction and howto video on Youtube
+https://www.youtube.com/watch?v=EcyXh4REaQk Complementary slides.
+http://slides.com/digitaldonkey/drupal-8-guru-theme-intro
+
+8.1.x Version
 
 Checkout presentation at Drupalcamp Essen 2015
 http://drupalcamp-essen.de/15/session/creating-a-gulp-based-d8-theme-with-browsersync
@@ -325,6 +334,12 @@ You may run any task in production environement. e.g:
 
   cd [theme folder]
   gulp serve --env=production
+
+**Inline your styleguide**
+
+There is a very simple drupal module you may use to include the Stylguide in the
+frontend of your site. But this module is more diy than productione ready.
+https://www.drupal.org/sandbox/digitaldonkey/2655300.
 
 Digging deeper
 ~~~~~~~~~~~~~~
