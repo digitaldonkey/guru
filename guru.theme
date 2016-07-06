@@ -4,6 +4,8 @@
  * The former template.php.
  */
 
+require_once ('guru.drush.inc');
+
 /**
  * Implements hook_page_attachments_alter().
  *

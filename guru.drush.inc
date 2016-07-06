@@ -388,7 +388,7 @@ function _guru_write_yaml_config(array &$yaml, $yaml_template, $save_to) {
         // Prepare Values.
         if ($prefix) {
           foreach ($value as $k => $v) {
-            $value[$k] = preg_replace("/\r|\n/", "", $prefix) . "- '" . $v . "'\n";
+            $value[$k] = preg_replace("/\r|\n/", "", $prefix) . "- " . preg_replace("/\r|\n/", "", trim($v)) . "\n";
           }
         }
         // Replacing lines prepared above.

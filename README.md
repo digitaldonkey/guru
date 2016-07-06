@@ -144,10 +144,10 @@ https://www.youtube.com/watch?v=EcyXh4REaQk
 Complementary slides.
 http://slides.com/digitaldonkey/drupal-8-guru-theme-intro
 
-8.1.x Version
+8.1-beta1 Talks
 
 Checkout presentation at Drupalcamp Essen 2015
-http://drupalcamp-essen.de/15/session/creating-a-gulp-based-d8-theme-with-browsersync
+~~http://drupalcamp-essen.de/15/session/creating-a-gulp-based-d8-theme-with-browsersync~~
 
 See the slides
 http://slides.com/digitaldonkey/create-a-drupal8-theme
@@ -466,4 +466,4 @@ On a local machine your default browser will launch your Drupal site at http://l
 
 In the virtual machine you should reach you website at the ip you find at the end of the startup script ("Proxying: http://192.168.44.44")
 
-Sou your local browser should show your drupal site at http://192.168.44.44:3000 and the browserSync UI at  http://192.168.44.44:3000 and the stylguide at http://192.168.44.44:3000/themes/my_theme/styleguide/index.html (Dont miss the index.html or drupal will deny access).
+So your local browser should show your drupal site at http://192.168.44.44:3000 and the browserSync UI at  http://192.168.44.44:3000 and the stylguide at http://192.168.44.44:3000/themes/my_theme/styleguide/index.html (Dont miss the index.html or drupal will deny access).
