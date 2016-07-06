@@ -157,10 +157,10 @@ Introduction and howto video on Youtube
 https://www.youtube.com/watch?v=EcyXh4REaQk Complementary slides.
 http://slides.com/digitaldonkey/drupal-8-guru-theme-intro
 
-8.1.x Version
+8.1-beta1 Talks
 
 Checkout presentation at Drupalcamp Essen 2015
-http://drupalcamp-essen.de/15/session/creating-a-gulp-based-d8-theme-with-browsersync
+[STRIKEOUT:http://drupalcamp-essen.de/15/session/creating-a-gulp-based-d8-theme-with-browsersync]
 
 See the slides http://slides.com/digitaldonkey/create-a-drupal8-theme
 
@@ -356,6 +356,70 @@ change this by changing the “base theme” variable in theme.info.yml At
 `lulabot <https://www.lullabot.com/articles/a-tale-of-two-base-themes-in-drupal-8-core>`__
 you can read about Drupal 8 base themes.
 
+Guru Theme in Vagrant Docker
+----------------------------
+
+Using the Guru theme with Docker is pretty simple and much faster compared to
+Drupal-VDD. You should include Docker image within your Docker environement.
+
+**Create startup script for browsersync**
+
+To start up browserSync you need to create startup script
+``docker-browsersync.sh`` within you subtheme folder *once* which will be used
+to startup browsersync. Ask your dev-ops guy to help you. Credits go to tobiasb
+and are sponsored by reinblau.
+
+Login to your dockerhost, create startup file and make it executable:
+
+  cd /var/www/gep/web/themes/<themename>
+  cp ../guru/docker-browsersync.example.sh docker-browsersync.sh
+  chmod 755 docker-browsersync.sh
+  vi docker-browsersync.sh
+
+Edit the file according to your domain settings. More Info available at the
+docker-browser-sync page.
+
+For example:
+
+  #!/usr/bin/env bash
+  set -o errexit
+  docker run -it --rm \
+             --name browser-sync \
+             --link gep:gep.dev \
+             -p 3000:3000 \
+             -p 3001:3001 \
+             -p 8080:8080 \
+  -v $(pwd):/source \
+    ustwo/browser-sync \
+    start --proxy "gep.dev" --host "gep.dev" --files "css/*.css, js/*.min.js, styleguide/*.html, styleguide/*.js, styleguide/*.css"
+
+When the initial setup is done, you may start browsersync with the following to
+develop in docker:
+
+**Start browserSync in dockerhost**
+
+  vagrant ssh
+  cd /var/www/gep/web/themes/<themename>
+  ./docker-browsersync.sh
+
+**Use Watch task instead of serve task**
+
+You will start your gulp within your project container without the “serve” task
+by using:
+
+  cd /var/www/gep/web/themes/<themename>
+  npm-run gulp watch
+
+This will prevent that browsersync will be loaded within the container but rund
+all watch tasks the same way as working locally.
+
+**Stopping BrowserSync container**
+
+After starting up the browsersync container it runs in the background. You can’t
+us CTRL+C to stop it, but docker tools:
+
+  docker rm -f browser-sync
+
 HOWTO: Getting started in Drupal’s Vagrant VM (Debian/Ubuntu)
 -------------------------------------------------------------
 
@@ -485,7 +549,7 @@ http://localhost:3000/themes/yourtheme/styleguide/index.html.
 In the virtual machine you should reach you website at the ip you find at the
 end of the startup script (“Proxying: http://192.168.44.44”)
 
-Sou your local browser should show your drupal site at http://192.168.44.44:3000
+So your local browser should show your drupal site at http://192.168.44.44:3000
 and the browserSync UI at http://192.168.44.44:3000 and the stylguide at
 http://192.168.44.44:3000/themes/my\_theme/styleguide/index.html (Dont miss the
 index.html or drupal will deny access).

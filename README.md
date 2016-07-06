@@ -323,6 +323,77 @@ Guru is using drupal default css classes provided by core classy theme.
 You can change this by changing the "base theme" variable in theme.info.yml
 At [lulabot](https://www.lullabot.com/articles/a-tale-of-two-base-themes-in-drupal-8-core) you can read about Drupal 8 base themes.
 
+## Guru Theme in Vagrant Docker
+
+Using the Guru theme with Docker is pretty simple and much faster compared to Drupal-VDD. 
+You should include <a href="https://github.com/ustwo/docker-browser-sync">Docker image</a> within your Docker environement.
+
+**Create startup script for browsersync**
+
+
+To start up browserSync you need to create startup script `docker-browsersync.sh` within you subtheme folder _once_ which will be used to startup browsersync.
+Ask your dev-ops guy to help you. Credits go to <a href="https://www.drupal.org/u/tobiasb">tobiasb</a> and are sponsored by <a href="https://www.drupal.org/reinblau">reinblau</a>.
+
+Login to your dockerhost, create startup file and make it executable:
+
+```
+cd /var/www/gep/web/themes/<themename>
+cp ../guru/docker-browsersync.example.sh docker-browsersync.sh
+chmod 755 docker-browsersync.sh
+vi docker-browsersync.sh
+```
+
+
+Edit the file according  to your domain settings. More Info available at the <a href="https://github.com/ustwo/docker-browser-sync">docker-browser-sync page</a>.
+
+For example: 
+
+```
+#!/usr/bin/env bash
+set -o errexit
+docker run -it --rm \
+           --name browser-sync \
+           --link gep:gep.dev \
+           -p 3000:3000 \
+           -p 3001:3001 \
+           -p 8080:8080 \
+-v $(pwd):/source \
+  ustwo/browser-sync \
+  start --proxy "gep.dev" --host "gep.dev" --files "css/*.css, js/*.min.js, styleguide/*.html, styleguide/*.js, styleguide/*.css"
+```
+
+When the initial setup is done, you may start browsersync with the following to develop in docker:
+
+**Start browserSync in dockerhost**
+
+
+```
+vagrant ssh
+cd /var/www/gep/web/themes/<themename>
+./docker-browsersync.sh
+```
+
+
+**Use Watch task instead of serve task**
+
+You will start your gulp within your project container without the "serve" task by using:
+
+```
+cd /var/www/gep/web/themes/<themename>
+npm-run gulp watch
+```
+
+This will prevent that browsersync will be loaded within the container but rund all watch tasks the same way as working locally. 
+
+
+**Stopping BrowserSync container**
+
+After starting up the browsersync container it runs in the background. You can't us CTRL+C to stop it, but docker tools:
+
+```
+docker rm -f browser-sync
+```
+
 
 ## HOWTO: Getting started in Drupal's Vagrant VM (Debian/Ubuntu) 
 
