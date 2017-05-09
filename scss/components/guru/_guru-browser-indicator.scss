@@ -9,19 +9,6 @@
 //
 // Styleguide Components - Broser width indicator
 //
-.site-logo {
-
-  @extend %svg-guru-logo;
-
-  background-repeat: no-repeat;
-  background-size: contain;
-  display: inline-block;
-  height: 8em;
-  margin: $vertical-space $vertical-space-tiny $vertical-space-tiny 0;
-  max-width: 100%;
-  width: 16em;
-}
-
 
 // body.is-touch-debug.
 .is-touch-debug {

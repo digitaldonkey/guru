@@ -37,7 +37,7 @@
     "gulp-postcss": "^6.1.1",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
-    "gulp-require-tasks": "github:digitaldonkey/gulp-require-tasks",
+    "gulp-require-tasks": "^1.0.3",
     "gulp-sass": "^2.1.0",
     "gulp-sass-glob": "1.0.6",
     "gulp-sass-lint": "^1.0.1",
